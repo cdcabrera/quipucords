@@ -1,4 +1,4 @@
-import * as types from '../constants/sourcesConstants';
+import * as types from '../constants/reportsConstants';
 
 const initialState = {
   error: false,
@@ -7,18 +7,18 @@ const initialState = {
   data: []
 };
 
-export default function sourcesReducer(state = initialState, action) {
+export default function reportsReducer(state = initialState, action) {
   switch (action.type) {
-    case types.GET_SOURCES_ERROR:
+    case types.GET_REPORTS_ERROR:
       return Object.assign({}, state, {
         error: action.error,
         errorMessage: action.message
       });
 
-    case types.GET_SOURCES_LOADING:
+    case types.GET_REPORTS_LOADING:
       return Object.assign({}, state, { loading: action.loading });
 
-    case types.GET_SOURCES_SUCCESS:
+    case types.GET_REPORTS_SUCCESS:
       return Object.assign({}, state, { data: action.data });
 
     default:

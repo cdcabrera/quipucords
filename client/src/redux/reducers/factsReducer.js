@@ -1,24 +1,24 @@
-import * as types from '../constants/sourcesConstants';
+import * as types from '../constants/factsConstants';
 
 const initialState = {
   error: false,
   errorMessage: '',
   loading: true,
-  data: []
+  data: {}
 };
 
-export default function sourcesReducer(state = initialState, action) {
+export default function factsReducer(state = initialState, action) {
   switch (action.type) {
-    case types.GET_SOURCES_ERROR:
+    case types.ADD_FACTS_ERROR:
       return Object.assign({}, state, {
         error: action.error,
         errorMessage: action.message
       });
 
-    case types.GET_SOURCES_LOADING:
+    case types.ADD_FACTS_LOADING:
       return Object.assign({}, state, { loading: action.loading });
 
-    case types.GET_SOURCES_SUCCESS:
+    case types.ADD_FACTS_SUCCESS:
       return Object.assign({}, state, { data: action.data });
 
     default:
