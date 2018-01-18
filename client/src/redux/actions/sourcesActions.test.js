@@ -1,4 +1,4 @@
-import * as types from '../constants/sourcesConstants';
+import { sourcesActionTypes as types } from '../constants';
 import * as actions from './sourcesActions';
 
 describe('SourcesActions', function() {

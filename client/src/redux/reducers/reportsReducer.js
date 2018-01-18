@@ -1,4 +1,4 @@
-import * as types from '../constants/reportsConstants';
+import { reportsActionTypes as types } from '../constants';
 
 const initialState = {
   error: false,

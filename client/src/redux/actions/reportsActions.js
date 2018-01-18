@@ -1,4 +1,4 @@
-import * as types from '../constants/reportsConstants';
+import { reportsActionTypes as types } from '../constants';
 import reportsService from '../../services/reportsService';
 
 const getReportsError = (bool, message) => ({

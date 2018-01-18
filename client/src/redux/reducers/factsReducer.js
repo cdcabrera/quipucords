@@ -1,4 +1,4 @@
-import * as types from '../constants/factsConstants';
+import { factsActionTypes as types } from '../constants';
 
 const initialState = {
   error: false,
