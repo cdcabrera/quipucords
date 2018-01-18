@@ -1,10 +1,10 @@
 import jquery from 'jquery';
 
-class ReportsApi {
+class ReportsService {
   static getReports(query = {}) {
     let queryStr = jquery.param(query);
 
-    return fetch(`${process.env.REACT_APP_REPORTS_API}${queryStr}`).then(
+    return fetch(`${process.env.REACT_APP_REPORTS_SERVICE}${queryStr}`).then(
       response => {
         if (response.ok) {
           return response.json();
@@ -16,4 +16,4 @@ class ReportsApi {
   }
 }
 
-export default ReportsApi;
+export default ReportsService;

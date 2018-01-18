@@ -1,5 +1,5 @@
 import * as types from '../constants/scansConstants';
-import scansApi from '../../services/scansApi';
+import scansService from '../../services/scansService';
 
 const getScansError = (bool, message) => ({
   type: types.GET_SCANS_ERROR,
@@ -20,7 +20,7 @@ const getScansSuccess = data => ({
 const getScans = () => {
   return function(dispatch) {
     dispatch(getScansLoading(true));
-    return scansApi
+    return scansService
       .getScans()
       .then(success => {
         dispatch(getScansSuccess(success));

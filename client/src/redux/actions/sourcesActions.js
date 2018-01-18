@@ -1,5 +1,5 @@
 import * as types from '../constants/sourcesConstants';
-import sourcesApi from '../../services/sourcesApi';
+import sourcesService from '../../services/sourcesService';
 
 const getSourcesError = (bool, message) => ({
   type: types.GET_SOURCES_ERROR,
@@ -20,7 +20,7 @@ const getSourcesSuccess = data => ({
 const getSources = () => {
   return function(dispatch) {
     dispatch(getSourcesLoading(true));
-    return sourcesApi
+    return sourcesService
       .getSources()
       .then(success => {
         dispatch(getSourcesSuccess(success));

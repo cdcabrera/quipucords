@@ -1,5 +1,5 @@
 import * as types from '../constants/reportsConstants';
-import reportsApi from '../../services/reportsApi';
+import reportsService from '../../services/reportsService';
 
 const getReportsError = (bool, message) => ({
   type: types.GET_REPORTS_ERROR,
@@ -20,7 +20,7 @@ const getReportsSuccess = data => ({
 const getReports = () => {
   return function(dispatch) {
     dispatch(getReportsLoading(true));
-    return reportsApi
+    return reportsService
       .getReports()
       .then(success => {
         dispatch(getReportsSuccess(success));

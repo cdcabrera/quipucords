@@ -1,5 +1,5 @@
 import * as types from '../constants/credentialsConstants';
-import credentialsApi from '../../services/credentialsApi';
+import credentialsService from '../../services/credentialsService';
 
 const getCredentialsError = (bool, message) => ({
   type: types.GET_CREDENTIALS_ERROR,
@@ -20,7 +20,7 @@ const getCredentialsSuccess = data => ({
 const getCredentials = () => {
   return function(dispatch) {
     dispatch(getCredentialsLoading(true));
-    return credentialsApi
+    return credentialsService
       .getCredentials()
       .then(success => {
         dispatch(getCredentialsSuccess(success));

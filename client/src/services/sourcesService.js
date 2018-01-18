@@ -1,8 +1,8 @@
 import jquery from 'jquery';
 
-class SourcesApi {
+class SourcesService {
   static addSource(data = {}) {
-    return fetch(process.env.REACT_APP_SOURCES_API, {
+    return fetch(process.env.REACT_APP_SOURCES_SERVICE, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: new Headers({
@@ -18,7 +18,7 @@ class SourcesApi {
   }
 
   static deleteSource(id) {
-    return fetch(`${process.env.REACT_APP_SOURCES_API}${id}`, {
+    return fetch(`${process.env.REACT_APP_SOURCES_SERVICE}${id}`, {
       method: 'DELETE'
     }).then(response => {
       if (response.ok) {
@@ -36,19 +36,19 @@ class SourcesApi {
   static getSources(id = '', query = {}) {
     let queryStr = jquery.param(query);
 
-    return fetch(`${process.env.REACT_APP_SOURCES_API}${id}${queryStr}`).then(
-      response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error(response.statusText);
-        }
+    return fetch(
+      `${process.env.REACT_APP_SOURCES_SERVICE}${id}${queryStr}`
+    ).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error(response.statusText);
       }
-    );
+    });
   }
 
   static updateSource(id, data = {}) {
-    return fetch(`${process.env.REACT_APP_SOURCES_API}${id}`, {
+    return fetch(`${process.env.REACT_APP_SOURCES_SERVICE}${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: new Headers({
@@ -64,4 +64,4 @@ class SourcesApi {
   }
 }
 
-export default SourcesApi;
+export default SourcesService;

@@ -1,5 +1,5 @@
 import * as types from '../constants/factsConstants';
-import reportsApi from '../../services/factsApi';
+import reportsService from '../../services/factsService';
 
 const addFactsError = (bool, message) => ({
   type: types.ADD_FACTS_ERROR,
@@ -20,7 +20,7 @@ const addFactsSuccess = data => ({
 const addFacts = () => {
   return function(dispatch) {
     dispatch(addFactsLoading(true));
-    return reportsApi
+    return reportsService
       .addFacts()
       .then(success => {
         dispatch(addFactsSuccess(success));

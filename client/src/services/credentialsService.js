@@ -1,8 +1,8 @@
 import jquery from 'jquery';
 
-class CredentialsApi {
+class CredentialsService {
   static addCredential(data = {}) {
-    return fetch(process.env.REACT_APP_CREDENTIALS_API, {
+    return fetch(process.env.REACT_APP_CREDENTIALS_SERVICE, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: new Headers({
@@ -18,7 +18,7 @@ class CredentialsApi {
   }
 
   static deleteCredential(id) {
-    return fetch(`${process.env.REACT_APP_CREDENTIALS_API}${id}`, {
+    return fetch(`${process.env.REACT_APP_CREDENTIALS_SERVICE}${id}`, {
       method: 'DELETE'
     }).then(response => {
       if (response.ok) {
@@ -37,7 +37,7 @@ class CredentialsApi {
     let queryStr = jquery.param(query);
 
     return fetch(
-      `${process.env.REACT_APP_CREDENTIALS_API}${id}${queryStr}`
+      `${process.env.REACT_APP_CREDENTIALS_SERVICE}${id}${queryStr}`
     ).then(response => {
       if (response.ok) {
         return response.json();
@@ -48,7 +48,7 @@ class CredentialsApi {
   }
 
   static updateCredential(id, data = {}) {
-    return fetch(`${process.env.REACT_APP_CREDENTIALS_API}${id}`, {
+    return fetch(`${process.env.REACT_APP_CREDENTIALS_SERVICE}${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: new Headers({
@@ -64,4 +64,4 @@ class CredentialsApi {
   }
 }
 
-export default CredentialsApi;
+export default CredentialsService;

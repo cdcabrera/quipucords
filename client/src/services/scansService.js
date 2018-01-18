@@ -1,8 +1,8 @@
 import jquery from 'jquery';
 
-class ScansApi {
+class ScansService {
   static addScan(data = {}) {
-    return fetch(process.env.REACT_APP_SCANS_API, {
+    return fetch(process.env.REACT_APP_SCANS_SERVICE, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: new Headers({
@@ -18,7 +18,7 @@ class ScansApi {
   }
 
   static cancelScan(id) {
-    let apiPath = process.env.REACT_APP_SCANS_API_CANCEL.replace('{0}', id);
+    let apiPath = process.env.REACT_APP_SCANS_SERVICE_CANCEL.replace('{0}', id);
 
     return fetch(apiPath, {
       method: 'PUT'
@@ -34,7 +34,7 @@ class ScansApi {
   static getScans(id = '', query = {}) {
     let queryStr = jquery.param(query);
 
-    return fetch(`${process.env.REACT_APP_SCANS_API}${id}${queryStr}`).then(
+    return fetch(`${process.env.REACT_APP_SCANS_SERVICE}${id}${queryStr}`).then(
       response => {
         if (response.ok) {
           return response.json();
@@ -46,7 +46,10 @@ class ScansApi {
   }
 
   static getScanResults(id) {
-    let apiPath = process.env.REACT_APP_SCANS_API_RESULTS.replace('{0}', id);
+    let apiPath = process.env.REACT_APP_SCANS_SERVICE_RESULTS.replace(
+      '{0}',
+      id
+    );
 
     return fetch(apiPath).then(response => {
       if (response.ok) {
@@ -58,7 +61,7 @@ class ScansApi {
   }
 
   static pauseScan(id) {
-    let apiPath = process.env.REACT_APP_SCANS_API_PAUSE.replace('{0}', id);
+    let apiPath = process.env.REACT_APP_SCANS_SERVICE_PAUSE.replace('{0}', id);
 
     return fetch(apiPath, {
       method: 'PUT'
@@ -72,7 +75,10 @@ class ScansApi {
   }
 
   static restartScan(id) {
-    let apiPath = process.env.REACT_APP_SCANS_API_RESTART.replace('{0}', id);
+    let apiPath = process.env.REACT_APP_SCANS_SERVICE_RESTART.replace(
+      '{0}',
+      id
+    );
 
     return fetch(apiPath, {
       method: 'PUT'
@@ -86,4 +92,4 @@ class ScansApi {
   }
 }
 
-export default ScansApi;
+export default ScansService;
