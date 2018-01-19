@@ -12,7 +12,7 @@ import {
   Modal
 } from 'patternfly-react';
 
-import { getScans } from '../../redux/actions/scansActions';
+import { scansActions } from '../../redux/actions';
 
 import ScansToolbar from './scansToolbar';
 import ScansEmptyState from './scansEmptyState';
@@ -169,7 +169,7 @@ Scans.defaultProps = {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  getScans: () => dispatch(getScans())
+  getScans: () => dispatch(scansActions.getScans())
 });
 
 function mapStateToProps(state) {

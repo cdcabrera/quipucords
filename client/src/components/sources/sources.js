@@ -12,7 +12,7 @@ import {
   Modal
 } from 'patternfly-react';
 
-import { getSources } from '../../redux/actions/sourcesActions';
+import { sourcesActions } from '../../redux/actions';
 
 import SourcesToolbar from './sourcesToolbar';
 import SourcesEmptyState from './sourcesEmptyState';
@@ -154,7 +154,7 @@ Sources.defaultProps = {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  getSources: () => dispatch(getSources())
+  getSources: () => dispatch(sourcesActions.getSources())
 });
 
 function mapStateToProps(state) {
