@@ -10,7 +10,7 @@ import sourcesToolbarReducer from './sourcesToolbarReducer';
 import scansReducer from './scansReducer';
 import scansToolbarReducer from './scansToolbarReducer';
 
-const appReducer = combineReducers({
+const reducers = {
   about: aboutReducer,
   credentials: credentialsReducer,
   facts: factsReducer,
@@ -20,6 +20,10 @@ const appReducer = combineReducers({
   sourcesToolbar: sourcesToolbarReducer,
   scans: scansReducer,
   scansToolbar: scansToolbarReducer
-});
+};
 
-export default appReducer;
+const reduxReducers = combineReducers(reducers);
+
+export { reduxReducers, reducers };
+
+export default reduxReducers;

@@ -1,4 +1,4 @@
-import { viewToolbarActionTypes as types } from '../constants';
+import { viewToolbarTypes as types } from '../constants';
 
 const initialState = {
   filterType: null,

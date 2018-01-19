@@ -1,4 +1,4 @@
-import { credentialsActionTypes as types } from '../constants';
+import { credentialsTypes as types } from '../constants';
 
 const initialState = {
   error: false,

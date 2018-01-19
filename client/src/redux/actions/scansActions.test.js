@@ -1,4 +1,4 @@
-import { scansActionTypes as types } from '../constants';
+import { scansTypes as types } from '../constants';
 import * as actions from './scansActions';
 
 describe('ScansActions', function() {

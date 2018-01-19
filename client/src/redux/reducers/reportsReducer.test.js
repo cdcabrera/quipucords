@@ -1,4 +1,4 @@
-import { reportsActionTypes as types } from '../constants';
+import { reportsTypes as types } from '../constants';
 import reportsReducer from './reportsReducer';
 
 describe('ReportsReducer', function() {

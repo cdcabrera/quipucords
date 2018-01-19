@@ -1,4 +1,4 @@
-import { credentialsActionTypes as types } from '../constants';
+import { credentialsTypes as types } from '../constants';
 import * as actions from './credentialsActions';
 
 describe('CredentialsActions', function() {

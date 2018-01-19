@@ -1,31 +1,33 @@
-import * as aboutActionTypes from './aboutConstants';
-import * as credentialsActionTypes from './credentialsConstants';
-import * as factsActionTypes from './factsConstants';
-import * as navigationBarActionTypes from './navigationBarConstants';
-import * as reportsActionTypes from './reportsConstants';
-import * as scansActionTypes from './scansConstants';
-import * as sourcesActionTypes from './sourcesConstants';
-import * as viewToolbarActionTypes from './viewToolbarConstants';
+import * as aboutTypes from './aboutConstants';
+import * as credentialsTypes from './credentialsConstants';
+import * as factsTypes from './factsConstants';
+import * as navigationBarTypes from './navigationBarConstants';
+import * as reportsTypes from './reportsConstants';
+import * as scansTypes from './scansConstants';
+import * as sourcesTypes from './sourcesConstants';
+import * as viewToolbarTypes from './viewToolbarConstants';
 
-const reduxActionTypes = {
-  about: aboutActionTypes,
-  credentials: credentialsActionTypes,
-  facts: factsActionTypes,
-  navigation: navigationBarActionTypes,
-  reports: reportsActionTypes,
-  scans: scansActionTypes,
-  sources: sourcesActionTypes,
-  viewToolbar: viewToolbarActionTypes
+const reduxTypes = {
+  about: aboutTypes,
+  credentials: credentialsTypes,
+  facts: factsTypes,
+  navigation: navigationBarTypes,
+  reports: reportsTypes,
+  scans: scansTypes,
+  sources: sourcesTypes,
+  viewToolbar: viewToolbarTypes
 };
 
 export {
-  reduxActionTypes,
-  aboutActionTypes,
-  credentialsActionTypes,
-  factsActionTypes,
-  navigationBarActionTypes,
-  reportsActionTypes,
-  scansActionTypes,
-  sourcesActionTypes,
-  viewToolbarActionTypes
+  reduxTypes,
+  aboutTypes,
+  credentialsTypes,
+  factsTypes,
+  navigationBarTypes,
+  reportsTypes,
+  scansTypes,
+  sourcesTypes,
+  viewToolbarTypes
 };
+
+export default reduxTypes;

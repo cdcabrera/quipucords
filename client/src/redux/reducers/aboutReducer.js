@@ -1,4 +1,4 @@
-import { aboutActionTypes as types } from '../constants';
+import { aboutTypes as types } from '../constants';
 
 const initialState = {
   show: false

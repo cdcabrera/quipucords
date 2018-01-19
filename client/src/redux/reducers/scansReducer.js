@@ -1,4 +1,4 @@
-import { scansActionTypes as types } from '../constants';
+import { scansTypes as types } from '../constants';
 
 const initialState = {
   error: false,

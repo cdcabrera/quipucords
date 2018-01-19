@@ -1,4 +1,4 @@
-import { factsActionTypes as types } from '../constants';
+import { factsTypes as types } from '../constants';
 import * as actions from './factsActions';
 
 describe('FactsActions', function() {

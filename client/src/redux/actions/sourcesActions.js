@@ -1,4 +1,4 @@
-import { sourcesActionTypes as types } from '../constants';
+import { sourcesTypes as types } from '../constants';
 import sourcesService from '../../services/sourcesService';
 
 const getSourcesError = (bool, message) => ({

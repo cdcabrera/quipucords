@@ -1,4 +1,4 @@
-import { sourcesActionTypes as types } from '../constants';
+import { sourcesTypes as types } from '../constants';
 
 const initialState = {
   error: false,

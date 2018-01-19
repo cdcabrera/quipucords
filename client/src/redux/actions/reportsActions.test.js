@@ -1,4 +1,4 @@
-import { reportsActionTypes as types } from '../constants';
+import { reportsTypes as types } from '../constants';
 import * as actions from './reportsActions';
 
 describe('ReportsActions', function() {
