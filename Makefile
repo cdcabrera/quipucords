@@ -27,6 +27,9 @@ all: build lint test-coverage
 build: clean-cli
 	$(PYTHON) setup.py build -f
 
+build-ui:
+    echo "building ui..."
+
 clean-cli:
 	-rm -rf dist/ build/ quipucords.egg-info/
 
@@ -46,6 +49,9 @@ test-case:
 test-coverage:
 	QPC_DISABLE_AUTHENTICATION=True coverage run --source=quipucords/,qpc/ quipucords/manage.py test -v 2 quipucords/ qpc/
 	coverage report -m --omit $(OMIT_PATTERNS)
+
+test-ui:
+    echo "testing ui..."
 
 lint-flake8:
 	flake8 . --ignore D203 --exclude quipucords/api/migrations,docs,build,.vscode,client,venv

@@ -1,18 +1,25 @@
 language: python
-cache: pip
+cache:
+  - pip
+  - node_modules
 python:
   - "3.6"
   - "3.5"
   - "3.4"
+node_js:
+  - "8.0"
 # command to install dependencies
 install:
   - pip install -r requirements.txt
   - pip install coveralls
+  - npm install ./client/package.json
 # command to run tests
 script:
   - make build
+  - make build-ui
   - make lint
   - make server-init
+  - make test-ui
   - make test-coverage
 after_success:
   - coveralls
