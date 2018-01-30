@@ -12,7 +12,7 @@ class VerticalNavigation extends React.Component {
   renderMenuItems() {
     return this.props.menuItems.map((item, index) => {
       let icon = null;
-      if (item.icon !== undefined) {
+      if (item.iconClass !== undefined) {
         if (this.props.navigationBar.collapsed) {
           let tooltip = (
             <Tooltip id="tooltip" className="nav-pf-vertical-tooltip">
@@ -21,22 +21,24 @@ class VerticalNavigation extends React.Component {
           );
           icon = (
             <OverlayTrigger overlay={tooltip} placement="top">
-              <span className={item.icon} key={item.icon} title="" />
+              <span className={item.iconClass} key={item.iconClass} title="" />
             </OverlayTrigger>
           );
         } else {
-          icon = <span className={item.icon} key={item.icon} title="" />;
+          icon = (
+            <span className={item.iconClass} key={item.iconClass} title="" />
+          );
         }
       }
 
       let classes = ClassNames({
         'list-group-item': true,
-        active: _.startsWith(this.props.location.pathname, item.to)
+        active: _.startsWith(this.props.location.pathname, item.href)
       });
 
       return (
         <li className={classes} key={item.title}>
-          <Link to={item.to}>
+          <Link to={item.href}>
             {icon}
             <span className="list-group-item-value">{item.title}</span>
           </Link>

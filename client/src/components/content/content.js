@@ -13,10 +13,10 @@ class Content extends React.Component {
     return {
       renderRoutes: routes().map((item, index) => {
         if (item.redirect === true) {
-          redirectRoot = <Redirect from="/" to={item.to} />;
+          redirectRoot = <Redirect from="/" to={item.href} />;
         }
 
-        return <Route key={index} path={item.to} component={item.component} />;
+        return <Route key={index} path={item.href} component={item.component} />;
       }),
       redirectRoot
     };
