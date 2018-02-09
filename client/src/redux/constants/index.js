@@ -9,6 +9,7 @@ import * as toastNotificationTypes from './toasNotificationConstants';
 import * as viewTypes from './viewConstants';
 import * as viewToolbarTypes from './viewToolbarConstants';
 import * as confirmationModalTypes from './confirmationModalConstants';
+import * as userTypes from './userConstants';
 
 const reduxTypes = {
   about: aboutTypes,
@@ -21,7 +22,8 @@ const reduxTypes = {
   toastNotifications: toastNotificationTypes,
   view: viewTypes,
   viewToolbar: viewToolbarTypes,
-  confirmationModal: confirmationModalTypes
+  confirmationModal: confirmationModalTypes,
+  user: userTypes
 };
 
 export {
@@ -36,7 +38,8 @@ export {
   toastNotificationTypes,
   viewTypes,
   viewToolbarTypes,
-  confirmationModalTypes
+  confirmationModalTypes,
+  userTypes
 };
 
 export default reduxTypes;
