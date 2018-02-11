@@ -306,7 +306,7 @@ class Credentials extends React.Component {
               {...viewOptions}
             />
           </div>
-          <CreateCredentialDialog credentials={credentials} />
+          <CreateCredentialDialog />
         </React.Fragment>
       );
     }
@@ -317,10 +317,7 @@ class Credentials extends React.Component {
         onAddSource={this.addSource}
         onImportSources={this.importSources}
       />,
-      <CreateCredentialDialog
-        key="createCredentialDialog"
-        credentials={credentials}
-      />
+      <CreateCredentialDialog key="createCredentialDialog" />
     ];
   }
 }
