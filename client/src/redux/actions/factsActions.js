@@ -1,10 +1,12 @@
 import { factsTypes } from '../constants';
-import factsService from '../../services/factsService';
+import FactsService from '../../services/factsService';
 
-const addFacts = data => dispatch => {
+const addFacts = data => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: factsTypes.ADD_FACTS,
-    payload: factsService.addFacts(data)
+    payload: new FactsService(authToken).addFacts(data)
   });
 };
 

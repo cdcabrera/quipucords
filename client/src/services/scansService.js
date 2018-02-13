@@ -1,11 +1,22 @@
 import jquery from 'jquery';
 
 class ScansService {
-  static addScan(data = {}) {
+  constructor(token = {}) {
+    this.token = token;
+  }
+
+  setHeaders(obj = {}) {
+    let tokenObj = {};
+    tokenObj[process.env.REACT_APP_AUTH_HEADER] = this.token;
+
+    return new Headers(Object.assign(obj, tokenObj));
+  }
+
+  addScan(data = {}) {
     return fetch(process.env.REACT_APP_SCANS_SERVICE, {
       method: 'POST',
       credentials: 'same-origin',
-      headers: new Headers({
+      headers: this.setHeaders({
         'Content-Type': 'application/json'
       }),
       body: JSON.stringify(data)
@@ -18,12 +29,13 @@ class ScansService {
     });
   }
 
-  static cancelScan(id) {
+  cancelScan(id) {
     let apiPath = process.env.REACT_APP_SCANS_SERVICE_CANCEL.replace('{0}', id);
 
     return fetch(apiPath, {
       method: 'PUT',
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      headers: this.setHeaders()
     }).then(response => {
       if (response.ok) {
         return response.json();
@@ -33,11 +45,11 @@ class ScansService {
     });
   }
 
-  static getScan(id) {
+  getScan(id) {
     return this.getScans(id);
   }
 
-  static getScans(id = '', query = {}) {
+  getScans(id = '', query = {}) {
     let queryStr = jquery.param(query);
 
     if (queryStr.length) {
@@ -45,7 +57,8 @@ class ScansService {
     }
 
     return fetch(`${process.env.REACT_APP_SCANS_SERVICE}${id}${queryStr}`, {
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      headers: this.setHeaders()
     }).then(response => {
       if (response.ok) {
         return response.json();
@@ -55,13 +68,13 @@ class ScansService {
     });
   }
 
-  static getScanResults(id) {
+  getScanResults(id) {
     let apiPath = process.env.REACT_APP_SCANS_SERVICE_RESULTS.replace(
       '{0}',
       id
     );
 
-    return fetch(apiPath, { credentials: 'same-origin' }).then(response => {
+    return fetch(apiPath, { credentials: 'same-origin', headers: this.setHeaders() }).then(response => {
       if (response.ok) {
         return response.json();
       } else {
@@ -70,12 +83,13 @@ class ScansService {
     });
   }
 
-  static pauseScan(id) {
+  pauseScan(id) {
     let apiPath = process.env.REACT_APP_SCANS_SERVICE_PAUSE.replace('{0}', id);
 
     return fetch(apiPath, {
       method: 'PUT',
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      headers: this.setHeaders()
     }).then(response => {
       if (response.ok) {
         return response.json();
@@ -85,7 +99,7 @@ class ScansService {
     });
   }
 
-  static restartScan(id) {
+  restartScan(id) {
     let apiPath = process.env.REACT_APP_SCANS_SERVICE_RESTART.replace(
       '{0}',
       id
@@ -93,7 +107,8 @@ class ScansService {
 
     return fetch(apiPath, {
       method: 'PUT',
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      headers: this.setHeaders()
     }).then(response => {
       if (response.ok) {
         return response.json();

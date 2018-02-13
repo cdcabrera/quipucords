@@ -1,7 +1,18 @@
 import cookies from 'js-cookie';
 
 class UserService {
-  static authorizeUser() {
+  constructor(token = {}) {
+    this.token = token;
+  }
+
+  setHeaders(obj = {}) {
+    let tokenObj = {};
+    tokenObj[process.env.REACT_APP_AUTH_HEADER] = this.token;
+
+    return new Headers(Object.assign(obj, tokenObj));
+  }
+
+  authorizeUser() {
     // ToDo: ReEvaluate placement of this spoof for auth. Also consider using a helper function.
     if (process.env.NODE_ENV !== 'production') {
       cookies.set(process.env.REACT_APP_AUTH_TOKEN, 'spoof');
@@ -23,7 +34,7 @@ class UserService {
   }
 
   // ToDo: Replace randomized name generator
-  static whoami() {
+  whoami() {
     const arr = ['admin', 'John Doe', 'Jane Doe'];
 
     return this.authorizeUser().then(
@@ -36,7 +47,7 @@ class UserService {
     );
   }
 
-  static logoutUser() {
+  logoutUser() {
     return this.whoami().then(
       response =>
         new Promise((resolve, reject) => {

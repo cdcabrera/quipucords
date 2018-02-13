@@ -1,45 +1,57 @@
 import { credentialsTypes } from '../constants';
-import credentialsService from '../../services/credentialsService';
+import CredentialsService from '../../services/credentialsService';
 
-const addCredential = data => dispatch => {
+const addCredential = data => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: credentialsTypes.ADD_CREDENTIAL,
-    payload: credentialsService.addCredential(data)
+    payload: new CredentialsService(authToken).addCredential(data)
   });
 };
 
-const getCredential = id => dispatch => {
+const getCredential = id => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: credentialsTypes.GET_CREDENTIAL,
-    payload: credentialsService.getCredential(id)
+    payload: new CredentialsService(authToken).getCredential(id)
   });
 };
 
-const getCredentials = (query = {}) => dispatch => {
+const getCredentials = (query = {}) => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: credentialsTypes.GET_CREDENTIALS,
-    payload: credentialsService.getCredentials('', query)
+    payload: new CredentialsService(authToken).getCredentials('', query)
   });
 };
 
-const updateCredential = (id, data) => dispatch => {
+const updateCredential = (id, data) => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: credentialsTypes.UPDATE_CREDENTIAL,
-    payload: credentialsService.updateCredential(id, data)
+    payload: new CredentialsService(authToken).updateCredential(id, data)
   });
 };
 
-const deleteCredential = id => dispatch => {
+const deleteCredential = id => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: credentialsTypes.DELETE_CREDENTIAL,
-    payload: credentialsService.deleteCredential(id)
+    payload: new CredentialsService(authToken).deleteCredential(id)
   });
 };
 
-const deleteCredentials = (ids = []) => dispatch => {
+const deleteCredentials = (ids = []) => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: credentialsTypes.DELETE_CREDENTIALS,
-    payload: credentialsService.deleteCredential(ids)
+    payload: new CredentialsService(authToken).deleteCredential(ids)
   });
 };
 

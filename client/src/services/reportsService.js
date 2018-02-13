@@ -1,7 +1,18 @@
 import jquery from 'jquery';
 
 class ReportsService {
-  static getReports(query = {}) {
+  constructor(token = {}) {
+    this.token = token;
+  }
+
+  setHeaders(obj = {}) {
+    let tokenObj = {};
+    tokenObj[process.env.REACT_APP_AUTH_HEADER] = this.token;
+
+    return new Headers(Object.assign(obj, tokenObj));
+  }
+
+  getReports(query = {}) {
     let queryStr = jquery.param(query);
 
     if (queryStr.length) {
@@ -9,7 +20,8 @@ class ReportsService {
     }
 
     return fetch(`${process.env.REACT_APP_REPORTS_SERVICE}${queryStr}`, {
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      headers: this.setHeaders()
     }).then(response => {
       if (response.ok) {
         return response.json();

@@ -1,45 +1,57 @@
 import { sourcesTypes } from '../constants';
-import sourcesService from '../../services/sourcesService';
+import SourcesService from '../../services/sourcesService';
 
-const addSource = data => dispatch => {
+const addSource = data => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: sourcesTypes.ADD_SOURCE,
-    payload: sourcesService.addSource(data)
+    payload: new SourcesService(authToken).addSource(data)
   });
 };
 
-const deleteSource = id => dispatch => {
+const deleteSource = id => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: sourcesTypes.DELETE_SOURCE,
-    payload: sourcesService.deleteSource(id)
+    payload: new SourcesService(authToken).deleteSource(id)
   });
 };
 
-const deleteSources = (ids = []) => dispatch => {
+const deleteSources = (ids = []) => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: sourcesTypes.DELETE_SOURCES,
-    payload: sourcesService.deleteSources(ids)
+    payload: new SourcesService(authToken).deleteSources(ids)
   });
 };
 
-const getSource = id => dispatch => {
+const getSource = id => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: sourcesTypes.GET_SOURCE,
-    payload: sourcesService.getSource(id)
+    payload: new SourcesService(authToken).getSource(id)
   });
 };
 
-const getSources = (query = {}) => dispatch => {
+const getSources = (query = {}) => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: sourcesTypes.GET_SOURCES,
-    payload: sourcesService.getSources('', query)
+    payload: new SourcesService(authToken).getSources('', query)
   });
 };
 
-const updateSource = (id, data) => dispatch => {
+const updateSource = (id, data) => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: sourcesTypes.UPDATE_SOURCE,
-    payload: sourcesService.updateSource(id, data)
+    payload: new SourcesService(authToken).updateSource(id, data)
   });
 };
 

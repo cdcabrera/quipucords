@@ -1,24 +1,30 @@
 import { userTypes } from '../constants';
-import userService from '../../services/userService';
+import UserService from '../../services/userService';
 
-const getUser = () => dispatch => {
+const getUser = () => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: userTypes.USER_INFO,
-    payload: userService.whoami()
+    payload: new UserService(authToken).whoami()
   });
 };
 
-const authorizeUser = () => dispatch => {
+const authorizeUser = () => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: userTypes.USER_AUTH,
-    payload: userService.authorizeUser()
+    payload: new UserService(authToken).authorizeUser()
   });
 };
 
-const logoutUser = () => dispatch => {
+const logoutUser = () => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: userTypes.USER_LOGOUT,
-    payload: userService.logoutUser()
+    payload: new UserService(authToken).logoutUser()
   });
 };
 

@@ -1,10 +1,22 @@
 import jquery from 'jquery';
 
 class CredentialsService {
-  static addCredential(data = {}) {
+  constructor(token = {}) {
+    this.token = token;
+  }
+
+  setHeaders(obj = {}) {
+    let tokenObj = {};
+    tokenObj[process.env.REACT_APP_AUTH_HEADER] = this.token;
+
+    return new Headers(Object.assign(obj, tokenObj));
+  }
+
+  addCredential(data = {}) {
     return fetch(process.env.REACT_APP_CREDENTIALS_SERVICE, {
       method: 'POST',
-      headers: new Headers({
+      credentials: 'same-origin',
+      headers: this.setHeaders({
         'Content-Type': 'application/json'
       }),
       body: JSON.stringify(data)
@@ -17,9 +29,11 @@ class CredentialsService {
     });
   }
 
-  static deleteCredential(id) {
+  deleteCredential(id) {
     return fetch(`${process.env.REACT_APP_CREDENTIALS_SERVICE}${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      credentials: 'same-origin',
+      headers: this.setHeaders()
     }).then(response => {
       if (response.ok) {
         return response.json();
@@ -29,15 +43,15 @@ class CredentialsService {
     });
   }
 
-  static deleteCredentials(data = []) {
+  deleteCredentials(data = []) {
     return Promise.all.apply(this, data.map(id => this.deleteCredential(id)));
   }
 
-  static getCredential(id) {
+  getCredential(id) {
     return this.getCredentials(id);
   }
 
-  static getCredentials(id = '', query = {}) {
+  getCredentials(id = '', query = {}) {
     let queryStr = jquery.param(query);
 
     if (queryStr.length) {
@@ -45,7 +59,11 @@ class CredentialsService {
     }
 
     return fetch(
-      `${process.env.REACT_APP_CREDENTIALS_SERVICE}${id}${queryStr}`
+      `${process.env.REACT_APP_CREDENTIALS_SERVICE}${id}${queryStr}`,
+      {
+        credentials: 'same-origin',
+        headers: this.setHeaders()
+      }
     ).then(response => {
       if (response.ok) {
         return response.json();
@@ -55,10 +73,11 @@ class CredentialsService {
     });
   }
 
-  static updateCredential(id, data = {}) {
+  updateCredential(id, data = {}) {
     return fetch(`${process.env.REACT_APP_CREDENTIALS_SERVICE}${id}`, {
       method: 'PUT',
-      headers: new Headers({
+      credentials: 'same-origin',
+      headers: this.setHeaders({
         'Content-Type': 'application/json'
       }),
       body: JSON.stringify(data)

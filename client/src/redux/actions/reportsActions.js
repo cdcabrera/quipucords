@@ -1,10 +1,12 @@
 import { reportsTypes } from '../constants';
-import reportsService from '../../services/reportsService';
+import ReportsService from '../../services/reportsService';
 
-const getReports = query => dispatch => {
+const getReports = query => (dispatch, getState) => {
+  const { authToken } = getState().user.session;
+
   return dispatch({
     type: reportsTypes.GET_REPORTS,
-    payload: reportsService.getReports(query)
+    payload: new ReportsService(authToken).getReports(query)
   });
 };
 

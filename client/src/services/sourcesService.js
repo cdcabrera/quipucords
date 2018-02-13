@@ -1,11 +1,22 @@
 import jquery from 'jquery';
 
 class SourcesService {
-  static addSource(data = {}) {
+  constructor(token = {}) {
+    this.token = token;
+  }
+
+  setHeaders(obj = {}) {
+    let tokenObj = {};
+    tokenObj[process.env.REACT_APP_AUTH_HEADER] = this.token;
+
+    return new Headers(Object.assign(obj, tokenObj));
+  }
+
+  addSource(data = {}) {
     return fetch(process.env.REACT_APP_SOURCES_SERVICE, {
       method: 'POST',
       credentials: 'same-origin',
-      headers: new Headers({
+      headers: this.setHeaders({
         'Content-Type': 'application/json'
       }),
       body: JSON.stringify(data)
@@ -18,10 +29,11 @@ class SourcesService {
     });
   }
 
-  static deleteSource(id) {
+  deleteSource(id) {
     return fetch(`${process.env.REACT_APP_SOURCES_SERVICE}${id}`, {
       method: 'DELETE',
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      headers: this.setHeaders()
     }).then(response => {
       if (response.ok) {
         return response.json();
@@ -31,15 +43,15 @@ class SourcesService {
     });
   }
 
-  static deleteSources(data = []) {
+  deleteSources(data = []) {
     return Promise.all.apply(this, data.map(id => this.deleteSource(id)));
   }
 
-  static getSource(id) {
+  getSource(id) {
     return this.getSources(id);
   }
 
-  static getSources(id = '', query = {}) {
+  getSources(id = '', query = {}) {
     let queryStr = jquery.param(query);
 
     if (queryStr.length) {
@@ -47,7 +59,8 @@ class SourcesService {
     }
 
     return fetch(`${process.env.REACT_APP_SOURCES_SERVICE}${id}${queryStr}`, {
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      headers: this.setHeaders()
     }).then(response => {
       if (response.ok) {
         return response.json();
@@ -57,11 +70,11 @@ class SourcesService {
     });
   }
 
-  static updateSource(id, data = {}) {
+  updateSource(id, data = {}) {
     return fetch(`${process.env.REACT_APP_SOURCES_SERVICE}${id}`, {
       method: 'PUT',
       credentials: 'same-origin',
-      headers: new Headers({
+      headers: this.setHeaders({
         'Content-Type': 'application/json'
       }),
       body: JSON.stringify(data)
