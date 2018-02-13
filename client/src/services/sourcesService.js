@@ -4,6 +4,7 @@ class SourcesService {
   static addSource(data = {}) {
     return fetch(process.env.REACT_APP_SOURCES_SERVICE, {
       method: 'POST',
+      credentials: 'same-origin',
       headers: new Headers({
         'Content-Type': 'application/json'
       }),
@@ -19,7 +20,8 @@ class SourcesService {
 
   static deleteSource(id) {
     return fetch(`${process.env.REACT_APP_SOURCES_SERVICE}${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      credentials: 'same-origin'
     }).then(response => {
       if (response.ok) {
         return response.json();
@@ -44,9 +46,9 @@ class SourcesService {
       queryStr = `?${queryStr}`;
     }
 
-    return fetch(
-      `${process.env.REACT_APP_SOURCES_SERVICE}${id}${queryStr}`
-    ).then(response => {
+    return fetch(`${process.env.REACT_APP_SOURCES_SERVICE}${id}${queryStr}`, {
+      credentials: 'same-origin'
+    }).then(response => {
       if (response.ok) {
         return response.json();
       } else {
@@ -58,6 +60,7 @@ class SourcesService {
   static updateSource(id, data = {}) {
     return fetch(`${process.env.REACT_APP_SOURCES_SERVICE}${id}`, {
       method: 'PUT',
+      credentials: 'same-origin',
       headers: new Headers({
         'Content-Type': 'application/json'
       }),

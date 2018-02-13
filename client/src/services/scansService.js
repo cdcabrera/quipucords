@@ -4,6 +4,7 @@ class ScansService {
   static addScan(data = {}) {
     return fetch(process.env.REACT_APP_SCANS_SERVICE, {
       method: 'POST',
+      credentials: 'same-origin',
       headers: new Headers({
         'Content-Type': 'application/json'
       }),
@@ -21,7 +22,8 @@ class ScansService {
     let apiPath = process.env.REACT_APP_SCANS_SERVICE_CANCEL.replace('{0}', id);
 
     return fetch(apiPath, {
-      method: 'PUT'
+      method: 'PUT',
+      credentials: 'same-origin'
     }).then(response => {
       if (response.ok) {
         return response.json();
@@ -42,15 +44,15 @@ class ScansService {
       queryStr = `?${queryStr}`;
     }
 
-    return fetch(`${process.env.REACT_APP_SCANS_SERVICE}${id}${queryStr}`).then(
-      response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error(response.statusText);
-        }
+    return fetch(`${process.env.REACT_APP_SCANS_SERVICE}${id}${queryStr}`, {
+      credentials: 'same-origin'
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error(response.statusText);
       }
-    );
+    });
   }
 
   static getScanResults(id) {
@@ -59,7 +61,7 @@ class ScansService {
       id
     );
 
-    return fetch(apiPath).then(response => {
+    return fetch(apiPath, { credentials: 'same-origin' }).then(response => {
       if (response.ok) {
         return response.json();
       } else {
@@ -72,7 +74,8 @@ class ScansService {
     let apiPath = process.env.REACT_APP_SCANS_SERVICE_PAUSE.replace('{0}', id);
 
     return fetch(apiPath, {
-      method: 'PUT'
+      method: 'PUT',
+      credentials: 'same-origin'
     }).then(response => {
       if (response.ok) {
         return response.json();
@@ -89,7 +92,8 @@ class ScansService {
     );
 
     return fetch(apiPath, {
-      method: 'PUT'
+      method: 'PUT',
+      credentials: 'same-origin'
     }).then(response => {
       if (response.ok) {
         return response.json();

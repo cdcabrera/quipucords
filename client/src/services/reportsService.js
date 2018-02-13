@@ -8,15 +8,15 @@ class ReportsService {
       queryStr = `?${queryStr}`;
     }
 
-    return fetch(`${process.env.REACT_APP_REPORTS_SERVICE}${queryStr}`).then(
-      response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error(response.statusText);
-        }
+    return fetch(`${process.env.REACT_APP_REPORTS_SERVICE}${queryStr}`, {
+      credentials: 'same-origin'
+    }).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error(response.statusText);
       }
-    );
+    });
   }
 }
 
