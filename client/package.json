@@ -23,7 +23,6 @@
     "api:update": "npm run api:dev -- -u; npm run api:stage -- -u; npm run api:prod -- -u",
     "api:doc": "node ./scripts/swagger.js & open http://localhost:4040/docs/api",
     "build:css": "node-sass --include-path ./src/styles $npm_package_sassDepIncludes src/styles/entitlements.scss -o src/styles/css",
-    "watch:css": "npm run build:css && node-sass --include-path ./src/styles $npm_package_sassDepIncludes src/styles/entitlements.scss -o src/styles/css --watch --recursive",
     "build:js": "react-scripts build",
     "build:ui": "run-s build:css build:js",
     "build:asset-deps": "mkdir -p public/assets/rcue && cp -R node_modules/rcue/dist/* public/assets/rcue",
@@ -31,14 +30,14 @@
     "build:assets": "npm-run-all build:asset-*",
     "build:finish": "mkdir -p ../quipucords/client && cp -R ./build/* ../quipucords/client",
     "build:prod": "run-s -l build:assets build:ui build:finish",
-    "start:js": "run-p -l api:dev api:doc start:client",
-    "start": "npm-run-all -p watch:css start:js",
-    "start:client": "react-scripts start",
-    "start:quipucords-docker": "npm run api:prod; open https://localhost/login/",
+    "start:css": "npm run build:css && node-sass --include-path ./src/styles $npm_package_sassDepIncludes src/styles/entitlements.scss -o src/styles/css --watch --recursive",
+    "start:ui": "react-scripts start",
+    "start": "run-p -l api:dev api:doc start:css start:ui",
+    "start:prod": "npm run api:prod; open https://localhost/login/",
+    "support:create-react-app": "create-react-app",
     "test": "run-s test:**",
     "test:lint-js": "eslint --ext=js --ext=jsx src",
-    "test:unit": "react-scripts test --env=jsdom",
-    "support:create-react-app": "create-react-app"
+    "test:unit": "react-scripts test --env=jsdom"
   },
   "dependencies": {
     "axios": "^0.17.1",
