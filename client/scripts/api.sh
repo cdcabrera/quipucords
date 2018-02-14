@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 #
-# Check container running
+# Check if a container is running. Currently supporting the mockApi container
 checkContainerRunning()
 {
   local CONTAINER=$1
@@ -41,7 +41,7 @@ checkContainerRunning()
 }
 #
 #
-# Install & Run Quipucords API Mock
+# Install & Run Quipucords API Mock Container
 #
 mockApi()
 {
@@ -72,9 +72,9 @@ mockApi()
 }
 #
 #
-# Install & Run Quipucords API
+# Install & Run Quipucords API Container
 #
-api()
+prodApi()
 {
   local CONTAINER="quipucords"
   local PORT=$1
@@ -125,7 +125,7 @@ api()
   if [ -f "$FILE" ]; then
     mockApi $PORT "$FILE" $UPDATE
   else
-    api $PORT $UPDATE
+    prodApi $PORT $UPDATE
   fi
 
   echo ""
