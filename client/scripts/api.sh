@@ -70,7 +70,7 @@ devApi()
   if [ ! -z "$(docker ps | grep $CONTAINER)" ] && [ "$UPDATE" = false ]; then
     echo "  Container: $(docker ps | grep $CONTAINER | cut -c 1-80)"
     echo "  Development API running: http://localhost:$PORT/"
-    printf "  To stop: $ \e[31mdocker stop $NAME\e[39m\n"
+    printf "  To stop: $ \e[32mdocker stop $NAME\e[39m\n"
   fi
 }
 #
@@ -102,7 +102,7 @@ stageApi()
     echo "  Container: $(docker ps | grep $CONTAINER | cut -c 1-80)"
     echo "  Stage API running: https://localhost:$PORT/"
     echo "  Connected to local directory: $(basename $DIR | cut -c 1-80)"
-    printf "  To stop: $ \e[31mdocker stop $NAME\e[39m\n"
+    printf "  To stop: $ \e[32mdocker stop $NAME\e[39m\n"
   fi
 }
 #
@@ -132,7 +132,7 @@ prodApi()
   if [ ! -z "$(docker ps | grep $CONTAINER)" ] && [ "$UPDATE" = false ]; then
     echo "  Container: $(docker ps | grep $CONTAINER | cut -c 1-80)"
     echo "  Production API running: https://localhost:$PORT/"
-    printf "  To stop: $ \e[31mdocker stop $NAME\e[39m\n"
+    printf "  To stop: $ \e[32mdocker stop $NAME\e[39m\n"
   fi
 }
 #
