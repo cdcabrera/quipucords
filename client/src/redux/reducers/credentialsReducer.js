@@ -129,7 +129,6 @@ const credentialsReducer = function(state = initialState, action) {
         },
         {
           state,
-          initialState,
           reset: false
         }
       );
@@ -146,7 +145,6 @@ const credentialsReducer = function(state = initialState, action) {
         },
         {
           state,
-          initialState,
           reset: false
         }
       );
@@ -162,7 +160,6 @@ const credentialsReducer = function(state = initialState, action) {
         },
         {
           state,
-          initialState,
           reset: false
         }
       );
@@ -190,7 +187,6 @@ const credentialsReducer = function(state = initialState, action) {
         },
         {
           state,
-          initialState,
           reset: false
         }
       );
@@ -206,7 +202,6 @@ const credentialsReducer = function(state = initialState, action) {
         },
         {
           state,
-          initialState,
           reset: false
         }
       );
@@ -219,7 +214,6 @@ const credentialsReducer = function(state = initialState, action) {
         },
         {
           state,
-          initialState,
           reset: false
         }
       );
@@ -251,7 +245,6 @@ const credentialsReducer = function(state = initialState, action) {
         },
         {
           state,
-          initialState,
           reset: false
         }
       );
@@ -270,7 +263,6 @@ const credentialsReducer = function(state = initialState, action) {
         },
         {
           state,
-          initialState,
           reset: false
         }
       );
@@ -287,7 +279,6 @@ const credentialsReducer = function(state = initialState, action) {
         },
         {
           state,
-          initialState,
           reset: false
         }
       );
@@ -301,6 +292,22 @@ const credentialsReducer = function(state = initialState, action) {
           selected: selectedIndex(state, nextCredential) !== -1
         };
       });
+
+      // if the wizard is open, don't refresh the view
+      if (_.get(action, 'meta.wizardShowState', false)) {
+        return helpers.setStateProp(
+          'view',
+          {
+            credentials: credentials,
+            pending: false
+          },
+          {
+            state,
+            reset: false
+          }
+        );
+      }
+
       return helpers.setStateProp(
         'view',
         {
@@ -322,7 +329,6 @@ const credentialsReducer = function(state = initialState, action) {
         },
         {
           state,
-          initialState,
           reset: false
         }
       );

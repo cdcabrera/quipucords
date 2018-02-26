@@ -1,5 +1,6 @@
 import { credentialsTypes } from '../constants';
 import credentialsService from '../../services/credentialsService';
+import _ from 'lodash';
 
 const addCredential = data => dispatch => {
   return dispatch({
@@ -15,10 +16,15 @@ const getCredential = id => dispatch => {
   });
 };
 
-const getCredentials = (query = {}) => dispatch => {
+const getCredentials = (query = {}) => (dispatch, getState) => {
+  const getWizardShowState = _.get(getState(), 'addSourceWizard.view.show', false);
+
   return dispatch({
     type: credentialsTypes.GET_CREDENTIALS,
-    payload: credentialsService.getCredentials('', query)
+    payload: credentialsService.getCredentials('', query),
+    meta: {
+      wizardShowState: getWizardShowState
+    }
   });
 };
 
