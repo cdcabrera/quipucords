@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { SplitButton, MenuItem, Checkbox, Button, Icon, Form } from 'patternfly-react';
 import Store from '../../redux/store';
@@ -6,6 +7,7 @@ import helpers from '../../common/helpers';
 import { addSourceWizardField as FieldGroup } from './addSourceWizardField';
 import { apiTypes } from '../../constants';
 import { sourcesTypes, credentialsTypes } from '../../redux/constants';
+import { getCredentials } from '../../redux/actions/credentialsActions';
 import _ from 'lodash';
 
 class AddSourceWizardStepTwo extends React.Component {
@@ -54,6 +56,10 @@ class AddSourceWizardStepTwo extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState(this.resetInitialState(nextProps));
+  }
+
+  componentDidMount() {
+    this.props.getCredentials();
   }
 
   credentialInfo(id) {
@@ -407,8 +413,16 @@ class AddSourceWizardStepTwo extends React.Component {
   }
 }
 
+AddSourceWizardStepTwo.propTypes = {
+  getCredentials: PropTypes.func
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  getCredentials: () => dispatch(getCredentials())
+});
+
 const mapStateToProps = function(state) {
   return Object.assign({}, state.addSourceWizard.view);
 };
 
-export default connect(mapStateToProps)(AddSourceWizardStepTwo);
+export default connect(mapStateToProps, mapDispatchToProps)(AddSourceWizardStepTwo);

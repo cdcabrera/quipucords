@@ -11,7 +11,6 @@ import { addSource, updateSource } from '../../redux/actions/sourcesActions';
 import AddSourceWizardStepOne from './addSourceWizardStepOne';
 import AddSourceWizardStepTwo from './addSourceWizardStepTwo';
 import AddSourceWizardStepThree from './addSourceWizardStepThree';
-import { getCredentials } from '../../redux/actions/credentialsActions';
 
 class AddSourceWizard extends React.Component {
   constructor(props) {
@@ -50,10 +49,6 @@ class AddSourceWizard extends React.Component {
         errorMessage: nextProps.errorMessage
       });
     }
-  }
-
-  componentDidMount() {
-    this.props.getCredentials();
   }
 
   resetInitialState(nextProps) {
@@ -216,7 +211,6 @@ class AddSourceWizard extends React.Component {
 AddSourceWizard.propTypes = {
   addSource: PropTypes.func,
   updateSource: PropTypes.func,
-  getCredentials: PropTypes.func,
   show: PropTypes.bool.isRequired,
   source: PropTypes.object,
   stepOneValid: PropTypes.bool,
@@ -228,8 +222,7 @@ AddSourceWizard.propTypes = {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   addSource: data => dispatch(addSource(data)),
-  updateSource: (id, data) => dispatch(updateSource(id, data)),
-  getCredentials: () => dispatch(getCredentials())
+  updateSource: (id, data) => dispatch(updateSource(id, data))
 });
 
 const mapStateToProps = function(state) {
