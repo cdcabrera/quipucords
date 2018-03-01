@@ -1,5 +1,6 @@
 import { scansTypes } from '../../constants/index';
 import scansReducer from '../scansReducer';
+import { scansMock } from '../../../../tests/mockFixtures';
 
 const initialState = {
   persist: {},
@@ -245,52 +246,11 @@ describe('scansReducer', function() {
   });
 
   it('should handle GET_SCAN_JOBS_FULFILLED', () => {
-    let mockResults = [
-      {
-        scan_type: 'inspect',
-        options: {
-          max_concurrency: 0,
-          disabled_optional_products: {
-            jboss_eap: true,
-            jboss_fuse: true,
-            jboss_brms: true
-          }
-        },
-        id: 0,
-        status: 'created',
-        sources: [
-          {
-            id: 0,
-            name: 'string',
-            source_type: 'network'
-          }
-        ],
-        tasks: [
-          {
-            source: 0,
-            scan_type: 'inspect',
-            status: 'created',
-            start_time: '2018-02-23T20:37:42.989Z',
-            end_time: '2018-02-23T20:37:42.989Z',
-            systems_count: 0,
-            systems_scanned: 0,
-            systems_failed: 0
-          }
-        ],
-        start_time: '2018-02-23T20:37:42.989Z',
-        end_time: '2018-02-23T20:37:42.989Z',
-        systems_count: 0,
-        systems_scanned: 0,
-        systems_failed: 0,
-        report_id: 0
-      }
-    ];
-
     let dispatched = {
       type: scansTypes.GET_SCAN_JOBS_FULFILLED,
       payload: {
         data: {
-          results: mockResults
+          results: { ...scansMock.getScanJobs }
         }
       }
     };
@@ -298,7 +258,7 @@ describe('scansReducer', function() {
     let resultState = scansReducer(undefined, dispatched);
 
     expect(resultState.jobs.fulfilled).toBeTruthy();
-    expect(resultState.jobs.jobs).toEqual(mockResults);
+    expect(resultState.jobs.jobs).toEqual(scansMock.getScanJobs);
 
     expect(resultState.persist).toEqual(initialState.persist);
     expect(resultState.view).toEqual(initialState.view);

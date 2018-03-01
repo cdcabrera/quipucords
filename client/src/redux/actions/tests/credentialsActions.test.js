@@ -4,6 +4,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { credentialsActions } from '../';
 import { credentialsReducer } from '../../reducers';
+import { credentialsMock } from '../../../../tests/mockFixtures';
 
 describe('CredentialsActions', function() {
   const middleware = [promiseMiddleware()];
@@ -17,35 +18,6 @@ describe('CredentialsActions', function() {
   afterEach(() => {
     moxios.uninstall();
   });
-
-  const getCredentialsMock = {
-    results: {
-      count: 0,
-      next: 'string',
-      previous: 'string',
-      results: [
-        {
-          name: 'string',
-          cred_type: 'network',
-          username: 'string',
-          password: 'string',
-          ssh_keyfile: 'string',
-          become_method: 'sudo',
-          become_user: 'string',
-          become_password: 'string',
-          sources: [
-            {
-              id: 0,
-              name: 'string',
-              source_type: 'network'
-            }
-          ],
-          id: 0
-        }
-      ]
-    },
-    headers: { 'content-type': 'application/json' }
-  };
 
   it('Updates the credentials view state when getCredentials is complete', () => {});
 });
