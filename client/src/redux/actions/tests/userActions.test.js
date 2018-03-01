@@ -4,6 +4,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { userActions } from '../';
 import { userReducer } from '../../reducers';
+import { userMock } from '../../../../tests/mockFixtures';
 
 describe('CredentialsActions', function() {
   const middleware = [promiseMiddleware()];
@@ -16,13 +17,6 @@ describe('CredentialsActions', function() {
   afterEach(() => {
     moxios.uninstall();
   });
-
-  const getUserMock = {
-    results: {
-      username: 'string'
-    },
-    headers: { 'content-type': 'application/json' }
-  };
 
   it('Update the user state with a username of the current user', () => {});
 });

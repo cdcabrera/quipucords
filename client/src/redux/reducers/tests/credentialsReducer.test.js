@@ -1,5 +1,6 @@
 import { credentialsTypes } from '../../constants/index';
 import credentialsReducer from '../credentialsReducer';
+import { credentialsMock } from '../../../../tests/mockFixtures';
 
 const initialState = {
   persist: {
@@ -218,33 +219,14 @@ describe('CredentialsReducer', function() {
     let dispatched = {
       type: credentialsTypes.GET_CREDENTIALS_FULFILLED,
       payload: {
-        data: {
-          results: [
-            {
-              name: '1',
-              id: 1
-            },
-            {
-              name: '2',
-              id: 2
-            },
-            {
-              name: '3',
-              id: 3
-            },
-            {
-              name: '4',
-              id: 4
-            }
-          ]
-        }
+        data: { ...credentialsMock.getCredentials }
       }
     };
 
     let resultState = credentialsReducer(undefined, dispatched);
 
     expect(resultState.view.fulfilled).toBeTruthy();
-    expect(resultState.view.credentials).toHaveLength(4);
+    expect(resultState.view.credentials).toHaveLength(1);
 
     expect(resultState.persist).toEqual(initialState.persist);
     expect(resultState.update).toEqual(initialState.update);

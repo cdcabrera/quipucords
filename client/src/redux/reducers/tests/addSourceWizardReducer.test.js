@@ -1,5 +1,6 @@
 import { sourcesTypes } from '../../constants/index';
 import addSourceWizardReducer from '../addSourceWizardReducer';
+import { sourcesMock } from '../../../../tests/mockFixtures';
 
 const initialState = {
   view: {
@@ -109,35 +110,7 @@ describe('AddSourceWizardReducer', function() {
     let dispatched = {
       type: sourcesTypes.UPDATE_SOURCE_FULFILLED,
       payload: {
-        data: {
-          name: 'string',
-          source_type: 'network',
-          hosts: ['string'],
-          port: 0,
-          id: 0,
-          credentials: [
-            {
-              id: 0,
-              name: 'string',
-              cred_type: 'network'
-            }
-          ],
-          options: {
-            satellite_version: '5',
-            ssl_cert_verify: true,
-            ssl_protocol: 'SSLv2',
-            disable_ssl: true
-          },
-          connection: {
-            id: 0,
-            start_time: '2018-02-21T19:04:18.820Z',
-            end_time: '2018-02-21T19:04:18.820Z',
-            status: 'created',
-            systems_count: 0,
-            systems_scanned: 0,
-            systems_failed: 0
-          }
-        }
+        data: { ...sourcesMock.putSourceResponse }
       }
     };
 
@@ -150,35 +123,7 @@ describe('AddSourceWizardReducer', function() {
     let dispatched = {
       type: sourcesTypes.ADD_SOURCE_FULFILLED,
       payload: {
-        data: {
-          name: 'string',
-          source_type: 'network',
-          hosts: ['string'],
-          port: 0,
-          id: 0,
-          credentials: [
-            {
-              id: 0,
-              name: 'string',
-              cred_type: 'network'
-            }
-          ],
-          options: {
-            satellite_version: '5',
-            ssl_cert_verify: true,
-            ssl_protocol: 'SSLv2',
-            disable_ssl: true
-          },
-          connection: {
-            id: 0,
-            start_time: '2018-02-21T19:04:18.820Z',
-            end_time: '2018-02-21T19:04:18.820Z',
-            status: 'created',
-            systems_count: 0,
-            systems_scanned: 0,
-            systems_failed: 0
-          }
-        }
+        data: { ...sourcesMock.postSourcesResponse }
       }
     };
 

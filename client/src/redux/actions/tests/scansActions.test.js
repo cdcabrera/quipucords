@@ -4,6 +4,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { scansActions } from '../';
 import { scansReducer } from '../../reducers';
+import { scansMock } from '../../../../tests/mockFixtures';
 
 describe('ScansActions', function() {
   const middleware = [promiseMiddleware()];
@@ -17,34 +18,14 @@ describe('ScansActions', function() {
     moxios.uninstall();
   });
 
-  const getScansMock = {
-    results: [
-      {
-        name: '1',
-        id: 1
-      },
-      {
-        name: '5',
-        id: 5
-      },
-      {
-        name: '6',
-        id: 6
-      },
-      {
-        name: '7',
-        id: 7
-      }
-    ],
-    headers: { 'content-type': 'application/json' }
-  };
-
   it('Update the scans view state when getScans is complete', done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 200,
-        response: getScansMock
+        response: {
+          ...scansMock.getScans
+        }
       });
     });
 
@@ -56,7 +37,7 @@ describe('ScansActions', function() {
     dispatcher(store.dispatch).then(() => {
       const view = store.getState().scans.view;
 
-      expect(view.scans).toEqual(getScansMock.results);
+      expect(view.scans).toEqual(scansMock.getScans.results);
       expect(view.fulfilled).toBeTruthy();
       expect(view.pending).toBeFalsy();
       expect(view.error).toBeFalsy();
