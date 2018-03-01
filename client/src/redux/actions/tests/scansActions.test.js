@@ -39,7 +39,7 @@ describe('ScansActions', function() {
     headers: { 'content-type': 'application/json' }
   };
 
-  it('updates the scans view state when getScans has been done', done => {
+  it('Update the scans view state when getScans is complete', done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -55,8 +55,6 @@ describe('ScansActions', function() {
 
     dispatcher(store.dispatch).then(() => {
       const view = store.getState().scans.view;
-
-      console.log(view);
 
       expect(view.scans).toEqual(getScansMock.results);
       expect(view.fulfilled).toBeTruthy();
