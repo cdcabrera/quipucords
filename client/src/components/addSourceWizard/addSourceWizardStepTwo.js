@@ -310,7 +310,7 @@ class AddSourceWizardStepTwo extends React.Component {
                 name="port"
                 type="text"
                 value={port}
-                placeholder="Enter a port"
+                placeholder="Default port :22"
                 onChange={this.onChangePort}
               />
             </FieldGroup>
@@ -326,7 +326,7 @@ class AddSourceWizardStepTwo extends React.Component {
                 name="hosts"
                 type="text"
                 value={singleHostPort}
-                placeholder="Enter an IP address:port"
+                placeholder="Enter an IP address (default port :443)"
                 onChange={this.onChangeHost}
               />
             </FieldGroup>
