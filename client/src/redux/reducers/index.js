@@ -26,6 +26,19 @@ const reducers = {
 
 const reduxReducers = combineReducers(reducers);
 
-export { reduxReducers, reducers };
+export {
+  reduxReducers,
+  reducers,
+  addSourceWizardReducer,
+  credentialsReducer,
+  factsReducer,
+  reportsReducer,
+  sourcesReducer,
+  scansReducer,
+  toastNotificationsReducer,
+  confirmationModalReducer,
+  viewOptionsReducer,
+  userReducer
+};
 
 export default reduxReducers;
