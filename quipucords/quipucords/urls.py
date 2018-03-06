@@ -28,6 +28,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
+from django.views.generic.base import TemplateView
 
 urlpatterns = [
     url(r'^login/$', auth_views.login, name='login'),
@@ -38,6 +39,8 @@ urlpatterns = [
 
     url(r'^$', RedirectView.as_view(url='/login', permanent=False),
         name='home'),
+
+    url(r'^client/^$', TemplateView.as_view(template_name='client/index.html'), name='client'),
 
     # static files (*.css, *.js, *.jpg etc.)
     url(r'^(client/(sources|scans|credentials|))$',
