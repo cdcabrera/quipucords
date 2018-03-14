@@ -14,7 +14,7 @@ import { getScanResults } from '../../redux/actions/scansActions';
 
 import { SourceCredentialsList } from './sourceCredentialsList';
 import SourceHostList from './sourceHostList';
-import { SimpleTooltip } from '../simpleTooltIp/simpleTooltip';
+import SimpleTooltip from '../simpleTooltIp/simpleTooltip';
 import ListStatusItem from '../listStatusItem/listStatusItem';
 
 class SourceListItem extends React.Component {

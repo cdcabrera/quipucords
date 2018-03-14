@@ -11,7 +11,7 @@ import { helpers } from '../../common/helpers';
 import Store from '../../redux/store';
 import { viewTypes } from '../../redux/constants';
 
-import { SimpleTooltip } from '../simpleTooltIp/simpleTooltip';
+import SimpleTooltip from '../simpleTooltIp/simpleTooltip';
 import { ScanSourceList } from './scanSourceList';
 import ScanHostsList from './scanHostList';
 import ScanJobsList from './scanJobsList';
