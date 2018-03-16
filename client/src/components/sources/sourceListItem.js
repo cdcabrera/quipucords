@@ -1,10 +1,10 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
+import { connect } from 'react-redux';
+import { Popover, OverlayTrigger, ListView, Button, Checkbox, Icon } from 'patternfly-react';
 import _ from 'lodash';
 import * as moment from 'moment';
-import React from 'react';
-import { connect } from 'react-redux';
-import cx from 'classnames';
-import PropTypes from 'prop-types';
-import { Popover, OverlayTrigger, ListView, Button, Checkbox, Icon } from 'patternfly-react';
 import { helpers } from '../../common/helpers';
 import Store from '../../redux/store';
 import { viewTypes } from '../../redux/constants';
@@ -119,8 +119,7 @@ class SourceListItem extends React.Component {
 
   renderSourceType() {
     const { item } = this.props;
-
-    let typeIcon = helpers.sourceTypeIcon(item.source_type);
+    const typeIcon = helpers.sourceTypeIcon(item.source_type);
 
     return (
       <SimpleTooltip id="sourceTypeTip" tooltip={helpers.sourceTypeString(item.source_type)}>
@@ -154,8 +153,8 @@ class SourceListItem extends React.Component {
   renderStatusItems() {
     const { item } = this.props;
 
-    let expandType = this.expandType();
-    let credentialCount = _.size(_.get(item, 'credentials', []));
+    const expandType = this.expandType();
+    const credentialCount = _.size(_.get(item, 'credentials', []));
     let okHostCount = _.get(item, 'connection.systems_scanned', 0);
     let failedHostCount = _.get(item, 'connection.systems_failed', 0);
 
@@ -284,11 +283,11 @@ class SourceListItem extends React.Component {
   renderScanStatus() {
     const { item } = this.props;
 
-    let scan = _.get(item, 'connection');
+    const scan = _.get(item, 'connection');
     let scanDescription = '';
     let scanTime = _.get(scan, 'end_time');
-
     let icon = null;
+
     switch (_.get(scan, 'status')) {
       case 'completed':
         scanDescription = 'Last Connected';
