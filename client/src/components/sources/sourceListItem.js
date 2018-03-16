@@ -4,15 +4,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-
 import { Popover, OverlayTrigger, ListView, Button, Checkbox, Icon } from 'patternfly-react';
-
 import { helpers } from '../../common/helpers';
 import Store from '../../redux/store';
 import { viewTypes } from '../../redux/constants';
 import { getScanResults } from '../../redux/actions/scansActions';
-
-import { SourceCredentialsList } from './sourceCredentialsList';
+import SourceCredentialsList from './sourceCredentialsList';
 import SourceHostList from './sourceHostList';
 import SimpleTooltip from '../simpleTooltIp/simpleTooltip';
 import ListStatusItem from '../listStatusItem/listStatusItem';

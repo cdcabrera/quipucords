@@ -29,6 +29,4 @@ SimpleTooltip.defaultProps = {
   delayShow: 500
 };
 
-export { SimpleTooltip };
-
 export default SimpleTooltip;
