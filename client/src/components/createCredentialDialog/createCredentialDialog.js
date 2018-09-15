@@ -384,18 +384,18 @@ class CreateCredentialDialog extends React.Component {
     );
   }
 
-  errorDismissed() {
+  onErrorDismissed = () => {
     Store.dispatch({
       type: credentialsTypes.RESET_CREDENTIAL_UPDATE_STATUS
     });
-  }
+  };
 
   renderErrorMessage() {
     const { error, errorMessage } = this.props;
 
     if (error) {
       return (
-        <Alert type="error" onDismiss={this.errorDismissed}>
+        <Alert type="error" onDismiss={this.onErrorDismissed}>
           <strong>Error</strong> {errorMessage}
         </Alert>
       );
@@ -544,4 +544,7 @@ const mapStateToProps = function(state) {
   });
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateCredentialDialog);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateCredentialDialog);

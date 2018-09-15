@@ -110,12 +110,12 @@ class Credentials extends React.Component {
     }
   }
 
-  addCredential(credentialType) {
+  onAddCredential = credentialType => {
     Store.dispatch({
       type: credentialsTypes.CREATE_CREDENTIAL_SHOW,
       credentialType
     });
-  }
+  };
 
   deleteNextCredential() {
     if (this.credentialsToDelete.length > 0) {
@@ -225,13 +225,13 @@ class Credentials extends React.Component {
     return (
       <div className="form-group">
         <DropdownButton bsStyle="primary" title="Add" pullRight id="createCredentialButton">
-          <MenuItem eventKey="1" onClick={() => this.addCredential('network')}>
+          <MenuItem eventKey="1" onClick={() => this.onAddCredential('network')}>
             Network Credential
           </MenuItem>
-          <MenuItem eventKey="2" onClick={() => this.addCredential('satellite')}>
+          <MenuItem eventKey="2" onClick={() => this.onAddCredential('satellite')}>
             Satellite Credential
           </MenuItem>
-          <MenuItem eventKey="2" onClick={() => this.addCredential('vcenter')}>
+          <MenuItem eventKey="2" onClick={() => this.onAddCredential('vcenter')}>
             VCenter Credential
           </MenuItem>
         </DropdownButton>
@@ -328,7 +328,7 @@ class Credentials extends React.Component {
     return (
       <React.Fragment>
         {this.renderPendingMessage()}
-        <CredentialsEmptyState onAddCredential={this.addCredential} onAddSource={this.addSource} />,
+        <CredentialsEmptyState onAddCredential={this.onAddCredential} onAddSource={this.addSource} />,
       </React.Fragment>
     );
   }
@@ -358,4 +358,7 @@ const mapStateToProps = function(state) {
   });
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Credentials);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Credentials);

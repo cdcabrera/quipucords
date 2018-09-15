@@ -106,14 +106,14 @@ class CreateScanDialog extends React.Component {
     this.setState({ start: value });
   }
 
-  validateScanName(scanName) {
+  static validateScanName(scanName) {
     return scanName && scanName.length > 0;
   }
 
   updateScanName(event) {
     this.setState({
       scanName: event.target.value,
-      validScanName: this.validateScanName(event.target.value)
+      validScanName: CreateScanDialog.validateScanName(event.target.value)
     });
   }
 
