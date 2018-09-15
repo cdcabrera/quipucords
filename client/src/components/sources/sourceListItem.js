@@ -196,7 +196,7 @@ class SourceListItem extends React.Component {
     ];
   }
 
-  renderHostRow(host) {
+  static renderHostRow(host) {
     const iconInfo = helpers.scanStatusIcon(host.status);
     const classes = cx(...iconInfo.classNames);
 
@@ -231,7 +231,7 @@ class SourceListItem extends React.Component {
             sourceId={item.id}
             lastRefresh={lastRefresh}
             status="success"
-            renderHostRow={this.renderHostRow}
+            renderHostRow={SourceListItem.renderHostRow}
             useConnectionResults
           />
         );
@@ -242,7 +242,7 @@ class SourceListItem extends React.Component {
             sourceId={item.id}
             lastRefresh={lastRefresh}
             status="failed"
-            renderHostRow={this.renderHostRow}
+            renderHostRow={SourceListItem.renderHostRow}
             useConnectionResults
           />
         );
@@ -253,7 +253,7 @@ class SourceListItem extends React.Component {
             sourceId={item.id}
             lastRefresh={lastRefresh}
             status="unreachable"
-            renderHostRow={this.renderHostRow}
+            renderHostRow={SourceListItem.renderHostRow}
             useConnectionResults
           />
         );
