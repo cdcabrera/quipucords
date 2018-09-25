@@ -5,41 +5,55 @@ const initialState = {
   paused: false
 };
 
-const toastNotificationsReducer = function(state = initialState, action) {
+const toastNotificationsReducer = (state = initialState, action) => {
   switch (action.type) {
     case toastNotificationTypes.TOAST_ADD:
-      let newToast = {
+      const newToast = {
         header: action.header,
         message: action.message,
         alertType: action.alertType,
         persistent: action.persistent
       };
-      return Object.assign({}, state, {
-        toasts: [...state.toasts, newToast],
-        displayedToasts: state.displayedToasts + 1
-      });
+
+      return {
+        ...state,
+        ...{
+          toasts: [...state.toasts, newToast],
+          displayedToasts: state.displayedToasts + 1
+        }
+      };
 
     case toastNotificationTypes.TOAST_REMOVE:
-      let index = state.toasts.indexOf(action.toast);
-      action.toast.removed = true;
+      const displayedToast = state.toasts.find(toast => !toast.removed);
+      let updatedToasts = [];
 
-      let displayedToast = state.toasts.find(toast => {
-        return !toast.removed;
-      });
-
-      if (!displayedToast) {
-        return Object.assign({}, state, { toasts: [] });
+      if (displayedToast) {
+        updatedToasts = [...state.toasts];
+        updatedToasts[state.toasts.indexOf(action.toast)].removed = true;
       }
 
-      return Object.assign({}, state, {
-        toasts: [...state.toasts.slice(0, index), action.toast, ...state.toasts.slice(index + 1)]
-      });
+      return {
+        ...state,
+        ...{
+          toasts: updatedToasts
+        }
+      };
 
     case toastNotificationTypes.TOAST_PAUSE:
-      return Object.assign({}, state, { paused: true });
+      return {
+        ...state,
+        ...{
+          paused: true
+        }
+      };
 
     case toastNotificationTypes.TOAST_RESUME:
-      return Object.assign({}, state, { paused: false });
+      return {
+        ...state,
+        ...{
+          paused: false
+        }
+      };
 
     default:
       return state;

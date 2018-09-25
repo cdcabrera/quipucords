@@ -1,6 +1,6 @@
-import helpers from '../../common/helpers';
+import _get from 'lodash/get';
 import { scansTypes, sourcesTypes } from '../constants';
-import _ from 'lodash';
+import helpers from '../../common/helpers';
 
 const initialState = {
   view: {
@@ -71,7 +71,7 @@ const initialState = {
   }
 };
 
-const scansReducer = function(state = initialState, action) {
+const scansReducer = (state = initialState, action) => {
   switch (action.type) {
     // Error/Rejected
     case helpers.REJECTED_ACTION(scansTypes.GET_SCANS):
@@ -537,7 +537,7 @@ const scansReducer = function(state = initialState, action) {
       return helpers.setStateProp(
         'view',
         {
-          sourcesCount: _.get(action, 'payload.data.count', 0)
+          sourcesCount: _get(action, 'payload.data.count', 0)
         },
         {
           state,

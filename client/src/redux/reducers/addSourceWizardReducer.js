@@ -1,6 +1,6 @@
+import _get from 'lodash/get';
 import { credentialsTypes, sourcesTypes } from '../constants';
 import helpers from '../../common/helpers';
-import _ from 'lodash';
 
 const initialState = {
   view: {
@@ -17,7 +17,7 @@ const initialState = {
   }
 };
 
-function addSourceWizardReducer(state = initialState, action) {
+const addSourceWizardReducer = (state = initialState, action) => {
   switch (action.type) {
     // Show/Hide
     case sourcesTypes.CREATE_SOURCE_SHOW:
@@ -145,7 +145,7 @@ function addSourceWizardReducer(state = initialState, action) {
       return helpers.setStateProp(
         'view',
         {
-          allCredentials: _.get(action, 'payload.data.results', [])
+          allCredentials: _get(action, 'payload.data.results', [])
         },
         {
           state,
@@ -156,7 +156,7 @@ function addSourceWizardReducer(state = initialState, action) {
     default:
       return state;
   }
-}
+};
 
 addSourceWizardReducer.initialState = initialState;
 

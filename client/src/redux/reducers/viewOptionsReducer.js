@@ -9,7 +9,7 @@ import {
   sourcesTypes
 } from '../constants';
 
-let initialState = {};
+const initialState = {};
 
 const INITAL_VIEW_STATE = {
   currentPage: 1,
@@ -30,10 +30,10 @@ initialState[viewTypes.SOURCES_VIEW] = Object.assign(INITAL_VIEW_STATE);
 initialState[viewTypes.SCANS_VIEW] = Object.assign(INITAL_VIEW_STATE);
 initialState[viewTypes.CREDENTIALS_VIEW] = Object.assign(INITAL_VIEW_STATE);
 
-const viewOptionsReducer = function(state = initialState, action) {
-  let updateState = {};
+const viewOptionsReducer = (state = initialState, action) => {
+  const updateState = {};
 
-  let updatePageCounts = (viewType, itemsCount) => {
+  const updatePageCounts = (viewType, itemsCount) => {
     let totalCount = itemsCount;
 
     // TODO: Remove this when we get decent data back in development mode
@@ -41,26 +41,20 @@ const viewOptionsReducer = function(state = initialState, action) {
       totalCount = Math.abs(itemsCount) % 1000;
     }
 
-    let totalPages = Math.ceil(totalCount / state[viewType].pageSize);
+    const totalPages = Math.ceil(totalCount / state[viewType].pageSize);
 
     updateState[viewType] = Object.assign({}, state[viewType], {
-      totalCount: totalCount,
-      totalPages: totalPages,
+      totalCount,
+      totalPages,
       currentPage: Math.min(state[viewType].currentPage, totalPages || 1)
     });
   };
 
-  const selectedIndex = function(state, item) {
-    return _.findIndex(state.selectedItems, nextSelected => {
-      return nextSelected.id === _.get(item, 'id');
-    });
-  };
+  const selectedIndex = (selectedIndexState, item) =>
+    _.findIndex(selectedIndexState.selectedItems, nextSelected => nextSelected.id === _.get(item, 'id'));
 
-  const expandedIndex = function(state, item) {
-    return _.findIndex(state.expandedItems, nextExpanded => {
-      return nextExpanded.id === _.get(item, 'id');
-    });
-  };
+  const expandedIndex = (expandedIndexState, item) =>
+    _.findIndex(expandedIndexState.expandedItems, nextExpanded => nextExpanded.id === _.get(item, 'id'));
 
   switch (action.type) {
     case viewToolbarTypes.SET_FILTER_TYPE:
@@ -81,7 +75,7 @@ const viewOptionsReducer = function(state = initialState, action) {
       return Object.assign({}, state, updateState);
 
     case viewToolbarTypes.ADD_FILTER:
-      let currentFilter = state[action.viewType].activeFilters.find(filter => action.filter.field === filter.field);
+      const currentFilter = state[action.viewType].activeFilters.find(filter => action.filter.field === filter.field);
 
       if (!currentFilter) {
         updateState[action.viewType] = Object.assign({}, state[action.viewType], {
@@ -93,7 +87,7 @@ const viewOptionsReducer = function(state = initialState, action) {
         return state;
       } else {
         // replace the existing filter
-        let index = state[action.viewType].activeFilters.indexOf(currentFilter);
+        const index = state[action.viewType].activeFilters.indexOf(currentFilter);
         updateState[action.viewType] = Object.assign({}, state[action.viewType], {
           activeFilters: [
             ...state[action.viewType].activeFilters.slice(0, index),
@@ -107,7 +101,7 @@ const viewOptionsReducer = function(state = initialState, action) {
       return Object.assign({}, state, updateState);
 
     case viewToolbarTypes.REMOVE_FILTER:
-      let index = state[action.viewType].activeFilters.indexOf(action.filter);
+      const index = state[action.viewType].activeFilters.indexOf(action.filter);
       if (index >= 0) {
         updateState[action.viewType] = Object.assign({}, state[action.viewType], {
           activeFilters: [
@@ -117,9 +111,9 @@ const viewOptionsReducer = function(state = initialState, action) {
           currentPage: 1
         });
         return Object.assign({}, state, updateState);
-      } else {
-        return state;
       }
+
+      return state;
 
     case viewToolbarTypes.CLEAR_FILTERS:
       updateState[action.viewType] = Object.assign({}, state[action.viewType], {
@@ -147,18 +141,21 @@ const viewOptionsReducer = function(state = initialState, action) {
         sortAscending: !state[action.viewType].sortAscending,
         currentPage: 1
       });
+
       return Object.assign({}, state, updateState);
 
     case viewPaginationTypes.VIEW_FIRST_PAGE:
       updateState[action.viewType] = Object.assign({}, state[action.viewType], {
         currentPage: 1
       });
+
       return Object.assign({}, state, updateState);
 
     case viewPaginationTypes.VIEW_LAST_PAGE:
       updateState[action.viewType] = Object.assign({}, state[action.viewType], {
         currentPage: state[action.viewType].totalPages
       });
+
       return Object.assign({}, state, updateState);
 
     case viewPaginationTypes.VIEW_PREVIOUS_PAGE:
@@ -175,9 +172,11 @@ const viewOptionsReducer = function(state = initialState, action) {
       if (state[action.viewType].currentPage >= state[action.viewType].totalPages) {
         return state;
       }
+
       updateState[action.viewType] = Object.assign({}, state[action.viewType], {
         currentPage: state[action.viewType].currentPage + 1
       });
+
       return Object.assign({}, state, updateState);
 
     case viewPaginationTypes.VIEW_PAGE_NUMBER:
@@ -192,12 +191,14 @@ const viewOptionsReducer = function(state = initialState, action) {
       updateState[action.viewType] = Object.assign({}, state[action.viewType], {
         currentPage: action.pageNumber
       });
+
       return Object.assign({}, state, updateState);
 
     case viewPaginationTypes.SET_PER_PAGE:
       updateState[action.viewType] = Object.assign({}, state[action.viewType], {
         pageSize: action.pageSize
       });
+
       return Object.assign({}, state, updateState);
 
     case helpers.FULFILLED_ACTION(credentialsTypes.GET_CREDENTIAL):
@@ -224,6 +225,7 @@ const viewOptionsReducer = function(state = initialState, action) {
       updateState[action.viewType] = Object.assign({}, state[action.viewType], {
         selectedItems: [...state[action.viewType].selectedItems, action.item]
       });
+
       return Object.assign({}, state, updateState);
 
     case viewTypes.DESELECT_ITEM:
@@ -240,6 +242,7 @@ const viewOptionsReducer = function(state = initialState, action) {
           ...state[action.viewType].selectedItems.slice(foundIndex + 1)
         ]
       });
+
       return Object.assign({}, state, updateState);
 
     case viewTypes.EXPAND_ITEM:
@@ -265,6 +268,7 @@ const viewOptionsReducer = function(state = initialState, action) {
       updateState[action.viewType] = Object.assign({}, state[action.viewType], {
         expandedItems: newExpansions
       });
+
       return Object.assign({}, state, updateState);
 
     default:

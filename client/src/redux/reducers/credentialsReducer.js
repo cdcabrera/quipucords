@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _get from 'lodash/get';
 import helpers from '../../common/helpers';
 import { credentialsTypes } from '../constants';
 
@@ -25,7 +25,7 @@ const initialState = {
   }
 };
 
-const credentialsReducer = function(state = initialState, action) {
+const credentialsReducer = (state = initialState, action) => {
   switch (action.type) {
     // Show/Hide
     case credentialsTypes.CREATE_CREDENTIAL_SHOW:
@@ -244,7 +244,7 @@ const credentialsReducer = function(state = initialState, action) {
       return helpers.setStateProp(
         'view',
         {
-          credentials: _.get(action, 'payload.data.results', []),
+          credentials: _get(action, 'payload.data.results', []),
           fulfilled: true
         },
         {

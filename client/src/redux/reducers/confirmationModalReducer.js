@@ -10,7 +10,7 @@ const initialState = {
   cancelButtonText: 'Cancel'
 };
 
-const confirmationModalReducer = function(state = initialState, action) {
+const confirmationModalReducer = (state = initialState, action) => {
   switch (action.type) {
     case confirmationModalTypes.CONFIRMATION_MODAL_SHOW:
       return Object.assign({}, state, {
