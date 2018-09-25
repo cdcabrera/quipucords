@@ -2,10 +2,11 @@ import React from 'react';
 import { mount } from 'enzyme';
 import SimpleTooltip from '../simpleTooltip';
 
-describe('SimpleTooltip Component', function() {
+describe('SimpleTooltip Component', () => {
   it('should render', () => {
     const props = {
-      id: 'test'
+      id: 'test',
+      tooltip: <React.Fragment>lorem</React.Fragment>
     };
 
     const component = mount(<SimpleTooltip {...props}>Test tooltip</SimpleTooltip>);
