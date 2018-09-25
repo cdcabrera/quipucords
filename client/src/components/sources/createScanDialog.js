@@ -4,29 +4,68 @@ import { connect } from 'react-redux';
 import { Alert, Modal, Button, Form, Grid, Icon } from 'patternfly-react';
 import helpers from '../../common/helpers';
 import Store from '../../redux/store';
-import { addScan, startScan } from '../../redux/actions/scansActions';
-import { scansTypes, toastNotificationTypes } from '../../redux/constants';
+import reduxActions from '../../redux/actions';
+import reduxTypes from '../../redux/constants';
 
 class CreateScanDialog extends React.Component {
-  constructor() {
-    super();
-
-    helpers.bindMethods(this, ['updateScanName', 'createScan', 'startChange']);
-
-    this.state = {
-      scanName: '',
-      validScanName: false
-    };
+  static validateScanName(scanName) {
+    return scanName && scanName.length > 0;
   }
 
+  state = {
+    scanName: '',
+    validScanName: false
+  };
+
+  // FixMe: convert componentWillReceiveProps
   componentWillReceiveProps(nextProps) {
-    if (nextProps.show && !this.props.show) {
+    const { show } = this.props;
+
+    if (nextProps.show && !show) {
       this.setState({ scanName: '', validScanName: false });
       Store.dispatch({
-        type: scansTypes.RESET_SCAN_ADD_STATUS
+        type: reduxTypes.scans.RESET_SCAN_ADD_STATUS
       });
     }
   }
+
+  onCreateScan = () => {
+    const { sources, addScan } = this.props;
+    const { scanName } = this.state;
+
+    const data = {
+      name: scanName,
+      sources: sources.map(item => item.id)
+    };
+
+    addScan(data).then(
+      response => this.notifyAddStatus(false, response.value),
+      error => this.notifyAddStatus(true, error)
+    );
+  };
+
+  onUpdateScanName = event => {
+    this.setState({
+      scanName: event.target.value,
+      validScanName: CreateScanDialog.validateScanName(event.target.value)
+    });
+  };
+
+  onScanNameKeyPress = keyEvent => {
+    const { scanName, validScanName } = this.state;
+
+    if (keyEvent.key === 'Enter' && scanName && validScanName) {
+      keyEvent.stopPropagation();
+      keyEvent.preventDefault();
+      this.onCreateScan();
+    }
+  };
+
+  onErrorDismissed = () => {
+    Store.dispatch({
+      type: reduxTypes.scans.RESET_SCAN_ADD_STATUS
+    });
+  };
 
   notifyStartStatus(error, results) {
     const { onClose } = this.props;
@@ -34,14 +73,14 @@ class CreateScanDialog extends React.Component {
 
     if (error) {
       Store.dispatch({
-        type: toastNotificationTypes.TOAST_ADD,
+        type: reduxTypes.toastNotifications.TOAST_ADD,
         alertType: 'error',
         header: 'Error',
         message: helpers.getErrorMessageFromResults(results)
       });
     } else {
       Store.dispatch({
-        type: toastNotificationTypes.TOAST_ADD,
+        type: reduxTypes.toastNotifications.TOAST_ADD,
         alertType: 'success',
         message: (
           <span>
@@ -67,14 +106,14 @@ class CreateScanDialog extends React.Component {
 
     if (error) {
       Store.dispatch({
-        type: toastNotificationTypes.TOAST_ADD,
+        type: reduxTypes.toastNotifications.TOAST_ADD,
         alertType: 'error',
         header: 'Error',
         message: helpers.getErrorMessageFromResults(results)
       });
     } else {
       Store.dispatch({
-        type: toastNotificationTypes.TOAST_ADD,
+        type: reduxTypes.toastNotifications.TOAST_ADD,
         alertType: 'success',
         message: (
           <span>
@@ -87,58 +126,12 @@ class CreateScanDialog extends React.Component {
     }
   }
 
-  createScan() {
-    const { sources, addScan } = this.props;
-    const { scanName } = this.state;
-
-    let data = {
-      name: scanName,
-      sources: sources.map(item => item.id)
-    };
-
-    addScan(data).then(
-      response => this.notifyAddStatus(false, response.value),
-      error => this.notifyAddStatus(true, error)
-    );
-  }
-
-  startChange(value) {
-    this.setState({ start: value });
-  }
-
-  static validateScanName(scanName) {
-    return scanName && scanName.length > 0;
-  }
-
-  updateScanName(event) {
-    this.setState({
-      scanName: event.target.value,
-      validScanName: CreateScanDialog.validateScanName(event.target.value)
-    });
-  }
-
-  onScanNameKeyPress(keyEvent) {
-    const { scanName, validScanName } = this.state;
-
-    if (keyEvent.key === 'Enter' && scanName && validScanName) {
-      keyEvent.stopPropagation();
-      keyEvent.preventDefault();
-      this.createScan();
-    }
-  }
-
-  errorDismissed() {
-    Store.dispatch({
-      type: scansTypes.RESET_SCAN_ADD_STATUS
-    });
-  }
-
   renderErrorMessage() {
     const { action } = this.props;
 
     if (action && action.error) {
       return (
-        <Alert type="error" onDismiss={this.errorDismissed}>
+        <Alert type="error" onDismiss={this.onErrorDismissed}>
           <strong>Error</strong> {action.errorMessage}
         </Alert>
       );
@@ -158,7 +151,7 @@ class CreateScanDialog extends React.Component {
     return (
       <Modal show={show} onHide={onClose}>
         <Modal.Header>
-          <button className="close" onClick={onClose} aria-hidden="true" aria-label="Close">
+          <button type="button" className="close" onClick={onClose} aria-hidden="true" aria-label="Close">
             <Icon type="pf" name="close" />
           </button>
           <Modal.Title>Scan</Modal.Title>
@@ -166,12 +159,10 @@ class CreateScanDialog extends React.Component {
         <Modal.Body />
         <Grid fluid>
           {this.renderErrorMessage()}
-          <Form horizontal onSubmit={this.createScan}>
+          <Form horizontal onSubmit={this.onCreateScan}>
             <Form.FormGroup controlId="scanName">
               <Grid.Col componentClass={Form.ControlLabel} sm={3}>
-                <label htmlFor="scanName" className="control-label">
-                  Name
-                </label>
+                Name
               </Grid.Col>
               <Grid.Col sm={9}>
                 <Form.FormControl
@@ -180,7 +171,7 @@ class CreateScanDialog extends React.Component {
                   autoFocus
                   value={scanName}
                   placeholder="Enter a name for the scan"
-                  onChange={e => this.updateScanName(e)}
+                  onChange={e => this.onUpdateScanName(e)}
                   onKeyPress={e => this.onScanNameKeyPress(e)}
                 />
               </Grid.Col>
@@ -206,7 +197,7 @@ class CreateScanDialog extends React.Component {
           <Button bsStyle="default" className="btn-cancel" onClick={onClose}>
             Cancel
           </Button>
-          <Button bsStyle="primary" type="submit" onClick={this.createScan} disabled={!validScanName}>
+          <Button bsStyle="primary" type="submit" onClick={this.onCreateScan} disabled={!validScanName}>
             Scan
           </Button>
         </Modal.Footer>
@@ -224,13 +215,22 @@ CreateScanDialog.propTypes = {
   action: PropTypes.object
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  addScan: data => dispatch(addScan(data)),
-  startScan: data => dispatch(startScan(data))
-});
-
-const mapStateToProps = function(state) {
-  return Object.assign({}, { action: state.scans.action });
+CreateScanDialog.defaultProps = {
+  addScan: helpers.noop,
+  startScan: helpers.noop,
+  sources: [],
+  onClose: helpers.noop,
+  action: {}
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateScanDialog);
+const mapDispatchToProps = dispatch => ({
+  addScan: data => dispatch(reduxActions.scans.addScan(data)),
+  startScan: data => dispatch(reduxActions.scans.startScan(data))
+});
+
+const mapStateToProps = state => Object.assign({}, { action: state.scans.action });
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateScanDialog);

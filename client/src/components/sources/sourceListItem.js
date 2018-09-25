@@ -7,94 +7,83 @@ import _ from 'lodash';
 import * as moment from 'moment';
 import { helpers } from '../../common/helpers';
 import Store from '../../redux/store';
-import { viewTypes } from '../../redux/constants';
+import reduxTypes from '../../redux/constants';
 import SourceCredentialsList from './sourceCredentialsList';
 import ScanHostList from '../scanHostList/scanHostList';
 import SimpleTooltip from '../simpleTooltIp/simpleTooltip';
 import ListStatusItem from '../listStatusItem/listStatusItem';
 
 class SourceListItem extends React.Component {
-  constructor() {
-    super();
-
-    helpers.bindMethods(this, ['itemSelectChange', 'toggleExpand', 'closeExpand']);
+  static isSelected(item, selectedSources) {
+    return _.find(selectedSources, nextSelected => nextSelected.id === item.id) !== undefined;
   }
 
+  // FixMe: convert componentWillReceiveProps
   componentWillReceiveProps(nextProps) {
+    const { lastRefresh } = this.props;
     // Check for changes resulting in a fetch
-    if (!_.isEqual(nextProps.lastRefresh, this.props.lastRefresh)) {
+    if (!_.isEqual(nextProps.lastRefresh, lastRefresh)) {
       this.closeExpandIfNoData(this.expandType());
     }
+  }
+
+  onItemSelectChange = () => {
+    const { item, selectedSources } = this.props;
+
+    Store.dispatch({
+      type: SourceListItem.isSelected(item, selectedSources)
+        ? reduxTypes.view.DESELECT_ITEM
+        : reduxTypes.view.SELECT_ITEM,
+      viewType: reduxTypes.view.SOURCES_VIEW,
+      item
+    });
+  };
+
+  onToggleExpand = expandType => {
+    const { item } = this.props;
+
+    if (expandType === this.expandType()) {
+      Store.dispatch({
+        type: reduxTypes.view.EXPAND_ITEM,
+        viewType: reduxTypes.view.SOURCES_VIEW,
+        item
+      });
+    } else {
+      Store.dispatch({
+        type: reduxTypes.view.EXPAND_ITEM,
+        viewType: reduxTypes.view.SOURCES_VIEW,
+        item,
+        expandType
+      });
+    }
+  };
+
+  onCloseExpand() {
+    const { item } = this.props;
+    Store.dispatch({
+      type: reduxTypes.view.EXPAND_ITEM,
+      viewType: reduxTypes.view.SOURCES_VIEW,
+      item
+    });
   }
 
   expandType() {
     const { item, expandedSources } = this.props;
 
-    return _.get(
-      _.find(expandedSources, nextExpanded => {
-        return nextExpanded.id === item.id;
-      }),
-      'expandType'
-    );
-  }
-
-  isSelected(item, selectedSources) {
-    return (
-      _.find(selectedSources, nextSelected => {
-        return nextSelected.id === item.id;
-      }) !== undefined
-    );
-  }
-
-  itemSelectChange() {
-    const { item, selectedSources } = this.props;
-
-    Store.dispatch({
-      type: this.isSelected(item, selectedSources) ? viewTypes.DESELECT_ITEM : viewTypes.SELECT_ITEM,
-      viewType: viewTypes.SOURCES_VIEW,
-      item: item
-    });
+    return _.get(_.find(expandedSources, nextExpanded => nextExpanded.id === item.id), 'expandType');
   }
 
   closeExpandIfNoData(expandType) {
     const { item } = this.props;
 
     if (expandType === 'okHosts' || expandType === 'failedHosts') {
-      let okHostCount = _.get(item, 'connection.source_systems_scanned', 0);
-      let failedHostCount = _.get(item, 'connection.source_systems_failed', 0);
+      const okHostCount = _.get(item, 'connection.source_systems_scanned', 0);
+      const failedHostCount = _.get(item, 'connection.source_systems_failed', 0);
 
       if ((expandType === 'okHosts' && okHostCount === 0) || (expandType === 'failedHosts' && failedHostCount === 0)) {
-        this.closeExpand();
+        this.onCloseExpand();
       }
     }
-  }
-
-  toggleExpand(expandType) {
-    const { item } = this.props;
-
-    if (expandType === this.expandType()) {
-      Store.dispatch({
-        type: viewTypes.EXPAND_ITEM,
-        viewType: viewTypes.SOURCES_VIEW,
-        item: item
-      });
-    } else {
-      Store.dispatch({
-        type: viewTypes.EXPAND_ITEM,
-        viewType: viewTypes.SOURCES_VIEW,
-        item: item,
-        expandType: expandType
-      });
-    }
-  }
-
-  closeExpand() {
-    const { item } = this.props;
-    Store.dispatch({
-      type: viewTypes.EXPAND_ITEM,
-      viewType: viewTypes.SOURCES_VIEW,
-      item: item
-    });
   }
 
   renderSourceType() {
@@ -137,7 +126,7 @@ class SourceListItem extends React.Component {
     const credentialCount = _.size(_.get(item, 'credentials', []));
     let okHostCount = _.get(item, 'connection.source_systems_scanned', 0);
     let failedHostCount = _.get(item, 'connection.source_systems_failed', 0);
-    let unreachableHostCount = _.get(item, 'connection.source_systems_unreachable', 0);
+    const unreachableHostCount = _.get(item, 'connection.source_systems_unreachable', 0);
 
     if (helpers.DEV_MODE) {
       okHostCount = helpers.devModeNormalizeCount(okHostCount);
@@ -154,7 +143,7 @@ class SourceListItem extends React.Component {
         tipPlural="Credentials"
         expanded={expandType === 'credentials'}
         expandType="credentials"
-        toggleExpand={this.toggleExpand}
+        toggleExpand={this.onToggleExpand}
         iconInfo={{ type: 'fa', name: 'id-card' }}
       />,
       <ListStatusItem
@@ -166,7 +155,7 @@ class SourceListItem extends React.Component {
         tipPlural="Successful Authentications"
         expanded={expandType === 'okHosts'}
         expandType="okHosts"
-        toggleExpand={this.toggleExpand}
+        toggleExpand={this.onToggleExpand}
         iconInfo={helpers.scanStatusIcon('success')}
       />,
       <ListStatusItem
@@ -178,7 +167,7 @@ class SourceListItem extends React.Component {
         tipPlural="Failed Authentications"
         expanded={expandType === 'failedHosts'}
         expandType="failedHosts"
-        toggleExpand={this.toggleExpand}
+        toggleExpand={this.onToggleExpand}
         iconInfo={helpers.scanStatusIcon('failed')}
       />,
       <ListStatusItem
@@ -190,7 +179,7 @@ class SourceListItem extends React.Component {
         tipPlural="Unreachable Systems"
         expanded={expandType === 'unreachableHosts'}
         expandType="unreachableHosts"
-        toggleExpand={this.toggleExpand}
+        toggleExpand={this.onToggleExpand}
         iconInfo={helpers.scanStatusIcon('unreachable')}
       />
     ];
@@ -272,10 +261,9 @@ class SourceListItem extends React.Component {
         {item.hosts &&
           item.hosts.length > 1 && (
             <ul className="quipucords-popover-list">
-              hello
-              {item.hosts.map((host, index) => {
-                return <li key={index}>{host}</li>;
-              })}
+              {item.hosts.map(host => (
+                <li>{host}</li>
+              ))}
             </ul>
           )}
         {item.hosts && item.hosts.length === 1 && <div>{item.hosts[0]}</div>}
@@ -365,7 +353,7 @@ class SourceListItem extends React.Component {
 
   render() {
     const { item, selectedSources } = this.props;
-    const selected = this.isSelected(item, selectedSources);
+    const selected = SourceListItem.isSelected(item, selectedSources);
 
     const classes = cx({
       'list-view-pf-top-align': true,
@@ -377,14 +365,14 @@ class SourceListItem extends React.Component {
         key={item.id}
         stacked
         className={classes}
-        checkboxInput={<Checkbox checked={selected} bsClass="" onChange={this.itemSelectChange} />}
+        checkboxInput={<Checkbox checked={selected} bsClass="" onChange={this.onItemSelectChange} />}
         actions={this.renderActions()}
         leftContent={this.renderSourceType()}
         description={this.renderDescription()}
         additionalInfo={this.renderStatusItems()}
         compoundExpand
         compoundExpanded={this.expandType() !== undefined}
-        onCloseCompoundExpand={this.closeExpand}
+        onCloseCompoundExpand={this.onCloseExpand}
       >
         {this.renderExpansionContents()}
       </ListView.Item>
@@ -402,11 +390,19 @@ SourceListItem.propTypes = {
   expandedSources: PropTypes.array
 };
 
-const mapStateToProps = function(state) {
-  return Object.assign({
-    selectedSources: state.viewOptions[viewTypes.SOURCES_VIEW].selectedItems,
-    expandedSources: state.viewOptions[viewTypes.SOURCES_VIEW].expandedItems
-  });
+SourceListItem.defaultProps = {
+  lastRefresh: 0,
+  onEdit: helpers.noop,
+  onDelete: helpers.noop,
+  onScan: helpers.noop,
+  selectedSources: [],
+  expandedSources: []
 };
+
+const mapStateToProps = state =>
+  Object.assign({
+    selectedSources: state.viewOptions[reduxTypes.view.SOURCES_VIEW].selectedItems,
+    expandedSources: state.viewOptions[reduxTypes.view.SOURCES_VIEW].expandedItems
+  });
 
 export default connect(mapStateToProps)(SourceListItem);
