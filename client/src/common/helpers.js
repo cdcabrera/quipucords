@@ -1,14 +1,11 @@
 import _ from 'lodash';
-
-const bindMethods = (context, methods) => {
-  methods.forEach(method => {
-    context[method] = context[method].bind(context);
-  });
-};
+import hash from 'object-hash';
 
 const devModeNormalizeCount = (count, modulus = 100) => Math.abs(count) % modulus;
 
 const generateId = prefix => `${prefix || 'generatedid'}-${Math.ceil(1e5 * Math.random())}`;
+
+const generateKey = obj => `generatedkey-${hash.MD5(obj)}`;
 
 const noop = Function.prototype;
 
@@ -118,8 +115,8 @@ const authorizationTypeString = authorizationType => {
 };
 
 const setStateProp = (prop, data, options) => {
-  let { state = {}, initialState = {}, reset = true } = options;
-  let obj = { ...state };
+  const { state = {}, initialState = {}, reset = true } = options;
+  const obj = { ...state };
 
   if (!state[prop]) {
     console.error(`Error: Property ${prop} does not exist within the passed state.`, state);
@@ -145,18 +142,15 @@ const setStateProp = (prop, data, options) => {
   return obj;
 };
 
-const viewPropsChanged = (nextViewOptions, currentViewOptions) => {
-  return (
-    nextViewOptions.currentPage !== currentViewOptions.currentPage ||
-    nextViewOptions.pageSize !== currentViewOptions.pageSize ||
-    nextViewOptions.sortField !== currentViewOptions.sortField ||
-    nextViewOptions.sortAscending !== currentViewOptions.sortAscending ||
-    nextViewOptions.activeFilters !== currentViewOptions.activeFilters
-  );
-};
+const viewPropsChanged = (nextViewOptions, currentViewOptions) =>
+  nextViewOptions.currentPage !== currentViewOptions.currentPage ||
+  nextViewOptions.pageSize !== currentViewOptions.pageSize ||
+  nextViewOptions.sortField !== currentViewOptions.sortField ||
+  nextViewOptions.sortAscending !== currentViewOptions.sortAscending ||
+  nextViewOptions.activeFilters !== currentViewOptions.activeFilters;
 
 const createViewQueryObject = (viewOptions, queryObj) => {
-  let queryObject = {
+  const queryObject = {
     ...queryObj
   };
 
@@ -179,28 +173,30 @@ const createViewQueryObject = (viewOptions, queryObj) => {
 };
 
 const getErrorMessageFromResults = results => {
-  let responseData = _.get(results, 'response.data', results.message);
+  const responseData = _.get(results, 'response.data', results.message);
 
   if (typeof responseData === 'string') {
     return responseData;
   }
 
-  const getMessages = messageObject => {
-    return _.map(messageObject, next => {
-      if (_.isString(next)) {
+  const getMessages = messageObject =>
+    _.map(
+      messageObject,
+      next => {
+        if (_.isArray(next)) {
+          return getMessages(next);
+        }
+
         return next;
-      }
-      if (_.isArray(next)) {
-        return getMessages(next);
-      }
-    });
-  };
+      },
+      null
+    );
 
   return _.join(getMessages(responseData), '\n');
 };
 
 const isIpAddress = name => {
-  let vals = name.split('.');
+  const vals = name.split('.');
   if (vals.length === 4) {
     return _.find(vals, val => Number.isNaN(val)) === undefined;
   }
@@ -223,9 +219,9 @@ const PENDING_ACTION = base => `${base}_PENDING`;
 const REJECTED_ACTION = base => `${base}_REJECTED`;
 
 export const helpers = {
-  bindMethods,
   devModeNormalizeCount,
   generateId,
+  generateKey,
   noop,
   sourceTypeString,
   sourceTypeIcon,
