@@ -10,69 +10,54 @@ import Store from '../../redux/store';
 import { viewTypes } from '../../redux/constants';
 
 class CredentialListItem extends React.Component {
-  constructor() {
-    super();
-
-    helpers.bindMethods(this, ['itemSelectChange', 'toggleExpand', 'closeExpand']);
-  }
-
-  expandType() {
-    const { item, expandedCredentials } = this.props;
-
-    return _.get(
-      _.find(expandedCredentials, nextExpanded => {
-        return nextExpanded.id === item.id;
-      }),
-      'expandType'
-    );
-  }
-
-  isSelected() {
-    const { item, selectedCredentials } = this.props;
-
-    return (
-      _.find(selectedCredentials, nextSelected => {
-        return nextSelected.id === item.id;
-      }) !== undefined
-    );
-  }
-
-  itemSelectChange() {
+  onItemSelectChange = () => {
     const { item } = this.props;
 
     Store.dispatch({
       type: this.isSelected() ? viewTypes.DESELECT_ITEM : viewTypes.SELECT_ITEM,
       viewType: viewTypes.CREDENTIALS_VIEW,
-      item: item
+      item
     });
-  }
+  };
 
-  toggleExpand(expandType) {
+  onToggleExpand = expandType => {
     const { item } = this.props;
 
     if (expandType === this.expandType()) {
       Store.dispatch({
         type: viewTypes.EXPAND_ITEM,
         viewType: viewTypes.CREDENTIALS_VIEW,
-        item: item
+        item
       });
     } else {
       Store.dispatch({
         type: viewTypes.EXPAND_ITEM,
         viewType: viewTypes.CREDENTIALS_VIEW,
-        item: item,
-        expandType: expandType
+        item,
+        expandType
       });
     }
-  }
+  };
 
-  closeExpand() {
+  onCloseExpand = () => {
     const { item } = this.props;
     Store.dispatch({
       type: viewTypes.EXPAND_ITEM,
       viewType: viewTypes.CREDENTIALS_VIEW,
-      item: item
+      item
     });
+  };
+
+  expandType() {
+    const { item, expandedCredentials } = this.props;
+
+    return _.get(_.find(expandedCredentials, nextExpanded => nextExpanded.id === item.id), 'expandType');
+  }
+
+  isSelected() {
+    const { item, selectedCredentials } = this.props;
+
+    return _.find(selectedCredentials, nextSelected => nextSelected.id === item.id) !== undefined;
   }
 
   renderActions() {
@@ -107,17 +92,17 @@ class CredentialListItem extends React.Component {
   renderStatusItems() {
     const { item } = this.props;
 
-    let sourceCount = item.sources ? item.sources.length : 0;
+    const sourceCount = item.sources ? item.sources.length : 0;
 
     return [
       <ListView.InfoItem
         key="sources"
-        className={'list-view-info-item-icon-count ' + (sourceCount === 0 ? 'invisible' : '')}
+        className={`list-view-info-item-icon-count ${sourceCount === 0 ? 'invisible' : ''}`}
       >
         <ListView.Expand
           expanded={this.expandType() === 'sources'}
           toggleExpanded={() => {
-            this.toggleExpand('sources');
+            this.onToggleExpand('sources');
           }}
         >
           <strong>{sourceCount}</strong>
@@ -133,29 +118,28 @@ class CredentialListItem extends React.Component {
 
     switch (this.expandType(item, expandedCredentials)) {
       case 'sources':
-        item.sources &&
-          item.sources.sort((item1, item2) => {
-            return item1.name.localeCompare(item2.name);
-          });
+        if (item.sources) {
+          item.sources.sort((item1, item2) => item1.name.localeCompare(item2.name));
+        }
+
         return (
           <Grid fluid>
             {item.sources &&
-              item.sources.map((source, index) => {
-                return (
-                  <Grid.Row key={index}>
-                    <Grid.Col xs={12} sm={4}>
-                      <span>
-                        <SimpleTooltip id="sourceTypeTip" tooltip={helpers.sourceTypeString(source.source_type)}>
-                          <Icon type={typeIcon.type} name={typeIcon.name} />
-                        </SimpleTooltip>
-                        &nbsp; {source.name}
-                      </span>
-                    </Grid.Col>
-                  </Grid.Row>
-                );
-              })}
+              item.sources.map(source => (
+                <Grid.Row key={helpers.generateKey(source)}>
+                  <Grid.Col xs={12} sm={4}>
+                    <span>
+                      <SimpleTooltip id="sourceTypeTip" tooltip={helpers.sourceTypeString(source.source_type)}>
+                        <Icon type={typeIcon.type} name={typeIcon.name} />
+                      </SimpleTooltip>
+                      &nbsp; {source.name}
+                    </span>
+                  </Grid.Col>
+                </Grid.Row>
+              ))}
           </Grid>
         );
+
       default:
         return null;
     }
@@ -171,34 +155,40 @@ class CredentialListItem extends React.Component {
       active: selected
     });
 
+    const checkboxInput = <Checkbox checked={selected} bsClass="" onChange={this.onItemSelectChange} />;
+
+    const leftContent = (
+      <SimpleTooltip id="credentialTypeTip" tooltip={helpers.sourceTypeString(item.cred_type)}>
+        <ListView.Icon type={sourceTypeIcon.type} name={sourceTypeIcon.name} />
+      </SimpleTooltip>
+    );
+
+    const description = (
+      <div className="quipucords-split-description">
+        <span className="quipucords-description-left">
+          <ListView.DescriptionHeading>{item.name}</ListView.DescriptionHeading>
+        </span>
+        <span className="quipucords-description-right">
+          <SimpleTooltip id="methodTip" tooltip="Authorization Type">
+            {helpers.authorizationTypeString(item.auth_type)}
+          </SimpleTooltip>
+        </span>
+      </div>
+    );
+
     return (
       <ListView.Item
         key={item.id}
         stacked
         className={classes}
-        checkboxInput={<Checkbox checked={selected} bsClass="" onChange={this.itemSelectChange} />}
+        checkboxInput={checkboxInput}
         actions={this.renderActions()}
-        leftContent={
-          <SimpleTooltip id="credentialTypeTip" tooltip={helpers.sourceTypeString(item.cred_type)}>
-            <ListView.Icon type={sourceTypeIcon.type} name={sourceTypeIcon.name} />
-          </SimpleTooltip>
-        }
-        description={
-          <div className="quipucords-split-description">
-            <span className="quipucords-description-left">
-              <ListView.DescriptionHeading>{item.name}</ListView.DescriptionHeading>
-            </span>
-            <span className="quipucords-description-right">
-              <SimpleTooltip id="methodTip" tooltip="Authorization Type">
-                {helpers.authorizationTypeString(item.auth_type)}
-              </SimpleTooltip>
-            </span>
-          </div>
-        }
+        leftContent={leftContent}
+        description={description}
         additionalInfo={this.renderStatusItems()}
         compoundExpand
         compoundExpanded={this.expandType() !== undefined}
-        onCloseCompoundExpand={this.closeExpand}
+        onCloseCompoundExpand={this.onCloseExpand}
       >
         {this.renderExpansionContents()}
       </ListView.Item>
@@ -214,11 +204,17 @@ CredentialListItem.propTypes = {
   expandedCredentials: PropTypes.array
 };
 
-const mapStateToProps = function(state) {
-  return Object.assign({
+CredentialListItem.defaultProps = {
+  onEdit: helpers.noop,
+  onDelete: helpers.noop,
+  selectedCredentials: [],
+  expandedCredentials: []
+};
+
+const mapStateToProps = state =>
+  Object.assign({
     selectedCredentials: state.viewOptions[viewTypes.CREDENTIALS_VIEW].selectedItems,
     expandedCredentials: state.viewOptions[viewTypes.CREDENTIALS_VIEW].expandedItems
   });
-};
 
 export default connect(mapStateToProps)(CredentialListItem);
