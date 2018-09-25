@@ -1,22 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { detect } from 'detect-browser';
+import _get from 'lodash/get';
 import { AboutModal } from 'patternfly-react';
 import helpers from '../../common/helpers';
-import _ from 'lodash';
 import logo from '../../styles/images/logo.svg';
 import productTitle from '../../styles/images/title.svg';
 import rhLogo from '../../styles/images/brand/logo.svg';
 import rhProductTitle from '../../styles/images/brand/title.svg';
 
 const About = ({ user, status, shown, onClose }) => {
-  const versionText = `${_.get(status, 'api_version', 'unknown')} (Build: ${_.get(status, 'build', 'unknown')})`;
+  const versionText = `${_get(status, 'api_version', 'unknown')} (Build: ${_get(status, 'build', 'unknown')})`;
   const browser = detect();
 
-  let props = {
+  const props = {
     show: shown,
     onHide: onClose,
-    logo: logo,
+    logo,
     productTitle: <img src={productTitle} alt="Entitlements Reporting" />,
     altLogo: 'ER'
   };
@@ -32,12 +32,12 @@ const About = ({ user, status, shown, onClose }) => {
     <AboutModal {...props}>
       <AboutModal.Versions>
         <AboutModal.VersionItem label="Version" versionText={versionText} />
-        <AboutModal.VersionItem label="Username" versionText={_.get(user, 'currentUser.username', '')} />
+        <AboutModal.VersionItem label="Username" versionText={_get(user, 'currentUser.username', '')} />
         <AboutModal.VersionItem
           label="Browser Version"
-          versionText={`${_.get(browser, 'name', '')} ${_.get(browser, 'version', '')}`}
+          versionText={`${_get(browser, 'name', '')} ${_get(browser, 'version', '')}`}
         />
-        <AboutModal.VersionItem label="Browser OS" versionText={_.get(browser, 'os', '')} />
+        <AboutModal.VersionItem label="Browser OS" versionText={_get(browser, 'os', '')} />
       </AboutModal.Versions>
     </AboutModal>
   );
@@ -48,6 +48,13 @@ About.propTypes = {
   status: PropTypes.object,
   shown: PropTypes.bool,
   onClose: PropTypes.func
+};
+
+About.defaultProps = {
+  user: {},
+  status: {},
+  shown: false,
+  onClose: helpers.noop
 };
 
 export default About;
