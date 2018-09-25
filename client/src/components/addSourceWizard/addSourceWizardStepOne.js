@@ -2,37 +2,42 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Form, Radio } from 'patternfly-react';
+import _ from 'lodash';
 import Store from '../../redux/store';
-import helpers from '../../common/helpers';
 import { apiTypes } from '../../constants';
 import { sourcesTypes } from '../../redux/constants';
-import _ from 'lodash';
+
+const initialState = {
+  sourceType: '',
+  sourceTypeError: null
+};
 
 class AddSourceWizardStepOne extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.initialState = {
-      sourceType: '',
-      sourceTypeError: null
-    };
-
-    this.state = { ...this.initialState };
-
-    helpers.bindMethods(this, ['onChangeSourceType']);
-  }
+  state = {
+    ...initialState
+  };
 
   componentDidMount() {
-    this.setState({ ...this.initializeState(this.props) }, () => {
-      this.validateStep();
-    });
+    const sourceType = _.get(this.props, ['source', apiTypes.API_SOURCE_TYPE], 'network');
+
+    this.setState(
+      {
+        sourceType
+      },
+      () => {
+        this.validateStep();
+      }
+    );
   }
 
-  initializeState(nextProps) {
-    return {
-      sourceType: _.get(nextProps, ['source', apiTypes.API_SOURCE_TYPE], 'network')
-    };
-  }
+  onChangeSourceType = event => {
+    this.setState(
+      {
+        sourceType: event.target.value
+      },
+      () => this.validateStep()
+    );
+  };
 
   validateStep() {
     const { sourceType } = this.state;
@@ -44,15 +49,6 @@ class AddSourceWizardStepOne extends React.Component {
         source: _.merge({}, source, { [apiTypes.API_SOURCE_TYPE]: sourceType })
       });
     }
-  }
-
-  onChangeSourceType(event) {
-    this.setState(
-      {
-        sourceType: event.target.value
-      },
-      () => this.validateStep()
-    );
   }
 
   render() {
@@ -96,8 +92,10 @@ AddSourceWizardStepOne.propTypes = {
   source: PropTypes.object
 };
 
-const mapStateToProps = function(state) {
-  return { ...state.addSourceWizard.view };
+AddSourceWizardStepOne.defaultProps = {
+  source: {}
 };
+
+const mapStateToProps = state => ({ ...state.addSourceWizard.view });
 
 export default connect(mapStateToProps)(AddSourceWizardStepOne);

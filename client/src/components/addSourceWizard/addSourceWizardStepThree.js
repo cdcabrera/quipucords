@@ -14,7 +14,9 @@ const AddSourceWizardStepThree = ({ view }) => {
         <p className="blank-slate-pf-secondary-action">{view.errorMessage}</p>
       </div>
     );
-  } else if (!view.fulfilled) {
+  }
+
+  if (!view.fulfilled) {
     return (
       <div className="wizard-pf-process blank-slate-pf">
         <Spinner loading size="lg" className="blank-slate-pf-icon" />
@@ -42,8 +44,10 @@ AddSourceWizardStepThree.propTypes = {
   view: PropTypes.object
 };
 
-const mapStateToProps = function(state) {
-  return Object.assign({}, { view: state.addSourceWizard.view });
+AddSourceWizardStepThree.defaultProps = {
+  view: {}
 };
+
+const mapStateToProps = state => Object.assign({}, { view: state.addSourceWizard.view });
 
 export default connect(mapStateToProps)(AddSourceWizardStepThree);
