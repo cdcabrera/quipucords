@@ -7,15 +7,11 @@ import Store from '../../redux/store';
 import { confirmationModalTypes } from '../../redux/constants';
 
 class ConfirmationModal extends React.Component {
-  constructor() {
-    super();
+  onCancel() {
+    const { onCancel } = this.props;
 
-    helpers.bindMethods(this, ['cancel']);
-  }
-
-  cancel() {
-    if (this.props.onCancel) {
-      this.props.onCancel();
+    if (onCancel) {
+      onCancel();
     } else {
       Store.dispatch({
         type: confirmationModalTypes.CONFIRMATION_MODAL_HIDE
@@ -27,9 +23,9 @@ class ConfirmationModal extends React.Component {
     const { show, title, heading, body, icon, confirmButtonText, cancelButtonText, onConfirm } = this.props;
 
     return (
-      <Modal show={show} onHide={this.cancel}>
+      <Modal show={show} onHide={this.onCancel}>
         <Modal.Header>
-          <button className="close" onClick={this.cancel} aria-hidden="true" aria-label="Close">
+          <button type="button" className="close" onClick={this.onCancel} aria-hidden="true" aria-label="Close">
             <Icon type="pf" name="close" />
           </button>
           <Modal.Title>{title}</Modal.Title>
@@ -46,7 +42,7 @@ class ConfirmationModal extends React.Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button autoFocus bsStyle="default" className="btn-cancel" onClick={this.cancel}>
+          <Button autoFocus bsStyle="default" className="btn-cancel" onClick={this.onCancel}>
             {cancelButtonText}
           </Button>
           <Button bsStyle="primary" onClick={onConfirm}>
@@ -75,11 +71,12 @@ ConfirmationModal.defaultProps = {
   heading: null,
   body: null,
   icon: <Icon type="pf" name="warning-triangle-o" />,
-  confirmButtonText: 'Confirm'
+  confirmButtonText: 'Confirm',
+  cancelButtonText: '',
+  onConfirm: helpers.noop,
+  onCancel: helpers.noop
 };
 
-const mapStateToProps = function(state) {
-  return { ...state.confirmationModal };
-};
+const mapStateToProps = state => ({ ...state.confirmationModal });
 
 export default connect(mapStateToProps)(ConfirmationModal);
