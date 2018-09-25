@@ -7,7 +7,7 @@ import _ from 'lodash';
 import * as moment from 'moment';
 import { helpers } from '../../common/helpers';
 import Store from '../../redux/store';
-import { viewTypes } from '../../redux/constants';
+import reduxTypes from '../../redux/constants';
 import SimpleTooltip from '../simpleTooltIp/simpleTooltip';
 import ScanSourceList from './scanSourceList';
 import ScanHostList from '../scanHostList/scanHostList';
@@ -15,37 +15,61 @@ import ScanJobsList from './scanJobsList';
 import ListStatusItem from '../listStatusItem/listStatusItem';
 
 class ScanListItem extends React.Component {
-  constructor() {
-    super();
-
-    helpers.bindMethods(this, ['toggleExpand', 'closeExpand', 'itemSelectChange']);
-
-    this.state = {
-      scanResultsPending: false,
-      scanResultsError: null,
-      scanResults: null,
-      scanJobsPending: false,
-      scanJobsError: null,
-      scanJobs: null
-    };
+  static isSelected(item, selectedSources) {
+    return _.find(selectedSources, nextSelected => nextSelected.id === item.id) !== undefined;
   }
 
+  // FixMe: convert componentWillReceiveProps
   componentWillReceiveProps(nextProps) {
+    const { lastRefresh } = this.props;
     // Check for changes resulting in a fetch
-    if (!_.isEqual(nextProps.lastRefresh, this.props.lastRefresh)) {
+    if (!_.isEqual(nextProps.lastRefresh, lastRefresh)) {
       this.closeExpandIfNoData(this.expandType());
     }
   }
 
+  onToggleExpand = expandType => {
+    const { item } = this.props;
+
+    if (expandType === this.expandType()) {
+      Store.dispatch({
+        type: reduxTypes.view.EXPAND_ITEM,
+        viewType: reduxTypes.view.SCANS_VIEW,
+        item
+      });
+    } else {
+      Store.dispatch({
+        type: reduxTypes.view.EXPAND_ITEM,
+        viewType: reduxTypes.view.SCANS_VIEW,
+        item,
+        expandType
+      });
+    }
+  };
+
+  onCloseExpand = () => {
+    const { item } = this.props;
+    Store.dispatch({
+      type: reduxTypes.view.EXPAND_ITEM,
+      viewType: reduxTypes.view.SCANS_VIEW,
+      item
+    });
+  };
+
+  onItemSelectChange = () => {
+    const { item, selectedScans } = this.props;
+
+    Store.dispatch({
+      type: ScanListItem.isSelected(item, selectedScans) ? reduxTypes.view.DESELECT_ITEM : reduxTypes.view.SELECT_ITEM,
+      viewType: reduxTypes.view.SCANS_VIEW,
+      item
+    });
+  };
+
   expandType() {
     const { item, expandedScans } = this.props;
 
-    return _.get(
-      _.find(expandedScans, nextExpanded => {
-        return nextExpanded.id === item.id;
-      }),
-      'expandType'
-    );
+    return _.get(_.find(expandedScans, nextExpanded => nextExpanded.id === item.id), 'expandType');
   }
 
   closeExpandIfNoData(expandType) {
@@ -60,54 +84,8 @@ class ScanListItem extends React.Component {
       (expandType === 'systemsFailed' && failedHosts === 0) ||
       (expandType === 'jobs' && prevCount === 0)
     ) {
-      this.closeExpand();
+      this.onCloseExpand();
     }
-  }
-
-  toggleExpand(expandType) {
-    const { item } = this.props;
-
-    if (expandType === this.expandType()) {
-      Store.dispatch({
-        type: viewTypes.EXPAND_ITEM,
-        viewType: viewTypes.SCANS_VIEW,
-        item: item
-      });
-    } else {
-      Store.dispatch({
-        type: viewTypes.EXPAND_ITEM,
-        viewType: viewTypes.SCANS_VIEW,
-        item: item,
-        expandType: expandType
-      });
-    }
-  }
-
-  closeExpand() {
-    const { item } = this.props;
-    Store.dispatch({
-      type: viewTypes.EXPAND_ITEM,
-      viewType: viewTypes.SCANS_VIEW,
-      item: item
-    });
-  }
-
-  isSelected(item, selectedSources) {
-    return (
-      _.find(selectedSources, nextSelected => {
-        return nextSelected.id === item.id;
-      }) !== undefined
-    );
-  }
-
-  itemSelectChange() {
-    const { item, selectedScans } = this.props;
-
-    Store.dispatch({
-      type: this.isSelected(item, selectedScans) ? viewTypes.DESELECT_ITEM : viewTypes.SELECT_ITEM,
-      viewType: viewTypes.SCANS_VIEW,
-      item: item
-    });
   }
 
   renderDescription() {
@@ -161,7 +139,7 @@ class ScanListItem extends React.Component {
         tipPlural="Successful Systems"
         expanded={expandType === 'systemsScanned'}
         expandType="systemsScanned"
-        toggleExpand={this.toggleExpand}
+        toggleExpand={this.onToggleExpand}
         iconInfo={helpers.scanStatusIcon('success')}
       />,
       <ListStatusItem
@@ -173,7 +151,7 @@ class ScanListItem extends React.Component {
         tipPlural="Failed Systems"
         expanded={expandType === 'systemsFailed'}
         expandType="systemsFailed"
-        toggleExpand={this.toggleExpand}
+        toggleExpand={this.onToggleExpand}
         iconInfo={helpers.scanStatusIcon('failed')}
       />,
       <ListStatusItem
@@ -185,7 +163,7 @@ class ScanListItem extends React.Component {
         tipPlural="Sources"
         expanded={expandType === 'sources'}
         expandType="sources"
-        toggleExpand={this.toggleExpand}
+        toggleExpand={this.onToggleExpand}
       />,
       <ListStatusItem
         key="scans"
@@ -196,7 +174,7 @@ class ScanListItem extends React.Component {
         tipPlural="Previous"
         expanded={expandType === 'jobs'}
         expandType="jobs"
-        toggleExpand={this.toggleExpand}
+        toggleExpand={this.onToggleExpand}
       />
     ];
   }
@@ -279,7 +257,7 @@ class ScanListItem extends React.Component {
     }
   }
 
-  renderHostRow(host) {
+  static renderHostRow(host) {
     return (
       <React.Fragment>
         <Grid.Col xs={6} sm={4} md={3}>
@@ -305,7 +283,7 @@ class ScanListItem extends React.Component {
             scanId={item.most_recent.id}
             lastRefresh={lastRefresh}
             status="success"
-            renderHostRow={this.renderHostRow}
+            renderHostRow={ScanListItem.renderHostRow}
             useInspectionResults
           />
         );
@@ -315,7 +293,7 @@ class ScanListItem extends React.Component {
             scanId={item.most_recent.id}
             lastRefresh={lastRefresh}
             status="failed"
-            renderHostRow={this.renderHostRow}
+            renderHostRow={ScanListItem.renderHostRow}
             useConnectionResults
             useInspectionResults
           />
@@ -338,7 +316,7 @@ class ScanListItem extends React.Component {
 
   render() {
     const { item, selectedScans } = this.props;
-    const selected = this.isSelected(item, selectedScans);
+    const selected = ScanListItem.isSelected(item, selectedScans);
 
     const classes = cx({
       'quipucords-scan-list-item': true,
@@ -350,14 +328,14 @@ class ScanListItem extends React.Component {
       <ListView.Item
         key={item.id}
         className={classes}
-        checkboxInput={<Checkbox checked={selected} bsClass="" onChange={this.itemSelectChange} />}
+        checkboxInput={<Checkbox checked={selected} bsClass="" onChange={this.onItemSelectChange} />}
         actions={this.renderActions()}
         leftContent={<div className="list-item-name">{item.name}</div>}
         description={this.renderDescription()}
         additionalInfo={this.renderStatusItems()}
         compoundExpand
         compoundExpanded={this.expandType() !== undefined}
-        onCloseCompoundExpand={this.closeExpand}
+        onCloseCompoundExpand={this.onCloseExpand}
       >
         {this.renderExpansionContents()}
       </ListView.Item>
@@ -378,11 +356,22 @@ ScanListItem.propTypes = {
   expandedScans: PropTypes.array
 };
 
-const mapStateToProps = function(state) {
-  return Object.assign({
-    expandedScans: state.viewOptions[viewTypes.SCANS_VIEW].expandedItems,
-    selectedScans: state.viewOptions[viewTypes.SCANS_VIEW].selectedItems
-  });
+ScanListItem.defaultProps = {
+  lastRefresh: 0,
+  onSummaryDownload: helpers.noop,
+  onDetailedDownload: helpers.noop,
+  onPause: helpers.noop,
+  onCancel: helpers.noop,
+  onStart: helpers.noop,
+  onResume: helpers.noop,
+  selectedScans: [],
+  expandedScans: []
 };
+
+const mapStateToProps = state =>
+  Object.assign({
+    expandedScans: state.viewOptions[reduxTypes.view.SCANS_VIEW].expandedItems,
+    selectedScans: state.viewOptions[reduxTypes.view.SCANS_VIEW].selectedItems
+  });
 
 export default connect(mapStateToProps)(ScanListItem);
