@@ -6,38 +6,100 @@ import _ from 'lodash';
 import helpers from '../../common/helpers';
 import Store from '../../redux/store';
 
-import { viewToolbarTypes } from '../../redux/constants';
+import reduxTypes from '../../redux/constants';
 import SimpleTooltip from '../simpleTooltIp/simpleTooltip';
 import RefreshTimeButton from '../refreshTimeButton/refreshTimeButton';
 
 class ViewToolbar extends React.Component {
-  constructor() {
-    super();
-
-    helpers.bindMethods(this, [
-      'updateCurrentValue',
-      'onValueKeyPress',
-      'selectFilterType',
-      'filterValueSelected',
-      'filterAdded',
-      'removeFilter',
-      'clearFilters',
-      'updateCurrentSortType',
-      'toggleCurrentSortDirection'
-    ]);
-  }
-
   componentDidMount() {
     const { filterType, sortType, filterFields, sortFields } = this.props;
 
     if (!filterType) {
-      this.selectFilterType(filterFields[0]);
+      this.onSelectFilterType(filterFields[0]);
     }
 
     if (!sortType) {
-      this.updateCurrentSortType(sortFields[0]);
+      this.onUpdateCurrentSortType(sortFields[0]);
     }
   }
+
+  onSelectFilterType = filterType => {
+    const { viewType } = this.props;
+    Store.dispatch({
+      type: reduxTypes.viewToolbar.SET_FILTER_TYPE,
+      viewType,
+      filterType
+    });
+  };
+
+  onFilterValueSelected = newFilterValue => {
+    const { filterType, viewType } = this.props;
+
+    Store.dispatch({
+      type: reduxTypes.viewToolbar.SET_FILTER_VALUE,
+      viewType,
+      filterValue: newFilterValue
+    });
+
+    if (newFilterValue) {
+      this.filterAdded(filterType, newFilterValue);
+    }
+  };
+
+  onUpdateCurrentValue = event => {
+    const { viewType } = this.props;
+    const filterValue = event.target.value;
+
+    Store.dispatch({
+      type: reduxTypes.viewToolbar.SET_FILTER_VALUE,
+      viewType,
+      filterValue
+    });
+  };
+
+  onValueKeyPress = keyEvent => {
+    const { filterType, filterValue } = this.props;
+
+    if (keyEvent.key === 'Enter' && filterValue && filterValue.length) {
+      this.filterAdded(filterType, filterValue);
+      keyEvent.stopPropagation();
+      keyEvent.preventDefault();
+    }
+  };
+
+  onRemoveFilter = filter => {
+    const { viewType } = this.props;
+    Store.dispatch({
+      type: reduxTypes.viewToolbar.REMOVE_FILTER,
+      viewType,
+      filter
+    });
+  };
+
+  onClearFilters = () => {
+    const { viewType } = this.props;
+    Store.dispatch({
+      type: reduxTypes.viewToolbar.CLEAR_FILTERS,
+      viewType
+    });
+  };
+
+  onUpdateCurrentSortType = sortType => {
+    const { viewType } = this.props;
+    Store.dispatch({
+      type: reduxTypes.viewToolbar.SET_SORT_TYPE,
+      viewType,
+      sortType
+    });
+  };
+
+  onToggleCurrentSortDirection = () => {
+    const { viewType } = this.props;
+    Store.dispatch({
+      type: reduxTypes.viewToolbar.TOGGLE_SORT_ASCENDING,
+      viewType
+    });
+  };
 
   filterAdded(field, value) {
     const { viewType } = this.props;
@@ -56,90 +118,11 @@ class ViewToolbar extends React.Component {
       filterText += value;
     }
 
-    const filter = { field: field, value: value, label: filterText };
+    const filter = { field, value, label: filterText };
     Store.dispatch({
-      type: viewToolbarTypes.ADD_FILTER,
-      viewType: viewType,
+      type: reduxTypes.viewToolbar.ADD_FILTER,
+      viewType,
       filter
-    });
-  }
-
-  selectFilterType(filterType) {
-    const { viewType } = this.props;
-    Store.dispatch({
-      type: viewToolbarTypes.SET_FILTER_TYPE,
-      viewType: viewType,
-      filterType
-    });
-  }
-
-  filterValueSelected(newFilterValue) {
-    const { filterType, viewType } = this.props;
-    const filterValue = newFilterValue;
-
-    Store.dispatch({
-      type: viewToolbarTypes.SET_FILTER_VALUE,
-      viewType: viewType,
-      filterValue
-    });
-
-    if (newFilterValue) {
-      this.filterAdded(filterType, newFilterValue);
-    }
-  }
-
-  updateCurrentValue(event) {
-    const { viewType } = this.props;
-    const filterValue = event.target.value;
-
-    Store.dispatch({
-      type: viewToolbarTypes.SET_FILTER_VALUE,
-      viewType: viewType,
-      filterValue
-    });
-  }
-
-  onValueKeyPress(keyEvent) {
-    const { filterType, filterValue } = this.props;
-
-    if (keyEvent.key === 'Enter' && filterValue && filterValue.length) {
-      this.filterAdded(filterType, filterValue);
-      keyEvent.stopPropagation();
-      keyEvent.preventDefault();
-    }
-  }
-
-  removeFilter(filter) {
-    const { viewType } = this.props;
-    Store.dispatch({
-      type: viewToolbarTypes.REMOVE_FILTER,
-      viewType: viewType,
-      filter
-    });
-  }
-
-  clearFilters() {
-    const { viewType } = this.props;
-    Store.dispatch({
-      type: viewToolbarTypes.CLEAR_FILTERS,
-      viewType: viewType
-    });
-  }
-
-  updateCurrentSortType(sortType) {
-    const { viewType } = this.props;
-    Store.dispatch({
-      type: viewToolbarTypes.SET_SORT_TYPE,
-      viewType: viewType,
-      sortType
-    });
-  }
-
-  toggleCurrentSortDirection() {
-    const { viewType } = this.props;
-    Store.dispatch({
-      type: viewToolbarTypes.TOGGLE_SORT_ASCENDING,
-      viewType: viewType
     });
   }
 
@@ -156,7 +139,7 @@ class ViewToolbar extends React.Component {
           filterValues={filterType.filterValues}
           currentValue={filterValue}
           placeholder={filterType.placeholder}
-          onFilterValueSelected={this.filterValueSelected}
+          onFilterValueSelected={this.onFilterValueSelected}
         />
       );
     }
@@ -167,8 +150,8 @@ class ViewToolbar extends React.Component {
         type={filterType.filterType}
         value={filterValue}
         placeholder={filterType.placeholder}
-        onChange={e => this.updateCurrentValue(e)}
-        onKeyPress={e => this.onValueKeyPress(e)}
+        onChange={this.onUpdateCurrentValue}
+        onKeyPress={this.onValueKeyPress}
       />
     );
   }
@@ -182,7 +165,7 @@ class ViewToolbar extends React.Component {
           <Filter.TypeSelector
             filterTypes={filterFields}
             currentFilterType={filterType}
-            onFilterTypeSelected={this.selectFilterType}
+            onFilterTypeSelected={this.onSelectFilterType}
           />
           {this.renderFilterInput()}
         </Filter>
@@ -201,13 +184,13 @@ class ViewToolbar extends React.Component {
           <Sort.TypeSelector
             sortTypes={sortFields}
             currentSortType={sortType}
-            onSortTypeSelected={this.updateCurrentSortType}
+            onSortTypeSelected={this.onUpdateCurrentSortType}
           />
           <SimpleTooltip id="sortTip" tooltip={`Sort by ${sortType.title}`}>
             <Sort.DirectionSelector
               isNumeric={sortType.isNumeric}
               isAscending={sortAscending}
-              onClick={() => this.toggleCurrentSortDirection()}
+              onClick={() => this.onToggleCurrentSortDirection()}
             />
           </SimpleTooltip>
         </Sort>
@@ -246,15 +229,13 @@ class ViewToolbar extends React.Component {
       return [
         <Filter.ActiveLabel key="label">Active Filters:</Filter.ActiveLabel>,
         <Filter.List key="list">
-          {activeFilters.map((item, index) => {
-            return (
-              <Filter.Item key={index} onRemove={this.removeFilter} filterData={item}>
-                {item.label}
-              </Filter.Item>
-            );
-          })}
+          {activeFilters.map(item => (
+            <Filter.Item key={item.label} onRemove={this.onRemoveFilter} filterData={item}>
+              {item.label}
+            </Filter.Item>
+          ))}
         </Filter.List>,
-        <Button bsStyle="link" key="clear" onClick={this.clearFilters}>
+        <Button bsStyle="link" key="clear" onClick={this.onClearFilters}>
           Clear All Filters
         </Button>
       ];
@@ -300,9 +281,21 @@ ViewToolbar.propTypes = {
 };
 
 ViewToolbar.defaultProps = {
-  filteredCount: -1,
+  activeFilters: [],
+  actions: null,
+  filterFields: [],
+  filterType: {},
+  filterValue: '',
   itemsType: '',
-  itemsTypePlural: ''
+  itemsTypePlural: '',
+  lastRefresh: null,
+  onRefresh: helpers.noop,
+  selectedCount: 0,
+  sortAscending: true,
+  sortFields: [],
+  sortType: {},
+  totalCount: 0,
+  viewType: null
 };
 
 export default ViewToolbar;
