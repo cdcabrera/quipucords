@@ -7,4 +7,4 @@ const addFacts = data => dispatch =>
     payload: factsService.addFacts(data)
   });
 
-export { addFacts };
+export { addFacts as default, addFacts };

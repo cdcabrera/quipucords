@@ -13,7 +13,7 @@ const initialState = {
   }
 };
 
-const factsReducer = function(state = initialState, action) {
+const factsReducer = (state = initialState, action) => {
   switch (action.type) {
     // Error/Rejected
     case helpers.REJECTED_ACTION(factsTypes.ADD_FACTS):

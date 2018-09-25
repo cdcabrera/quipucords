@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _get from 'lodash/get';
 import helpers from '../../common/helpers';
 import { sourcesTypes } from '../constants';
 
@@ -21,7 +21,7 @@ const initialState = {
   }
 };
 
-const sourcesReducer = function(state = initialState, action) {
+const sourcesReducer = (state = initialState, action) => {
   switch (action.type) {
     // Error/Rejected
     case helpers.REJECTED_ACTION(sourcesTypes.DELETE_SOURCE):
@@ -97,11 +97,11 @@ const sourcesReducer = function(state = initialState, action) {
     // Success/Fulfilled
     case helpers.FULFILLED_ACTION(sourcesTypes.GET_SOURCES):
       // Get resulting sources and update the selected state of each
-      const sources = _.get(action, 'payload.data.results', []);
+      const sources = _get(action, 'payload.data.results', []);
       return helpers.setStateProp(
         'view',
         {
-          sources: sources,
+          sources,
           fulfilled: true
         },
         {

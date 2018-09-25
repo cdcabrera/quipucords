@@ -20,7 +20,7 @@ const initialState = {
   }
 };
 
-const userReducer = function(state = initialState, action) {
+const userReducer = (state = initialState, action) => {
   switch (action.type) {
     // Error/Rejected
     case helpers.REJECTED_ACTION(userTypes.USER_INFO):

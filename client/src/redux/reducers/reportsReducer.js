@@ -18,7 +18,7 @@ const initialState = {
   }
 };
 
-const reportsReducer = function(state = initialState, action) {
+const reportsReducer = (state = initialState, action) => {
   switch (action.type) {
     // Error/Rejected
     case helpers.REJECTED_ACTION(reportsTypes.GET_REPORT):
