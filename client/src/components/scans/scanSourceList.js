@@ -1,60 +1,39 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import { Grid, Icon } from 'patternfly-react';
 import { helpers } from '../../common/helpers';
-import { getScanJob } from '../../redux/actions/scansActions';
+import reduxActions from '../../redux/actions';
 
 class ScanSourceList extends React.Component {
-  constructor() {
-    super();
+  static renderSourceIcon(source) {
+    const iconInfo = helpers.sourceTypeIcon(source.source_type);
 
-    this.state = {
-      sources: [],
-      scanJob: []
-    };
+    return <Icon type={iconInfo.type} name={iconInfo.name} />;
   }
+
+  state = {
+    sources: [],
+    scanJob: []
+  };
 
   componentDidMount() {
     this.sortSources(_.get(this.props, 'scan'));
     this.refresh();
   }
 
+  // FixMe: convert componentWillReceiveProps
   componentWillReceiveProps(nextProps) {
+    const { lastRefresh, scan } = this.props;
     // Check for changes resulting in a fetch
-    if (!_.isEqual(nextProps.lastRefresh, this.props.lastRefresh)) {
+    if (!_.isEqual(nextProps.lastRefresh, lastRefresh)) {
       this.refresh();
     }
 
-    if (nextProps.scan !== this.props.scan) {
+    if (nextProps.scan !== scan) {
       this.sortSources(_.get(nextProps, 'scan'));
     }
-  }
-
-  refresh() {
-    const { scan, getScanJob } = this.props;
-    const jobId = _.get(scan, 'most_recent.id');
-
-    if (jobId) {
-      getScanJob(jobId).then(results => {
-        this.setState({ scanJob: _.get(results.value, 'data') });
-      });
-    }
-  }
-
-  sortSources(scan) {
-    let sources = [..._.get(scan, 'sources', [])];
-
-    sources.sort((item1, item2) => {
-      let cmp = item1.source_type.localeCompare(item2.source_type);
-      if (cmp === 0) {
-        cmp = item1.name.localeCompare(item2.name);
-      }
-      return cmp;
-    });
-
-    this.setState({ sources: sources });
   }
 
   getSourceStatus(source) {
@@ -75,10 +54,30 @@ class ScanSourceList extends React.Component {
     return `Inspection Scan: ${_.get(inspectTask, 'status_message', 'checking status...')}`;
   }
 
-  static renderSourceIcon(source) {
-    const iconInfo = helpers.sourceTypeIcon(source.source_type);
+  sortSources(scan) {
+    const sources = [..._.get(scan, 'sources', [])];
 
-    return <Icon type={iconInfo.type} name={iconInfo.name} />;
+    sources.sort((item1, item2) => {
+      let cmp = item1.source_type.localeCompare(item2.source_type);
+      if (cmp === 0) {
+        cmp = item1.name.localeCompare(item2.name);
+      }
+
+      return cmp;
+    });
+
+    this.setState({ sources });
+  }
+
+  refresh() {
+    const { scan, getScanJob } = this.props;
+    const jobId = _.get(scan, 'most_recent.id');
+
+    if (jobId) {
+      getScanJob(jobId).then(results => {
+        this.setState({ scanJob: _.get(results.value, 'data') });
+      });
+    }
   }
 
   render() {
@@ -86,8 +85,8 @@ class ScanSourceList extends React.Component {
 
     return (
       <Grid fluid>
-        {sources.map((item, index) => (
-          <Grid.Row key={index}>
+        {sources.map(item => (
+          <Grid.Row key={helpers.generateKey(item)}>
             <Grid.Col xs={4} md={3}>
               {ScanSourceList.renderSourceIcon(item)}
               &nbsp; {item.name}
@@ -108,12 +107,15 @@ ScanSourceList.propTypes = {
   getScanJob: PropTypes.func
 };
 
-const mapStateToProps = function(state) {
-  return {};
+ScanSourceList.defaultProps = {
+  lastRefresh: 0,
+  getScanJob: helpers.noop
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  getScanJob: (id, query) => dispatch(getScanJob(id))
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = dispatch => ({
+  getScanJob: id => dispatch(reduxActions.scans.getScanJob(id))
 });
 
 export default connect(

@@ -9,7 +9,7 @@ exports[`ScanSourceList Component should shallow render a basic component with s
   <Row
     bsClass="row"
     componentClass="div"
-    key="0"
+    key="generatedkey-31b054fd7debdd0eed278b7bfdcdefb9"
   >
     <Col
       bsClass="col"
