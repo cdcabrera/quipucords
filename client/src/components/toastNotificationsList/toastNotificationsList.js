@@ -3,21 +3,22 @@ import PropTypes from 'prop-types';
 import { ToastNotificationList, TimedToastNotification } from 'patternfly-react';
 import { connect } from 'react-redux';
 import Store from '../../redux/store';
-import { toastNotificationTypes } from '../../redux/constants';
+import reduxTypes from '../../redux/constants';
+import helpers from '../../common/helpers';
 
 class ToastNotificationsList extends React.Component {
   onHover = () => {
-    Store.dispatch({ type: toastNotificationTypes.TOAST_PAUSE });
+    Store.dispatch({ type: reduxTypes.toastNotifications.TOAST_PAUSE });
   };
 
   onLeave = () => {
-    Store.dispatch({ type: toastNotificationTypes.TOAST_RESUME });
+    Store.dispatch({ type: reduxTypes.toastNotifications.TOAST_RESUME });
   };
 
   onDismiss = toast => {
     Store.dispatch({
-      type: toastNotificationTypes.TOAST_REMOVE,
-      toast: toast
+      type: reduxTypes.toastNotifications.TOAST_REMOVE,
+      toast
     });
   };
 
@@ -31,11 +32,11 @@ class ToastNotificationsList extends React.Component {
             if (!toast.removed) {
               return (
                 <TimedToastNotification
-                  key={index}
+                  key={helpers.generateKey(toast)}
                   toastIndex={index}
                   type={toast.alertType}
                   paused={paused}
-                  onDismiss={e => this.onDismiss(toast)}
+                  onDismiss={() => this.onDismiss(toast)}
                   onMouseEnter={this.onHover}
                   onMouseLeave={this.onLeave}
                 >
@@ -45,9 +46,9 @@ class ToastNotificationsList extends React.Component {
                   </span>
                 </TimedToastNotification>
               );
-            } else {
-              return null;
             }
+
+            return null;
           })}
       </ToastNotificationList>
     );
@@ -59,8 +60,11 @@ ToastNotificationsList.propTypes = {
   paused: PropTypes.bool
 };
 
-const mapStateToProps = function(state) {
-  return { ...state.toastNotifications };
+ToastNotificationsList.defaultProps = {
+  toasts: [],
+  paused: false
 };
+
+const mapStateToProps = state => ({ ...state.toastNotifications });
 
 export default connect(mapStateToProps)(ToastNotificationsList);
