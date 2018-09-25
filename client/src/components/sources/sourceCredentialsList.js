@@ -4,16 +4,14 @@ import { Grid, Icon } from 'patternfly-react';
 import _ from 'lodash';
 
 const SourceCredentialsList = ({ source }) => {
-  let credentials = [..._.get(source, 'credentials', [])];
+  const credentials = [..._.get(source, 'credentials', [])];
 
-  credentials.sort((item1, item2) => {
-    return item1.name.localeCompare(item2.name);
-  });
+  credentials.sort((item1, item2) => item1.name.localeCompare(item2.name));
 
   return (
     <Grid fluid>
-      {credentials.map((item, index) => (
-        <Grid.Row key={index}>
+      {credentials.map(item => (
+        <Grid.Row key={item.name}>
           <Grid.Col xs={12} sm={4}>
             <span>
               <Icon type="fa" name="id-card" />
@@ -28,6 +26,10 @@ const SourceCredentialsList = ({ source }) => {
 
 SourceCredentialsList.propTypes = {
   source: PropTypes.object
+};
+
+SourceCredentialsList.defaultProps = {
+  source: {}
 };
 
 export default SourceCredentialsList;
