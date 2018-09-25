@@ -2,46 +2,46 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { PaginationRow, PAGINATION_VIEW } from 'patternfly-react';
 import Store from '../../redux/store';
-import { viewPaginationTypes } from '../../redux/constants';
+import reduxTypes from '../../redux/constants';
 
 class ViewPaginationRow extends React.Component {
   onFirstPage = () => {
     const { viewType } = this.props;
     Store.dispatch({
-      type: viewPaginationTypes.VIEW_FIRST_PAGE,
-      viewType: viewType
+      type: reduxTypes.viewPagination.VIEW_FIRST_PAGE,
+      viewType
     });
   };
 
   onLastPage = () => {
     const { viewType } = this.props;
     Store.dispatch({
-      type: viewPaginationTypes.VIEW_LAST_PAGE,
-      viewType: viewType
+      type: reduxTypes.viewPagination.VIEW_LAST_PAGE,
+      viewType
     });
   };
 
   onPreviousPage = () => {
     const { viewType } = this.props;
     Store.dispatch({
-      type: viewPaginationTypes.VIEW_PREVIOUS_PAGE,
-      viewType: viewType
+      type: reduxTypes.viewPagination.VIEW_PREVIOUS_PAGE,
+      viewType
     });
   };
 
   onNextPage = () => {
     const { viewType } = this.props;
     Store.dispatch({
-      type: viewPaginationTypes.VIEW_NEXT_PAGE,
-      viewType: viewType
+      type: reduxTypes.viewPagination.VIEW_NEXT_PAGE,
+      viewType
     });
   };
 
   onPageInput = e => {
     const { viewType } = this.props;
     Store.dispatch({
-      type: viewPaginationTypes.VIEW_PAGE_NUMBER,
-      viewType: viewType,
+      type: reduxTypes.viewPagination.VIEW_PAGE_NUMBER,
+      viewType,
       pageNumber: parseInt(e.target.value, 10)
     });
   };
@@ -49,8 +49,8 @@ class ViewPaginationRow extends React.Component {
   onPerPageSelect = eventKey => {
     const { viewType } = this.props;
     Store.dispatch({
-      type: viewPaginationTypes.SET_PER_PAGE,
-      viewType: viewType,
+      type: reduxTypes.viewPagination.SET_PER_PAGE,
+      viewType,
       pageSize: eventKey
     });
   };
@@ -62,7 +62,7 @@ class ViewPaginationRow extends React.Component {
     const rowPagination = {
       page: currentPage,
       perPage: pageSize,
-      perPageOptions: perPageOptions
+      perPageOptions
     };
 
     const itemsStart = (currentPage - 1) * pageSize + 1;
@@ -96,6 +96,14 @@ ViewPaginationRow.propTypes = {
   pageSize: PropTypes.number,
   totalCount: PropTypes.number,
   totalPages: PropTypes.number
+};
+
+ViewPaginationRow.defaultProps = {
+  viewType: null,
+  currentPage: 1,
+  pageSize: 10,
+  totalCount: 0,
+  totalPages: 0
 };
 
 export default ViewPaginationRow;
