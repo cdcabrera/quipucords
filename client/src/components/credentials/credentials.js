@@ -1,19 +1,10 @@
-import _ from 'lodash';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { connect } from 'react-redux';
-
 import { Alert, Button, DropdownButton, EmptyState, Form, Grid, ListView, MenuItem, Modal } from 'patternfly-react';
-
-import { getCredentials, deleteCredential } from '../../redux/actions/credentialsActions';
-import {
-  confirmationModalTypes,
-  credentialsTypes,
-  sourcesTypes,
-  toastNotificationTypes,
-  viewToolbarTypes,
-  viewTypes
-} from '../../redux/constants';
+import reduxActions from '../../redux/actions';
+import reduxTypes from '../../redux/constants';
 import Store from '../../redux/store';
 import helpers from '../../common/helpers';
 
@@ -28,15 +19,6 @@ class Credentials extends React.Component {
   constructor() {
     super();
 
-    helpers.bindMethods(this, [
-      'addCredential',
-      'deleteCredentials',
-      'editCredential',
-      'deleteCredential',
-      'addSource',
-      'refresh'
-    ]);
-
     this.credentialsToDelete = [];
     this.deletingCredential = null;
 
@@ -46,12 +28,17 @@ class Credentials extends React.Component {
   }
 
   componentDidMount() {
-    this.refresh();
+    this.onRefresh();
   }
 
+  // FixMe: convert componentWillReceiveProps
   componentWillReceiveProps(nextProps) {
-    if (!_.isEqual(nextProps.credentials, this.props.credentials)) {
+    const { credentials, fulfilled, update, viewOptions } = this.props;
+
+    if (!_.isEqual(nextProps.credentials, credentials)) {
+      // FixMe: fix credentials object manipulation, convert to state first, temporarily disabling linter
       // Reset selection state though we may want to keep selections over refreshes...
+      /* eslint-disable */
       nextProps.credentials.forEach(credential => {
         if (credential.ssh_keyfile && credential.ssh_keyfile !== '') {
           credential.auth_type = 'sshKey';
@@ -59,21 +46,22 @@ class Credentials extends React.Component {
           credential.auth_type = 'usernamePassword';
         }
       });
+      /* eslint-enable */
 
-      if (nextProps.fulfilled && !this.props.fulfilled) {
+      if (nextProps.fulfilled && !fulfilled) {
         this.setState({ lastRefresh: Date.now() });
       }
     }
 
     // Check for changes resulting in a fetch
-    if (helpers.viewPropsChanged(nextProps.viewOptions, this.props.viewOptions)) {
-      this.refresh(nextProps);
+    if (helpers.viewPropsChanged(nextProps.viewOptions, viewOptions)) {
+      this.onRefresh(nextProps);
     }
 
     if (_.get(nextProps, 'update.delete')) {
-      if (nextProps.update.fulfilled && !this.props.update.fulfilled) {
+      if (nextProps.update.fulfilled && !update.fulfilled) {
         Store.dispatch({
-          type: toastNotificationTypes.TOAST_ADD,
+          type: reduxTypes.toastNotifications.TOAST_ADD,
           alertType: 'success',
           message: (
             <span>
@@ -81,20 +69,21 @@ class Credentials extends React.Component {
             </span>
           )
         });
-        this.refresh(nextProps);
+
+        this.onRefresh(nextProps);
 
         Store.dispatch({
-          type: viewTypes.DESELECT_ITEM,
-          viewType: viewTypes.CREDENTIALS_VIEW,
+          type: reduxTypes.view.DESELECT_ITEM,
+          viewType: reduxTypes.view.CREDENTIALS_VIEW,
           item: this.deletingCredential
         });
 
         this.deleteNextCredential();
       }
 
-      if (nextProps.update.error && !this.props.update.error) {
+      if (nextProps.update.error && !update.error) {
         Store.dispatch({
-          type: toastNotificationTypes.TOAST_ADD,
+          type: reduxTypes.toastNotifications.TOAST_ADD,
           alertType: 'error',
           header: 'Error',
           message: (
@@ -112,31 +101,12 @@ class Credentials extends React.Component {
 
   onAddCredential = credentialType => {
     Store.dispatch({
-      type: credentialsTypes.CREATE_CREDENTIAL_SHOW,
+      type: reduxTypes.credentials.CREATE_CREDENTIAL_SHOW,
       credentialType
     });
   };
 
-  deleteNextCredential() {
-    if (this.credentialsToDelete.length > 0) {
-      this.deletingCredential = this.credentialsToDelete.pop();
-      if (this.deletingCredential) {
-        this.props.deleteCredential(this.deletingCredential.id);
-      }
-    }
-  }
-
-  doDeleteCredentials(items) {
-    this.credentialsToDelete = [...items];
-
-    Store.dispatch({
-      type: confirmationModalTypes.CONFIRMATION_MODAL_HIDE
-    });
-
-    this.deleteNextCredential();
-  }
-
-  deleteCredentials() {
+  onDeleteCredentials = () => {
     const { viewOptions } = this.props;
 
     if (viewOptions.selectedItems.length === 1) {
@@ -144,14 +114,14 @@ class Credentials extends React.Component {
       return;
     }
 
-    let heading = <span>Are you sure you want to delete the following credentials?</span>;
+    const heading = <span>Are you sure you want to delete the following credentials?</span>;
 
     let credentialsList = '';
     viewOptions.selectedItems.forEach((item, index) => {
-      return (credentialsList += (index > 0 ? '\n' : '') + item.name);
+      credentialsList += (index > 0 ? '\n' : '') + item.name;
     });
 
-    let body = (
+    const body = (
       <Grid.Col sm={12}>
         <Form.FormControl
           className="quipucords-form-control"
@@ -164,59 +134,81 @@ class Credentials extends React.Component {
       </Grid.Col>
     );
 
-    let onConfirm = () => this.doDeleteCredentials(viewOptions.selectedItems);
+    const onConfirm = () => this.doDeleteCredentials(viewOptions.selectedItems);
 
     Store.dispatch({
-      type: confirmationModalTypes.CONFIRMATION_MODAL_SHOW,
+      type: reduxTypes.confirmationModal.CONFIRMATION_MODAL_SHOW,
       title: 'Delete Credentials',
-      heading: heading,
-      body: body,
+      heading,
+      body,
       confirmButtonText: 'Delete',
-      onConfirm: onConfirm
+      onConfirm
     });
-  }
+  };
 
-  editCredential(item) {
+  onEditCredential = item => {
     Store.dispatch({
-      type: credentialsTypes.EDIT_CREDENTIAL_SHOW,
+      type: reduxTypes.credentials.EDIT_CREDENTIAL_SHOW,
       credential: item
     });
-  }
+  };
 
-  deleteCredential(item) {
-    let heading = (
+  onDeleteCredential = item => {
+    const heading = (
       <span>
         Are you sure you want to delete the credential <strong>{item.name}</strong>?
       </span>
     );
 
-    let onConfirm = () => this.doDeleteCredentials([item]);
+    const onConfirm = () => this.doDeleteCredentials([item]);
 
     Store.dispatch({
-      type: confirmationModalTypes.CONFIRMATION_MODAL_SHOW,
+      type: reduxTypes.confirmationModal.CONFIRMATION_MODAL_SHOW,
       title: 'Delete Credential',
-      heading: heading,
+      heading,
       confirmButtonText: 'Delete',
-      onConfirm: onConfirm
+      onConfirm
     });
-  }
+  };
 
-  addSource() {
+  onAddSource = () => {
     Store.dispatch({
-      type: sourcesTypes.CREATE_SOURCE_SHOW
+      type: reduxTypes.sources.CREATE_SOURCE_SHOW
     });
-  }
+  };
 
-  refresh(props) {
-    const options = _.get(props, 'viewOptions') || this.props.viewOptions;
-    this.props.getCredentials(helpers.createViewQueryObject(options));
-  }
+  onRefresh = passedProps => {
+    const { getCredentials, viewOptions } = this.props;
+    const options = _.get(passedProps, 'viewOptions') || viewOptions;
+    getCredentials(helpers.createViewQueryObject(options));
+  };
 
-  clearFilters() {
+  onClearFilters = () => {
     Store.dispatch({
-      type: viewToolbarTypes.CLEAR_FILTERS,
-      viewType: viewTypes.CREDENTIALS_VIEW
+      type: reduxTypes.viewToolbar.CLEAR_FILTERS,
+      viewType: reduxTypes.view.CREDENTIALS_VIEW
     });
+  };
+
+  deleteNextCredential() {
+    const { deleteCredential } = this.props;
+
+    if (this.credentialsToDelete.length > 0) {
+      this.deletingCredential = this.credentialsToDelete.pop();
+      if (this.deletingCredential) {
+        deleteCredential(this.deletingCredential.id);
+      }
+    }
+  }
+
+  doDeleteCredentials(items) {
+    this.credentialsToDelete = [...items];
+
+    Store.dispatch({
+      type: reduxTypes.confirmationModal.CONFIRMATION_MODAL_HIDE
+    });
+
+    this.deleteNextCredential();
   }
 
   renderCredentialActions() {
@@ -237,7 +229,7 @@ class Credentials extends React.Component {
         </DropdownButton>
         <Button
           disabled={!viewOptions.selectedItems || viewOptions.selectedItems.length === 0}
-          onClick={this.deleteCredentials}
+          onClick={this.onDeleteCredentials}
         >
           Delete
         </Button>
@@ -266,8 +258,13 @@ class Credentials extends React.Component {
     if (_.size(items)) {
       return (
         <ListView className="quipicords-list-view">
-          {items.map((item, index) => (
-            <CredentialListItem item={item} key={index} onEdit={this.editCredential} onDelete={this.deleteCredential} />
+          {items.map(item => (
+            <CredentialListItem
+              item={item}
+              key={helpers.generateKey(item)}
+              onEdit={this.onEditCredential}
+              onDelete={this.onDeleteCredential}
+            />
           ))}
         </ListView>
       );
@@ -278,7 +275,7 @@ class Credentials extends React.Component {
         <EmptyState.Title>No Results Match the Filter Criteria</EmptyState.Title>
         <EmptyState.Info>The active filters are hiding all items.</EmptyState.Info>
         <EmptyState.Action>
-          <Button bsStyle="link" onClick={this.clearFilters}>
+          <Button bsStyle="link" onClick={this.onClearFilters}>
             Clear Filters
           </Button>
         </EmptyState.Action>
@@ -306,10 +303,10 @@ class Credentials extends React.Component {
         <React.Fragment>
           <div className="quipucords-view-container">
             <ViewToolbar
-              viewType={viewTypes.CREDENTIALS_VIEW}
+              viewType={reduxTypes.view.CREDENTIALS_VIEW}
               filterFields={CredentialFilterFields}
               sortFields={CredentialSortFields}
-              onRefresh={this.refresh}
+              onRefresh={this.onRefresh}
               lastRefresh={lastRefresh}
               actions={this.renderCredentialActions()}
               itemsType="Credential"
@@ -317,7 +314,7 @@ class Credentials extends React.Component {
               selectedCount={viewOptions.selectedItems.length}
               {...viewOptions}
             />
-            <ViewPaginationRow viewType={viewTypes.CREDENTIALS_VIEW} {...viewOptions} />
+            <ViewPaginationRow viewType={reduxTypes.view.CREDENTIALS_VIEW} {...viewOptions} />
             <div className="quipucords-list-container">{this.renderCredentialsList(credentials)}</div>
           </div>
           {this.renderPendingMessage()}
@@ -328,7 +325,7 @@ class Credentials extends React.Component {
     return (
       <React.Fragment>
         {this.renderPendingMessage()}
-        <CredentialsEmptyState onAddCredential={this.onAddCredential} onAddSource={this.addSource} />,
+        <CredentialsEmptyState onAddCredential={this.onAddCredential} onAddSource={this.onAddSource} />,
       </React.Fragment>
     );
   }
@@ -346,17 +343,28 @@ Credentials.propTypes = {
   update: PropTypes.object
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  getCredentials: queryObj => dispatch(getCredentials(queryObj)),
-  deleteCredential: id => dispatch(deleteCredential(id))
+Credentials.defaultProps = {
+  getCredentials: helpers.noop,
+  deleteCredential: helpers.noop,
+  fulfilled: false,
+  error: false,
+  errorMessage: '',
+  pending: false,
+  credentials: [],
+  viewOptions: {},
+  update: {}
+};
+
+const mapDispatchToProps = dispatch => ({
+  getCredentials: queryObj => dispatch(reduxActions.credentials.getCredentials(queryObj)),
+  deleteCredential: id => dispatch(reduxActions.credentials.deleteCredential(id))
 });
 
-const mapStateToProps = function(state) {
-  return Object.assign({}, state.credentials.view, {
-    viewOptions: state.viewOptions[viewTypes.CREDENTIALS_VIEW],
+const mapStateToProps = state =>
+  Object.assign({}, state.credentials.view, {
+    viewOptions: state.viewOptions[reduxTypes.view.CREDENTIALS_VIEW],
     update: state.credentials.update
   });
-};
 
 export default connect(
   mapStateToProps,
