@@ -22,7 +22,7 @@ const ListStatusItem = ({
       const classes = cx('list-view-compound-item-icon', ..._get(iconInfoDisplay, 'classNames', []));
       return (
         <React.Fragment>
-          <Icon className={classes} type={iconInfoDisplay.type} name={iconInfoDisplay.name} />
+          <Icon className={classes} type={iconInfoDisplay.type} name={iconInfoDisplay.name || 'unknown'} />
           <strong>{countDisplay}</strong>
         </React.Fragment>
       );

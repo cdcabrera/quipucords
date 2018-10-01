@@ -198,6 +198,7 @@ class Sources extends React.Component {
         <ListView className="quipicords-list-view">
           {items.map(item => (
             <SourceListItem
+              key={item.id}
               item={item}
               lastRefresh={lastRefresh}
               onEdit={this.onEditSource}

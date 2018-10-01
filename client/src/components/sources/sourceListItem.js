@@ -262,7 +262,7 @@ class SourceListItem extends React.Component {
           item.hosts.length > 1 && (
             <ul className="quipucords-popover-list">
               {item.hosts.map(host => (
-                <li>{host}</li>
+                <li key={host}>{host}</li>
               ))}
             </ul>
           )}
