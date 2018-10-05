@@ -27,16 +27,12 @@ class MergeReportsDialog extends React.Component {
 
   getValidScans() {
     const { scans } = this.props;
-    return _.filter(scans, scan => {
-      return _.get(scan, 'most_recent.status') === 'completed';
-    });
+    return _.filter(scans, scan => _.get(scan, 'most_recent.status') === 'completed');
   }
 
   getInvalidScans() {
     const { scans } = this.props;
-    return _.filter(scans, scan => {
-      return _.get(scan, 'most_recent.status') !== 'completed';
-    });
+    return _.filter(scans, scan => _.get(scan, 'most_recent.status') !== 'completed');
   }
 
   getValidReportId() {
@@ -92,9 +88,9 @@ class MergeReportsDialog extends React.Component {
         <div>
           <span>Scans to be included in the merged report:</span>
           <ul>
-            {validScans.map(scan => {
-              return <li key={scan.id}>{scan.name}</li>;
-            })}
+            {validScans.map(scan => (
+              <li key={scan.id}>{scan.name}</li>
+            ))}
           </ul>
         </div>
       );
@@ -111,9 +107,9 @@ class MergeReportsDialog extends React.Component {
         <div>
           <span>Failed scans that cannot be included in the merged report:</span>
           <ul>
-            {invalidScans.map(scan => {
-              return <li key={scan.id}>{scan.name}</li>;
-            })}
+            {invalidScans.map(scan => (
+              <li key={scan.id}>{scan.name}</li>
+            ))}
           </ul>
         </div>
       );

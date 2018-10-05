@@ -146,15 +146,12 @@ const setStateProp = (prop, data, options) => {
   return obj;
 };
 
-const viewPropsChanged = (nextViewOptions, currentViewOptions) => {
-  return (
-    nextViewOptions.currentPage !== currentViewOptions.currentPage ||
-    nextViewOptions.pageSize !== currentViewOptions.pageSize ||
-    nextViewOptions.sortField !== currentViewOptions.sortField ||
-    nextViewOptions.sortAscending !== currentViewOptions.sortAscending ||
-    nextViewOptions.activeFilters !== currentViewOptions.activeFilters
-  );
-};
+const viewPropsChanged = (nextViewOptions, currentViewOptions) =>
+  nextViewOptions.currentPage !== currentViewOptions.currentPage ||
+  nextViewOptions.pageSize !== currentViewOptions.pageSize ||
+  nextViewOptions.sortField !== currentViewOptions.sortField ||
+  nextViewOptions.sortAscending !== currentViewOptions.sortAscending ||
+  nextViewOptions.activeFilters !== currentViewOptions.activeFilters;
 
 const createViewQueryObject = (viewOptions, queryObj) => {
   let queryObject = {
@@ -186,16 +183,14 @@ const getErrorMessageFromResults = results => {
     return responseData;
   }
 
-  const getMessages = messageObject => {
-    return _.map(messageObject, next => {
-      if (_.isString(next)) {
-        return next;
-      }
+  const getMessages = messageObject =>
+    _.map(messageObject, next => {
       if (_.isArray(next)) {
         return getMessages(next);
       }
+
+      return next;
     });
-  };
 
   return _.join(getMessages(responseData), '\n');
 };

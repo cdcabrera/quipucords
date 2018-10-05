@@ -414,9 +414,7 @@ class AddSourceWizardStepTwo extends React.Component {
     const sourceType = _.get(source, apiTypes.API_SOURCE_TYPE);
     const hasSingleCredential = sourceType === 'vcenter' || sourceType === 'satellite';
 
-    const availableCredentials = allCredentials.filter(credential => {
-      return credential.cred_type === sourceType;
-    });
+    const availableCredentials = allCredentials.filter(credential => credential.cred_type === sourceType);
 
     let titleAddSelect;
     let title;
@@ -442,28 +440,26 @@ class AddSourceWizardStepTwo extends React.Component {
               multiselect={!hasSingleCredential}
             >
               {availableCredentials.length &&
-                availableCredentials.map((value, index) => {
-                  return (
-                    <MenuItem
-                      key={value.id}
-                      eventKey={index}
-                      className={{ 'quipucords-dropdownselect-menuitem-selected': credentials.indexOf(value.id) > -1 }}
-                      onSelect={e => this.onChangeCredential(e, value)}
-                    >
-                      {!hasSingleCredential && (
-                        <Grid.Row className="quipucords-dropdownselect-menuitem">
-                          <Grid.Col xs={10} className="quipucords-dropdownselect-menuitemname">
-                            {value.name}
-                          </Grid.Col>
-                          <Grid.Col xs={2} className="quipucords-dropdownselect-menuitemcheck">
-                            {credentials.indexOf(value.id) > -1 && <Icon type="fa" name="check" />}
-                          </Grid.Col>
-                        </Grid.Row>
-                      )}
-                      {hasSingleCredential && value.name}
-                    </MenuItem>
-                  );
-                })}
+                availableCredentials.map((value, index) => (
+                  <MenuItem
+                    key={value.id}
+                    eventKey={index}
+                    className={{ 'quipucords-dropdownselect-menuitem-selected': credentials.indexOf(value.id) > -1 }}
+                    onSelect={e => this.onChangeCredential(e, value)}
+                  >
+                    {!hasSingleCredential && (
+                      <Grid.Row className="quipucords-dropdownselect-menuitem">
+                        <Grid.Col xs={10} className="quipucords-dropdownselect-menuitemname">
+                          {value.name}
+                        </Grid.Col>
+                        <Grid.Col xs={2} className="quipucords-dropdownselect-menuitemcheck">
+                          {credentials.indexOf(value.id) > -1 && <Icon type="fa" name="check" />}
+                        </Grid.Col>
+                      </Grid.Row>
+                    )}
+                    {hasSingleCredential && value.name}
+                  </MenuItem>
+                ))}
             </DropdownSelect>
           </div>
           <Form.InputGroup.Button>

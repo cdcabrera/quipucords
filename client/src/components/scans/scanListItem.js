@@ -40,12 +40,7 @@ class ScanListItem extends React.Component {
   expandType() {
     const { item, expandedScans } = this.props;
 
-    return _.get(
-      _.find(expandedScans, nextExpanded => {
-        return nextExpanded.id === item.id;
-      }),
-      'expandType'
-    );
+    return _.get(_.find(expandedScans, nextExpanded => nextExpanded.id === item.id), 'expandType');
   }
 
   closeExpandIfNoData(expandType) {
@@ -93,11 +88,7 @@ class ScanListItem extends React.Component {
   }
 
   isSelected(item, selectedSources) {
-    return (
-      _.find(selectedSources, nextSelected => {
-        return nextSelected.id === item.id;
-      }) !== undefined
-    );
+    return _.find(selectedSources, nextSelected => nextSelected.id === item.id) !== undefined;
   }
 
   itemSelectChange() {

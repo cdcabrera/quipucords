@@ -19,22 +19,13 @@ class CredentialListItem extends React.Component {
   expandType() {
     const { item, expandedCredentials } = this.props;
 
-    return _.get(
-      _.find(expandedCredentials, nextExpanded => {
-        return nextExpanded.id === item.id;
-      }),
-      'expandType'
-    );
+    return _.get(_.find(expandedCredentials, nextExpanded => nextExpanded.id === item.id), 'expandType');
   }
 
   isSelected() {
     const { item, selectedCredentials } = this.props;
 
-    return (
-      _.find(selectedCredentials, nextSelected => {
-        return nextSelected.id === item.id;
-      }) !== undefined
-    );
+    return _.find(selectedCredentials, nextSelected => nextSelected.id === item.id) !== undefined;
   }
 
   itemSelectChange() {
@@ -133,27 +124,22 @@ class CredentialListItem extends React.Component {
 
     switch (this.expandType(item, expandedCredentials)) {
       case 'sources':
-        item.sources &&
-          item.sources.sort((item1, item2) => {
-            return item1.name.localeCompare(item2.name);
-          });
+        item.sources && item.sources.sort((item1, item2) => item1.name.localeCompare(item2.name));
         return (
           <Grid fluid>
             {item.sources &&
-              item.sources.map((source, index) => {
-                return (
-                  <Grid.Row key={index}>
-                    <Grid.Col xs={12} sm={4}>
-                      <span>
-                        <SimpleTooltip id="sourceTypeTip" tooltip={helpers.sourceTypeString(source.source_type)}>
-                          <Icon type={typeIcon.type} name={typeIcon.name} />
-                        </SimpleTooltip>
-                        &nbsp; {source.name}
-                      </span>
-                    </Grid.Col>
-                  </Grid.Row>
-                );
-              })}
+              item.sources.map((source, index) => (
+                <Grid.Row key={index}>
+                  <Grid.Col xs={12} sm={4}>
+                    <span>
+                      <SimpleTooltip id="sourceTypeTip" tooltip={helpers.sourceTypeString(source.source_type)}>
+                        <Icon type={typeIcon.type} name={typeIcon.name} />
+                      </SimpleTooltip>
+                      &nbsp; {source.name}
+                    </span>
+                  </Grid.Col>
+                </Grid.Row>
+              ))}
           </Grid>
         );
       default:

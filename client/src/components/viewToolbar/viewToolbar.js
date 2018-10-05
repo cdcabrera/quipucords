@@ -246,13 +246,11 @@ class ViewToolbar extends React.Component {
       return [
         <Filter.ActiveLabel key="label">Active Filters:</Filter.ActiveLabel>,
         <Filter.List key="list">
-          {activeFilters.map((item, index) => {
-            return (
-              <Filter.Item key={index} onRemove={this.removeFilter} filterData={item}>
-                {item.label}
-              </Filter.Item>
-            );
-          })}
+          {activeFilters.map((item, index) => (
+            <Filter.Item key={index} onRemove={this.removeFilter} filterData={item}>
+              {item.label}
+            </Filter.Item>
+          ))}
         </Filter.List>,
         <Button bsStyle="link" key="clear" onClick={this.clearFilters}>
           Clear All Filters

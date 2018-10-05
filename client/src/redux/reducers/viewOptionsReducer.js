@@ -51,15 +51,11 @@ const viewOptionsReducer = function(state = initialState, action) {
   };
 
   const selectedIndex = function(state, item) {
-    return _.findIndex(state.selectedItems, nextSelected => {
-      return nextSelected.id === _.get(item, 'id');
-    });
+    return _.findIndex(state.selectedItems, nextSelected => nextSelected.id === _.get(item, 'id'));
   };
 
   const expandedIndex = function(state, item) {
-    return _.findIndex(state.expandedItems, nextExpanded => {
-      return nextExpanded.id === _.get(item, 'id');
-    });
+    return _.findIndex(state.expandedItems, nextExpanded => nextExpanded.id === _.get(item, 'id'));
   };
 
   switch (action.type) {

@@ -21,15 +21,14 @@ class DropdownSelect extends React.Component {
       });
     };
 
-    const passOnClick = callback => {
-      return function() {
+    const passOnClick = callback =>
+      function() {
         if (callback) {
           callback.apply(this, arguments);
         }
 
         toggleDropDown.apply(this, arguments);
       };
-    };
 
     if (!multiselect) {
       return (

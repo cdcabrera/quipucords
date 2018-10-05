@@ -147,9 +147,7 @@ class Credentials extends React.Component {
     let heading = <span>Are you sure you want to delete the following credentials?</span>;
 
     let credentialsList = '';
-    viewOptions.selectedItems.forEach((item, index) => {
-      return (credentialsList += (index > 0 ? '\n' : '') + item.name);
-    });
+    viewOptions.selectedItems.forEach((item, index) => (credentialsList += (index > 0 ? '\n' : '') + item.name));
 
     let body = (
       <Grid.Col sm={12}>

@@ -23,9 +23,7 @@ const toastNotificationsReducer = function(state = initialState, action) {
       let index = state.toasts.indexOf(action.toast);
       action.toast.removed = true;
 
-      let displayedToast = state.toasts.find(toast => {
-        return !toast.removed;
-      });
+      let displayedToast = state.toasts.find(toast => !toast.removed);
 
       if (!displayedToast) {
         return Object.assign({}, state, { toasts: [] });

@@ -30,20 +30,11 @@ class SourceListItem extends React.Component {
   expandType() {
     const { item, expandedSources } = this.props;
 
-    return _.get(
-      _.find(expandedSources, nextExpanded => {
-        return nextExpanded.id === item.id;
-      }),
-      'expandType'
-    );
+    return _.get(_.find(expandedSources, nextExpanded => nextExpanded.id === item.id), 'expandType');
   }
 
   isSelected(item, selectedSources) {
-    return (
-      _.find(selectedSources, nextSelected => {
-        return nextSelected.id === item.id;
-      }) !== undefined
-    );
+    return _.find(selectedSources, nextSelected => nextSelected.id === item.id) !== undefined;
   }
 
   itemSelectChange() {
@@ -273,9 +264,9 @@ class SourceListItem extends React.Component {
           item.hosts.length > 1 && (
             <ul className="quipucords-popover-list">
               hello
-              {item.hosts.map((host, index) => {
-                return <li key={index}>{host}</li>;
-              })}
+              {item.hosts.map((host, index) => (
+                <li key={index}>{host}</li>
+              ))}
             </ul>
           )}
         {item.hosts && item.hosts.length === 1 && <div>{item.hosts[0]}</div>}

@@ -122,19 +122,17 @@ class AddSourceWizard extends React.Component {
     const wizardSteps = edit ? editSourceWizardSteps : addSourceWizardSteps;
     const activeStep = wizardSteps[activeStepIndex];
 
-    return wizardSteps.map((step, stepIndex) => {
-      return (
-        <Wizard.Step
-          key={stepIndex}
-          stepIndex={stepIndex}
-          step={step.step}
-          label={step.label}
-          title={step.title}
-          activeStep={activeStep && activeStep.step}
-          onClick={e => this.onStep(activeStep && activeStep.step)}
-        />
-      );
-    });
+    return wizardSteps.map((step, stepIndex) => (
+      <Wizard.Step
+        key={stepIndex}
+        stepIndex={stepIndex}
+        step={step.step}
+        label={step.label}
+        title={step.title}
+        activeStep={activeStep && activeStep.step}
+        onClick={e => this.onStep(activeStep && activeStep.step)}
+      />
+    ));
   }
 
   render() {
@@ -156,13 +154,11 @@ class AddSourceWizard extends React.Component {
               <Wizard.Steps steps={this.renderWizardSteps()} />
               <Wizard.Row>
                 <Wizard.Main>
-                  {wizardSteps.map((step, stepIndex) => {
-                    return (
-                      <Wizard.Contents key={step.title} stepIndex={stepIndex} activeStepIndex={activeStepIndex}>
-                        {wizardSteps[stepIndex].page}
-                      </Wizard.Contents>
-                    );
-                  })}
+                  {wizardSteps.map((step, stepIndex) => (
+                    <Wizard.Contents key={step.title} stepIndex={stepIndex} activeStepIndex={activeStepIndex}>
+                      {wizardSteps[stepIndex].page}
+                    </Wizard.Contents>
+                  ))}
                 </Wizard.Main>
               </Wizard.Row>
             </Modal.Body>

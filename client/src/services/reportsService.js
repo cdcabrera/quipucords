@@ -49,9 +49,9 @@ class ReportsService {
   }
 
   static getReportDetailsCsv(id) {
-    return this.getReportDetails(id, { format: 'csv' }).then(success => {
-      return this.downloadCSV(success.data, `report_${id}_details_${this.getTimeStampFromResults(success)}.csv`);
-    });
+    return this.getReportDetails(id, { format: 'csv' }).then(success =>
+      this.downloadCSV(success.data, `report_${id}_details_${this.getTimeStampFromResults(success)}.csv`)
+    );
   }
 
   static getReportSummary(id, query = {}) {
@@ -65,21 +65,21 @@ class ReportsService {
   }
 
   static getReportSummaryCsv(id, query = {}) {
-    return this.getReportSummary(id, Object.assign(query, { format: 'csv' })).then(success => {
-      return this.downloadCSV(success.data, `report_${id}_summary_${this.getTimeStampFromResults(success)}.csv`);
-    });
+    return this.getReportSummary(id, Object.assign(query, { format: 'csv' })).then(success =>
+      this.downloadCSV(success.data, `report_${id}_summary_${this.getTimeStampFromResults(success)}.csv`)
+    );
   }
 
   static getMergedScanReportDetailsCsv(id) {
-    return this.getReportDetails(id, { format: 'csv' }).then(success => {
-      return this.downloadCSV(success.data, `merged_report_details_${this.getTimeStampFromResults(success)}.csv`);
-    });
+    return this.getReportDetails(id, { format: 'csv' }).then(success =>
+      this.downloadCSV(success.data, `merged_report_details_${this.getTimeStampFromResults(success)}.csv`)
+    );
   }
 
   static getMergedScanReportSummaryCsv(id) {
-    return this.getReportSummary(id, { format: 'csv' }).then(success => {
-      return this.downloadCSV(success.data, `merged_report_summary_${this.getTimeStampFromResults(success)}.csv`);
-    });
+    return this.getReportSummary(id, { format: 'csv' }).then(success =>
+      this.downloadCSV(success.data, `merged_report_summary_${this.getTimeStampFromResults(success)}.csv`)
+    );
   }
 
   static mergeScanReports(data = {}) {

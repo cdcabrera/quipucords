@@ -59,17 +59,15 @@ class App extends React.Component {
 
     const activeItem = this.menu.find(item => _.startsWith(location.pathname, item.to));
 
-    return this.menu.map(item => {
-      return (
-        <VerticalNav.Item
-          key={item.to}
-          title={item.title}
-          iconClass={item.iconClass}
-          active={item === activeItem || (!activeItem && item.redirect)}
-          onClick={() => this.navigateTo(item.to)}
-        />
-      );
-    });
+    return this.menu.map(item => (
+      <VerticalNav.Item
+        key={item.to}
+        title={item.title}
+        iconClass={item.iconClass}
+        active={item === activeItem || (!activeItem && item.redirect)}
+        onClick={() => this.navigateTo(item.to)}
+      />
+    ));
   }
 
   renderMenuActions() {
