@@ -1,4 +1,3 @@
-import expect from 'expect';
 import moxios from 'moxios';
 import promiseMiddleware from 'redux-promise-middleware';
 import { createStore, applyMiddleware, combineReducers } from 'redux';

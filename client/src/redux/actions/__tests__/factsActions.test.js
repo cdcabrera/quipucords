@@ -1,4 +1,3 @@
-import expect from 'expect';
 import { reducers } from '../../reducers';
 
 describe('FactsActions', () => {
