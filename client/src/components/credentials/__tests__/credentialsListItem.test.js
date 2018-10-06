@@ -2,7 +2,7 @@ import React from 'react';
 import configureMockStore from 'redux-mock-store';
 import CredentialListItem from '../credentialListItem';
 import { mount } from 'enzyme';
-import { viewTypes } from '../../../redux/constants/';
+import { viewTypes } from '../../../redux/constants';
 
 describe('CredentialListItem Component', () => {
   const generateEmptyStore = () =>

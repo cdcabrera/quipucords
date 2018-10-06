@@ -1,7 +1,7 @@
 import moxios from 'moxios';
 import promiseMiddleware from 'redux-promise-middleware';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
-import { actions } from '../';
+import { actions } from '..';
 import { reducers } from '../../reducers';
 
 describe('ScansActions', () => {
