@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button, Icon, Wizard } from 'patternfly-react';
-import helpers from '../../common/helpers';
 import { connect } from 'react-redux';
 import Store from '../../redux/store';
 import { confirmationModalTypes, sourcesTypes } from '../../redux/constants';
@@ -19,8 +18,6 @@ class AddSourceWizard extends React.Component {
     };
 
     this.state = { ...this.initialState };
-
-    helpers.bindMethods(this, ['onCancel', 'onStep', 'onNext', 'onBack', 'onSubmit']);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -42,7 +39,7 @@ class AddSourceWizard extends React.Component {
     }
   }
 
-  onCancel() {
+  onCancel = () => {
     const { fulfilled, error } = this.props;
 
     const closeWizard = () => {
@@ -67,13 +64,13 @@ class AddSourceWizard extends React.Component {
         onConfirm: closeWizard
       });
     }
-  }
+  };
 
-  onStep(stepIndex) {
+  onStep = stepIndex => {
     // ToDo: wizard step map/breadcrumb/trail click, or leave disabled
-  }
+  };
 
-  onNext() {
+  onNext = () => {
     const { activeStepIndex } = this.state;
     const { edit } = this.props;
     const numberSteps = edit ? editSourceWizardSteps.length : addSourceWizardSteps.length;
@@ -81,17 +78,17 @@ class AddSourceWizard extends React.Component {
     if (activeStepIndex < numberSteps - 1) {
       this.setState({ activeStepIndex: activeStepIndex + 1 });
     }
-  }
+  };
 
-  onBack() {
+  onBack = () => {
     let { activeStepIndex } = this.state;
 
     if (activeStepIndex >= 1) {
       this.setState({ activeStepIndex: activeStepIndex - 1 });
     }
-  }
+  };
 
-  onSubmit(event) {
+  onSubmit = event => {
     const { addSource, updateSource, source, edit } = this.props;
     const { stepOneValid, stepTwoValid } = this.state;
 
@@ -114,7 +111,7 @@ class AddSourceWizard extends React.Component {
         });
       }
     }
-  }
+  };
 
   renderWizardSteps() {
     const { activeStepIndex } = this.state;

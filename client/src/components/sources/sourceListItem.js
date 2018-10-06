@@ -14,12 +14,6 @@ import SimpleTooltip from '../simpleTooltIp/simpleTooltip';
 import ListStatusItem from '../listStatusItem/listStatusItem';
 
 class SourceListItem extends React.Component {
-  constructor() {
-    super();
-
-    helpers.bindMethods(this, ['itemSelectChange', 'toggleExpand', 'closeExpand']);
-  }
-
   componentWillReceiveProps(nextProps) {
     // Check for changes resulting in a fetch
     if (!_.isEqual(nextProps.lastRefresh, this.props.lastRefresh)) {
@@ -33,19 +27,19 @@ class SourceListItem extends React.Component {
     return _.get(_.find(expandedSources, nextExpanded => nextExpanded.id === item.id), 'expandType');
   }
 
-  isSelected(item, selectedSources) {
+  static isSelected(item, selectedSources) {
     return _.find(selectedSources, nextSelected => nextSelected.id === item.id) !== undefined;
   }
 
-  itemSelectChange() {
+  onItemSelectChange = () => {
     const { item, selectedSources } = this.props;
 
     Store.dispatch({
-      type: this.isSelected(item, selectedSources) ? viewTypes.DESELECT_ITEM : viewTypes.SELECT_ITEM,
+      type: SourceListItem.isSelected(item, selectedSources) ? viewTypes.DESELECT_ITEM : viewTypes.SELECT_ITEM,
       viewType: viewTypes.SOURCES_VIEW,
       item: item
     });
-  }
+  };
 
   closeExpandIfNoData(expandType) {
     const { item } = this.props;
@@ -55,12 +49,12 @@ class SourceListItem extends React.Component {
       let failedHostCount = _.get(item, 'connection.source_systems_failed', 0);
 
       if ((expandType === 'okHosts' && okHostCount === 0) || (expandType === 'failedHosts' && failedHostCount === 0)) {
-        this.closeExpand();
+        this.onCloseExpand();
       }
     }
   }
 
-  toggleExpand(expandType) {
+  onToggleExpand = expandType => {
     const { item } = this.props;
 
     if (expandType === this.expandType()) {
@@ -77,16 +71,16 @@ class SourceListItem extends React.Component {
         expandType: expandType
       });
     }
-  }
+  };
 
-  closeExpand() {
+  onCloseExpand = () => {
     const { item } = this.props;
     Store.dispatch({
       type: viewTypes.EXPAND_ITEM,
       viewType: viewTypes.SOURCES_VIEW,
       item: item
     });
-  }
+  };
 
   renderSourceType() {
     const { item } = this.props;
@@ -145,7 +139,7 @@ class SourceListItem extends React.Component {
         tipPlural="Credentials"
         expanded={expandType === 'credentials'}
         expandType="credentials"
-        toggleExpand={this.toggleExpand}
+        toggleExpand={this.onToggleExpand}
         iconInfo={{ type: 'fa', name: 'id-card' }}
       />,
       <ListStatusItem
@@ -157,7 +151,7 @@ class SourceListItem extends React.Component {
         tipPlural="Successful Authentications"
         expanded={expandType === 'okHosts'}
         expandType="okHosts"
-        toggleExpand={this.toggleExpand}
+        toggleExpand={this.onToggleExpand}
         iconInfo={helpers.scanStatusIcon('success')}
       />,
       <ListStatusItem
@@ -169,7 +163,7 @@ class SourceListItem extends React.Component {
         tipPlural="Failed Authentications"
         expanded={expandType === 'failedHosts'}
         expandType="failedHosts"
-        toggleExpand={this.toggleExpand}
+        toggleExpand={this.onToggleExpand}
         iconInfo={helpers.scanStatusIcon('failed')}
       />,
       <ListStatusItem
@@ -181,13 +175,13 @@ class SourceListItem extends React.Component {
         tipPlural="Unreachable Systems"
         expanded={expandType === 'unreachableHosts'}
         expandType="unreachableHosts"
-        toggleExpand={this.toggleExpand}
+        toggleExpand={this.onToggleExpand}
         iconInfo={helpers.scanStatusIcon('unreachable')}
       />
     ];
   }
 
-  renderHostRow(host) {
+  static renderHostRow(host) {
     const iconInfo = helpers.scanStatusIcon(host.status);
     const classes = cx(...iconInfo.classNames);
 
@@ -222,7 +216,7 @@ class SourceListItem extends React.Component {
             sourceId={item.id}
             lastRefresh={lastRefresh}
             status="success"
-            renderHostRow={this.renderHostRow}
+            renderHostRow={SourceListItem.renderHostRow}
             useConnectionResults
           />
         );
@@ -233,7 +227,7 @@ class SourceListItem extends React.Component {
             sourceId={item.id}
             lastRefresh={lastRefresh}
             status="failed"
-            renderHostRow={this.renderHostRow}
+            renderHostRow={SourceListItem.renderHostRow}
             useConnectionResults
           />
         );
@@ -244,7 +238,7 @@ class SourceListItem extends React.Component {
             sourceId={item.id}
             lastRefresh={lastRefresh}
             status="unreachable"
-            renderHostRow={this.renderHostRow}
+            renderHostRow={SourceListItem.renderHostRow}
             useConnectionResults
           />
         );
@@ -356,7 +350,7 @@ class SourceListItem extends React.Component {
 
   render() {
     const { item, selectedSources } = this.props;
-    const selected = this.isSelected(item, selectedSources);
+    const selected = SourceListItem.isSelected(item, selectedSources);
 
     const classes = cx({
       'list-view-pf-top-align': true,
@@ -368,14 +362,14 @@ class SourceListItem extends React.Component {
         key={item.id}
         stacked
         className={classes}
-        checkboxInput={<Checkbox checked={selected} bsClass="" onChange={this.itemSelectChange} />}
+        checkboxInput={<Checkbox checked={selected} bsClass="" onChange={this.onItemSelectChange} />}
         actions={this.renderActions()}
         leftContent={this.renderSourceType()}
         description={this.renderDescription()}
         additionalInfo={this.renderStatusItems()}
         compoundExpand
         compoundExpanded={this.expandType() !== undefined}
-        onCloseCompoundExpand={this.closeExpand}
+        onCloseCompoundExpand={this.onCloseExpand}
       >
         {this.renderExpansionContents()}
       </ListView.Item>

@@ -75,7 +75,7 @@ class ScanSourceList extends React.Component {
     return `Inspection Scan: ${_.get(inspectTask, 'status_message', 'checking status...')}`;
   }
 
-  renderSourceIcon(source) {
+  static renderSourceIcon(source) {
     const iconInfo = helpers.sourceTypeIcon(source.source_type);
 
     return <Icon type={iconInfo.type} name={iconInfo.name} />;
@@ -89,7 +89,7 @@ class ScanSourceList extends React.Component {
         {sources.map((item, index) => (
           <Grid.Row key={index}>
             <Grid.Col xs={4} md={3}>
-              {this.renderSourceIcon(item)}
+              {ScanSourceList.renderSourceIcon(item)}
               &nbsp; {item.name}
             </Grid.Col>
             <Grid.Col xs={8} md={9}>

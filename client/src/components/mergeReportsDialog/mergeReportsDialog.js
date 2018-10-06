@@ -13,17 +13,11 @@ import {
 } from '../../redux/actions/reportsActions';
 
 class MergeReportsDialog extends React.Component {
-  constructor() {
-    super();
-
-    helpers.bindMethods(this, ['mergeScanResults', 'onClose']);
-  }
-
-  onClose() {
+  onClose = () => {
     Store.dispatch({
       type: scansTypes.MERGE_SCAN_DIALOG_HIDE
     });
-  }
+  };
 
   getValidScans() {
     const { scans } = this.props;
@@ -58,7 +52,7 @@ class MergeReportsDialog extends React.Component {
     this.onClose();
   }
 
-  mergeScanResults() {
+  onMergeScanResults = () => {
     const { mergeScans, details, getMergedScanReportDetailsCsv, getMergedScanReportSummaryCsv } = this.props;
     const data = { reports: this.getValidReportId() };
 
@@ -78,7 +72,7 @@ class MergeReportsDialog extends React.Component {
       },
       error => this.notifyDownloadStatus(true, error)
     );
-  }
+  };
 
   renderValidScans() {
     const validScans = this.getValidScans();
@@ -134,7 +128,7 @@ class MergeReportsDialog extends React.Component {
         <Button bsStyle="default" className="btn-cancel" onClick={this.onClose}>
           Cancel
         </Button>
-        <Button bsStyle="primary" type="submit" disabled={validCount < 2} onClick={this.mergeScanResults}>
+        <Button bsStyle="primary" type="submit" disabled={validCount < 2} onClick={this.onMergeScanResults}>
           Merge
         </Button>
       </React.Fragment>

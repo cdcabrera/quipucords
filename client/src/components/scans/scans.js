@@ -30,20 +30,6 @@ class Scans extends React.Component {
   constructor() {
     super();
 
-    helpers.bindMethods(this, [
-      'downloadSummaryReport',
-      'downloadDetailedReport',
-      'doPauseScan',
-      'doCancelScan',
-      'doStartScan',
-      'doResumeScan',
-      'deleteScans',
-      'mergeScanResults',
-      'addSource',
-      'refresh',
-      'notifyActionStatus'
-    ]);
-
     // FUTURE: Deletions of scans is not currently desired. This is here in case it ever gets added.
     //         Delete is fully functional by setting this.okToDelete to true.
     this.okToDelete = false;
@@ -57,13 +43,13 @@ class Scans extends React.Component {
   }
 
   componentDidMount() {
-    this.refresh();
+    this.onRefresh();
   }
 
   componentWillReceiveProps(nextProps) {
     // Check for changes resulting in a fetch
     if (helpers.viewPropsChanged(nextProps.viewOptions, this.props.viewOptions)) {
-      this.refresh(nextProps);
+      this.onRefresh(nextProps);
     }
 
     if (nextProps.fulfilled && !this.props.fulfilled) {
@@ -81,7 +67,7 @@ class Scans extends React.Component {
             </span>
           )
         });
-        this.refresh();
+        this.onRefresh();
 
         Store.dispatch({
           type: viewTypes.DESELECT_ITEM,
@@ -129,11 +115,11 @@ class Scans extends React.Component {
         )
       });
 
-      this.refresh();
+      this.onRefresh();
     }
   }
 
-  notifyDownloadStatus(error, results) {
+  static notifyDownloadStatus(error, results) {
     if (error) {
       Store.dispatch({
         type: toastNotificationTypes.TOAST_ADD,
@@ -150,19 +136,19 @@ class Scans extends React.Component {
     }
   }
 
-  downloadSummaryReport(reportId) {
+  onDownloadSummaryReport = reportId => {
     this.props
       .getReportSummaryCsv(reportId)
-      .then(response => this.notifyDownloadStatus(false), error => this.notifyDownloadStatus(true, error.message));
-  }
+      .then(response => Scans.notifyDownloadStatus(false), error => Scans.notifyDownloadStatus(true, error.message));
+  };
 
-  downloadDetailedReport(reportId) {
+  onDownloadDetailedReport = reportId => {
     this.props
       .getReportDetailsCsv(reportId)
-      .then(response => this.notifyDownloadStatus(false), error => this.notifyDownloadStatus(true, error.message));
-  }
+      .then(response => Scans.notifyDownloadStatus(false), error => Scans.notifyDownloadStatus(true, error.message));
+  };
 
-  mergeScanResults(details) {
+  onMergeScanResults = details => {
     const { viewOptions } = this.props;
 
     Store.dispatch({
@@ -171,45 +157,45 @@ class Scans extends React.Component {
       scans: viewOptions.selectedItems,
       details: details
     });
-  }
+  };
 
-  doStartScan(item) {
+  onDoStartScan = item => {
     this.props
       .startScan(item.id)
       .then(
         response => this.notifyActionStatus(item, 'started', false, response.value),
         error => this.notifyActionStatus(item, 'started', true, error)
       );
-  }
+  };
 
-  doPauseScan(item) {
+  onDoPauseScan = item => {
     this.props
       .pauseScan(item.id)
       .then(
         response => this.notifyActionStatus(item, 'paused', false, response.value),
         error => this.notifyActionStatus(item, 'paused', true, error)
       );
-  }
+  };
 
-  doResumeScan(item) {
+  onDoResumeScan = item => {
     this.props
       .restartScan(item.id)
       .then(
         response => this.notifyActionStatus(item, 'resumed', false, response.value),
         error => this.notifyActionStatus(item, 'resumed', true, error)
       );
-  }
+  };
 
-  doCancelScan(item) {
+  onDoCancelScan = item => {
     this.props
       .cancelScan(item.id)
       .then(
         response => this.notifyActionStatus(item, 'canceled', false, response.value),
         error => this.notifyActionStatus(item, 'canceled', true, error)
       );
-  }
+  };
 
-  addSource() {
+  onAddSource = () => {
     const { sourcesCount } = this.props;
 
     if (sourcesCount) {
@@ -219,13 +205,13 @@ class Scans extends React.Component {
         type: sourcesTypes.CREATE_SOURCE_SHOW
       });
     }
-  }
+  };
 
-  refresh(props) {
+  onRefresh = props => {
     const options = _.get(props, 'viewOptions') || this.props.viewOptions;
     this.props.getScansSources();
     this.props.getScans(helpers.createViewQueryObject(options, { scan_type: 'inspect' }));
-  }
+  };
 
   deleteNextScan() {
     const { deleteScan } = this.props;
@@ -266,7 +252,7 @@ class Scans extends React.Component {
     });
   }
 
-  deleteScans() {
+  onDeleteScans = () => {
     const { viewOptions } = this.props;
 
     if (_.size(viewOptions.selectedItems) === 0) {
@@ -306,14 +292,14 @@ class Scans extends React.Component {
       confirmButtonText: 'Delete',
       onConfirm: onConfirm
     });
-  }
+  };
 
-  clearFilters() {
+  onClearFilters = () => {
     Store.dispatch({
       type: viewToolbarTypes.CLEAR_FILTERS,
       viewType: viewTypes.SCANS_VIEW
     });
-  }
+  };
 
   renderPendingMessage() {
     const { pending } = this.props;
@@ -341,7 +327,7 @@ class Scans extends React.Component {
     let deleteAction = null;
     if (this.okToDelete) {
       deleteAction = (
-        <Button disabled={_.size(viewOptions.selectedItems) === 0} onClick={this.deleteScans}>
+        <Button disabled={_.size(viewOptions.selectedItems) === 0} onClick={this.onDeleteScans}>
           Delete
         </Button>
       );
@@ -355,10 +341,10 @@ class Scans extends React.Component {
           tooltip="Merge selected scan results into a single report"
         >
           <DropdownButton key="mergeButton" title="Merge Report" id="merge-reports-dropdown" disabled={!mergeAllowed}>
-            <MenuItem eventKey="1" onClick={() => this.mergeScanResults(false)}>
+            <MenuItem eventKey="1" onClick={() => this.onMergeScanResults(false)}>
               Summary Report
             </MenuItem>
-            <MenuItem eventKey="2" onClick={() => this.mergeScanResults(true)}>
+            <MenuItem eventKey="2" onClick={() => this.onMergeScanResults(true)}>
               Detailed Report
             </MenuItem>
           </DropdownButton>
@@ -379,12 +365,12 @@ class Scans extends React.Component {
               item={item}
               key={index}
               lastRefresh={lastRefresh}
-              onSummaryDownload={this.downloadSummaryReport}
-              onDetailedDownload={this.downloadDetailedReport}
-              onStart={this.doStartScan}
-              onPause={this.doPauseScan}
-              onResume={this.doResumeScan}
-              onCancel={this.doCancelScan}
+              onSummaryDownload={this.onDownloadSummaryReport}
+              onDetailedDownload={this.onDownloadDetailedReport}
+              onStart={this.onDoStartScan}
+              onPause={this.onDoPauseScan}
+              onResume={this.onDoResumeScan}
+              onCancel={this.onDoCancelScan}
             />
           ))}
         </ListView>
@@ -396,7 +382,7 @@ class Scans extends React.Component {
         <EmptyState.Title>No Results Match the Filter Criteria</EmptyState.Title>
         <EmptyState.Info>The active filters are hiding all items.</EmptyState.Info>
         <EmptyState.Action>
-          <Button bsStyle="link" onClick={this.clearFilters}>
+          <Button bsStyle="link" onClick={this.onClearFilters}>
             Clear Filters
           </Button>
         </EmptyState.Action>
@@ -431,7 +417,7 @@ class Scans extends React.Component {
               viewType={viewTypes.SCANS_VIEW}
               filterFields={ScanFilterFields}
               sortFields={ScanSortFields}
-              onRefresh={this.refresh}
+              onRefresh={this.onRefresh}
               lastRefresh={lastRefresh}
               actions={this.renderScansActions()}
               itemsType="Scan"
@@ -450,7 +436,7 @@ class Scans extends React.Component {
 
     return (
       <React.Fragment>
-        <ScansEmptyState onAddSource={this.addSource} sourcesExist={!!sourcesCount} />
+        <ScansEmptyState onAddSource={this.onAddSource} sourcesExist={!!sourcesCount} />
         {this.renderPendingMessage()}
       </React.Fragment>
     );

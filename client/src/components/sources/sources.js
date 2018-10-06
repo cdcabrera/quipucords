@@ -28,16 +28,6 @@ class Sources extends React.Component {
   constructor() {
     super();
 
-    helpers.bindMethods(this, [
-      'scanSource',
-      'scanSources',
-      'editSource',
-      'handleDeleteSource',
-      'hideScanDialog',
-      'refresh',
-      'showAddSourceWizard'
-    ]);
-
     this.state = {
       scanDialogShown: false,
       multiSourceScan: false,
@@ -47,7 +37,7 @@ class Sources extends React.Component {
   }
 
   componentDidMount() {
-    this.refresh();
+    this.onRefresh();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -55,11 +45,11 @@ class Sources extends React.Component {
 
     // Check for changes resulting in a fetch
     if (helpers.viewPropsChanged(nextProps.viewOptions, viewOptions)) {
-      this.refresh(nextProps);
+      this.onRefresh(nextProps);
     }
 
     if ((nextProps.updated && !updated) || (nextProps.deleted && !deleted)) {
-      this.refresh();
+      this.onRefresh();
     }
 
     if (nextProps.fulfilled && !fulfilled) {
@@ -67,7 +57,7 @@ class Sources extends React.Component {
     }
   }
 
-  notifyDeleteStatus(item, error, results) {
+  static notifyDeleteStatus(item, error, results) {
     try {
       if (error) {
         Store.dispatch({
@@ -98,38 +88,38 @@ class Sources extends React.Component {
     }
   }
 
-  showAddSourceWizard() {
+  onShowAddSourceWizard = () => {
     Store.dispatch({
       type: sourcesTypes.CREATE_SOURCE_SHOW
     });
-  }
+  };
 
-  editSource(item) {
+  onEditSource = item => {
     Store.dispatch({
       type: sourcesTypes.EDIT_SOURCE_SHOW,
       source: item
     });
-  }
+  };
 
-  scanSource(source) {
+  onScanSource = source => {
     this.setState({
       scanDialogShown: true,
       multiSourceScan: false,
       currentScanSource: source
     });
-  }
+  };
 
-  scanSources() {
+  onScanSources = () => {
     this.setState({ scanDialogShown: true, multiSourceScan: true });
-  }
+  };
 
-  hideScanDialog(updated) {
+  onHideScanDialog = updated => {
     this.setState({ scanDialogShown: false });
 
     if (updated) {
-      this.refresh();
+      this.onRefresh();
     }
-  }
+  };
 
   doDeleteSource(item) {
     const { deleteSource } = this.props;
@@ -139,12 +129,12 @@ class Sources extends React.Component {
     });
 
     deleteSource(item.id).then(
-      response => this.notifyDeleteStatus(item, false, response.value),
-      error => this.notifyDeleteStatus(item, true, error)
+      response => Sources.notifyDeleteStatus(item, false, response.value),
+      error => Sources.notifyDeleteStatus(item, true, error)
     );
   }
 
-  handleDeleteSource(item) {
+  onHandleDeleteSource = item => {
     const heading = (
       <span>
         Are you sure you want to delete the source <strong>{item.name}</strong>?
@@ -160,31 +150,31 @@ class Sources extends React.Component {
       confirmButtonText: 'Delete',
       onConfirm: onConfirm
     });
-  }
+  };
 
-  refresh(props) {
+  onRefresh = props => {
     const options = _.get(props, 'viewOptions') || this.props.viewOptions;
     this.props.getSources(helpers.createViewQueryObject(options));
-  }
+  };
 
-  clearFilters() {
+  onClearFilters = () => {
     Store.dispatch({
       type: viewToolbarTypes.CLEAR_FILTERS,
       viewType: viewTypes.SOURCES_VIEW
     });
-  }
+  };
 
   renderSourceActions() {
     const { viewOptions } = this.props;
 
     return (
       <div className="form-group">
-        <Button bsStyle="primary" onClick={this.showAddSourceWizard}>
+        <Button bsStyle="primary" onClick={this.onShowAddSourceWizard}>
           Add
         </Button>
         <Button
           disabled={!viewOptions.selectedItems || viewOptions.selectedItems.length === 0}
-          onClick={this.scanSources}
+          onClick={this.onScanSources}
         >
           Scan
         </Button>
@@ -220,9 +210,9 @@ class Sources extends React.Component {
               item={item}
               key={index}
               lastRefresh={lastRefresh}
-              onEdit={this.editSource}
-              onDelete={this.handleDeleteSource}
-              onScan={this.scanSource}
+              onEdit={this.onEditSource}
+              onDelete={this.onHandleDeleteSource}
+              onScan={this.onScanSource}
             />
           ))}
         </ListView>
@@ -234,7 +224,7 @@ class Sources extends React.Component {
         <EmptyState.Title>No Results Match the Filter Criteria</EmptyState.Title>
         <EmptyState.Info>The active filters are hiding all items.</EmptyState.Info>
         <EmptyState.Action>
-          <Button bsStyle="link" onClick={this.clearFilters}>
+          <Button bsStyle="link" onClick={this.onClearFilters}>
             Clear Filters
           </Button>
         </EmptyState.Action>
@@ -265,7 +255,7 @@ class Sources extends React.Component {
               viewType={viewTypes.SOURCES_VIEW}
               filterFields={SourceFilterFields}
               sortFields={SourceSortFields}
-              onRefresh={this.refresh}
+              onRefresh={this.onRefresh}
               lastRefresh={lastRefresh}
               actions={this.renderSourceActions()}
               itemsType="Source"
@@ -280,7 +270,7 @@ class Sources extends React.Component {
           <CreateScanDialog
             show={scanDialogShown}
             sources={multiSourceScan ? viewOptions.selectedItems : [currentScanSource]}
-            onClose={this.hideScanDialog}
+            onClose={this.onHideScanDialog}
           />
         </React.Fragment>
       );
@@ -288,7 +278,7 @@ class Sources extends React.Component {
 
     return (
       <React.Fragment>
-        <SourcesEmptyState onAddSource={this.showAddSourceWizard} />
+        <SourcesEmptyState onAddSource={this.onShowAddSourceWizard} />
         {this.renderPendingMessage()}
       </React.Fragment>
     );

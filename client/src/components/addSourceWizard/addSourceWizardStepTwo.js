@@ -30,16 +30,6 @@ class AddSourceWizardStepTwo extends React.Component {
     };
 
     this.state = { ...this.initialState };
-
-    helpers.bindMethods(this, [
-      'onChangeSourceName',
-      'onChangeCredential',
-      'onClickCredential',
-      'onChangeHost',
-      'onChangeHosts',
-      'onChangePort',
-      'onChangeSslCertVerify'
-    ]);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,19 +43,19 @@ class AddSourceWizardStepTwo extends React.Component {
       }
 
       this.setState(Object.assign({ ...this.initialState }, { sslCertVerify }), () => {
-        this.invalidateStep();
+        AddSourceWizardStepTwo.invalidateStep();
       });
     }
   }
 
   componentDidMount() {
-    this.setState({ ...this.initializeState(this.props) }, () => {
+    this.setState({ ...AddSourceWizardStepTwo.initializeState(this.props) }, () => {
       this.props.getWizardCredentials();
       this.validateStep();
     });
   }
 
-  initializeState(nextProps) {
+  static initializeState(nextProps) {
     if (nextProps.source) {
       const credentials = _.get(nextProps.source, apiTypes.API_SOURCE_CREDENTIALS, []);
       let singlePort;
@@ -100,7 +90,7 @@ class AddSourceWizardStepTwo extends React.Component {
     return {};
   }
 
-  invalidateStep() {
+  static invalidateStep() {
     Store.dispatch({
       type: sourcesTypes.INVALID_SOURCE_WIZARD_STEPTWO
     });
@@ -148,11 +138,11 @@ class AddSourceWizardStepTwo extends React.Component {
         source: Object.assign({ ...source }, updatedSource)
       });
     } else {
-      this.invalidateStep();
+      AddSourceWizardStepTwo.invalidateStep();
     }
   }
 
-  validateSourceName(value) {
+  static validateSourceName(value) {
     if (value === '') {
       return 'You must enter a source name';
     }
@@ -160,21 +150,21 @@ class AddSourceWizardStepTwo extends React.Component {
     return null;
   }
 
-  onChangeSourceName(event) {
+  onChangeSourceName = event => {
     this.setState(
       {
         sourceName: event.target.value,
-        sourceNameError: this.validateSourceName(event.target.value)
+        sourceNameError: AddSourceWizardStepTwo.validateSourceName(event.target.value)
       },
       () => this.validateStep()
     );
-  }
+  };
 
   credentialInfo(id) {
     return _.find(this.props.allCredentials, { id: id }) || {};
   }
 
-  validateCredentials(value) {
+  static validateCredentials(value) {
     if (!value.length) {
       return 'You must add a credential';
     }
@@ -182,7 +172,7 @@ class AddSourceWizardStepTwo extends React.Component {
     return null;
   }
 
-  onChangeCredential(event, value) {
+  onChangeCredential = (event, value) => {
     const { credentials } = this.state;
     const { source } = this.props;
 
@@ -202,21 +192,22 @@ class AddSourceWizardStepTwo extends React.Component {
       }
     }
 
-    this.setState({ credentials: submitCreds, credentialsError: this.validateCredentials(submitCreds) }, () =>
-      this.validateStep()
+    this.setState(
+      { credentials: submitCreds, credentialsError: AddSourceWizardStepTwo.validateCredentials(submitCreds) },
+      () => this.validateStep()
     );
-  }
+  };
 
-  onClickCredential() {
+  onClickCredential = () => {
     const { source } = this.props;
 
     Store.dispatch({
       type: credentialsTypes.CREATE_CREDENTIAL_SHOW,
       credentialType: _.get(source, apiTypes.API_SOURCE_TYPE)
     });
-  }
+  };
 
-  validateHosts(value) {
+  static validateHosts(value) {
     let validation = null;
 
     if (value.length) {
@@ -240,7 +231,7 @@ class AddSourceWizardStepTwo extends React.Component {
     return validation;
   }
 
-  validateHost(value) {
+  static validateHost(value) {
     if (
       !new RegExp('^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$').test(value) &&
       !new RegExp('^(([a-z0-9]|[a-z0-9][a-z0-9\\-]*[a-z0-9])\\.)*([a-z0-9]|[a-z0-9][a-z0-9\\-]*[a-z0-9])$', 'i').test(
@@ -253,7 +244,7 @@ class AddSourceWizardStepTwo extends React.Component {
     return null;
   }
 
-  validatePort(value) {
+  static validatePort(value) {
     if (value && value.length && !/^\d{1,4}$/.test(value)) {
       return 'Port must be valid';
     }
@@ -261,7 +252,7 @@ class AddSourceWizardStepTwo extends React.Component {
     return null;
   }
 
-  onChangePort(targetValue) {
+  onChangePort = targetValue => {
     const { source } = this.props;
     let value = targetValue;
     let defaultPort;
@@ -286,22 +277,22 @@ class AddSourceWizardStepTwo extends React.Component {
     this.setState(
       {
         port: value,
-        portError: this.validatePort(value)
+        portError: AddSourceWizardStepTwo.validatePort(value)
       },
       () => this.validateStep()
     );
-  }
+  };
 
-  onChangeSslCertVerify(event) {
+  onChangeSslCertVerify = event => {
     this.setState(
       {
         sslCertVerify: event.target.checked || false
       },
       () => this.validateStep()
     );
-  }
+  };
 
-  onChangeHost(event) {
+  onChangeHost = event => {
     let value = event.target.value;
     let host = [];
     let port;
@@ -314,7 +305,7 @@ class AddSourceWizardStepTwo extends React.Component {
       port = hostPort[1];
     }
 
-    validateHost = this.validateHost(host);
+    validateHost = AddSourceWizardStepTwo.validateHost(host);
     this.onChangePort(port || '');
 
     this.setState(
@@ -325,9 +316,9 @@ class AddSourceWizardStepTwo extends React.Component {
       },
       () => this.validateStep()
     );
-  }
+  };
 
-  onChangeHosts(event) {
+  onChangeHosts = event => {
     const value = event.target.value;
     let hosts = [];
 
@@ -340,11 +331,11 @@ class AddSourceWizardStepTwo extends React.Component {
       {
         multiHostDisplay: value,
         hosts: hosts,
-        hostsError: this.validateHosts(hosts)
+        hostsError: AddSourceWizardStepTwo.validateHosts(hosts)
       },
       () => this.validateStep()
     );
-  }
+  };
 
   renderHosts() {
     const { hostsError, port, portError, multiHostDisplay, singleHostPortDisplay } = this.state;

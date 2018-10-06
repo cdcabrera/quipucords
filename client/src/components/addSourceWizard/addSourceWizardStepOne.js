@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Form, Radio } from 'patternfly-react';
 import Store from '../../redux/store';
-import helpers from '../../common/helpers';
 import { apiTypes } from '../../constants';
 import { sourcesTypes } from '../../redux/constants';
 import _ from 'lodash';
@@ -18,20 +17,14 @@ class AddSourceWizardStepOne extends React.Component {
     };
 
     this.state = { ...this.initialState };
-
-    helpers.bindMethods(this, ['onChangeSourceType']);
   }
 
   componentDidMount() {
-    this.setState({ ...this.initializeState(this.props) }, () => {
+    const sourceType = _.get(this.props, ['source', apiTypes.API_SOURCE_TYPE], 'network');
+
+    this.setState({ sourceType }, () => {
       this.validateStep();
     });
-  }
-
-  initializeState(nextProps) {
-    return {
-      sourceType: _.get(nextProps, ['source', apiTypes.API_SOURCE_TYPE], 'network')
-    };
   }
 
   validateStep() {
@@ -46,14 +39,14 @@ class AddSourceWizardStepOne extends React.Component {
     }
   }
 
-  onChangeSourceType(event) {
+  onChangeSourceType = event => {
     this.setState(
       {
         sourceType: event.target.value
       },
       () => this.validateStep()
     );
-  }
+  };
 
   render() {
     const { sourceType, sourceTypeError } = this.state;
