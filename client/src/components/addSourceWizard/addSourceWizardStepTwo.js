@@ -225,6 +225,8 @@ class AddSourceWizardStepTwo extends React.Component {
           validation = 'You must enter a valid IP address or hostname';
           return false;
         }
+
+        return true;
       });
     }
 
