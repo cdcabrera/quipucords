@@ -17,7 +17,7 @@ const initialState = {
   }
 };
 
-describe('AddSourceWizardReducer', function() {
+describe('AddSourceWizardReducer', () => {
   it('should return the initial state', () => {
     expect(addSourceWizardReducer(undefined, {})).toEqual(initialState);
   });

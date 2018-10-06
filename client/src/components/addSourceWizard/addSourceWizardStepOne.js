@@ -89,8 +89,6 @@ AddSourceWizardStepOne.propTypes = {
   source: PropTypes.object
 };
 
-const mapStateToProps = function(state) {
-  return { ...state.addSourceWizard.view };
-};
+const mapStateToProps = state => ({ ...state.addSourceWizard.view });
 
 export default connect(mapStateToProps)(AddSourceWizardStepOne);

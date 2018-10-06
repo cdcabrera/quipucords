@@ -25,7 +25,7 @@ const initialState = {
   }
 };
 
-describe('CredentialsReducer', function() {
+describe('CredentialsReducer', () => {
   it('should return the initial state', () => {
     expect(credentialsReducer(undefined, {})).toEqual(initialState);
   });

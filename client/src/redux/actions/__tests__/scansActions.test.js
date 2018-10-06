@@ -5,7 +5,7 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { actions } from '../';
 import { reducers } from '../../reducers';
 
-describe('ScansActions', function() {
+describe('ScansActions', () => {
   const middleware = [promiseMiddleware()];
   const generateStore = () => createStore(combineReducers({ scans: reducers.scans }), applyMiddleware(...middleware));
 

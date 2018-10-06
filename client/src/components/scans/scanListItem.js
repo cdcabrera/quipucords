@@ -367,11 +367,9 @@ ScanListItem.propTypes = {
   expandedScans: PropTypes.array
 };
 
-const mapStateToProps = function(state) {
-  return Object.assign({
-    expandedScans: state.viewOptions[viewTypes.SCANS_VIEW].expandedItems,
-    selectedScans: state.viewOptions[viewTypes.SCANS_VIEW].selectedItems
-  });
-};
+const mapStateToProps = state => ({
+  expandedScans: state.viewOptions[viewTypes.SCANS_VIEW].expandedItems,
+  selectedScans: state.viewOptions[viewTypes.SCANS_VIEW].selectedItems
+});
 
 export default connect(mapStateToProps)(ScanListItem);

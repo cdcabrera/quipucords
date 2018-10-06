@@ -190,13 +190,11 @@ ScanJobsList.propTypes = {
   getScanJobs: PropTypes.func
 };
 
-const mapStateToProps = function(state) {
-  return {};
-};
-
 const mapDispatchToProps = (dispatch, ownProps) => ({
   getScanJobs: (id, query) => dispatch(getScanJobs(id, query))
 });
+
+const mapStateToProps = () => ({});
 
 export default connect(
   mapStateToProps,

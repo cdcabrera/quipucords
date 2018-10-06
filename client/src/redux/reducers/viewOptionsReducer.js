@@ -30,7 +30,7 @@ initialState[viewTypes.SOURCES_VIEW] = Object.assign(INITAL_VIEW_STATE);
 initialState[viewTypes.SCANS_VIEW] = Object.assign(INITAL_VIEW_STATE);
 initialState[viewTypes.CREDENTIALS_VIEW] = Object.assign(INITAL_VIEW_STATE);
 
-const viewOptionsReducer = function(state = initialState, action) {
+const viewOptionsReducer = (state = initialState, action) => {
   let updateState = {};
 
   let updatePageCounts = (viewType, itemsCount) => {
@@ -50,13 +50,11 @@ const viewOptionsReducer = function(state = initialState, action) {
     });
   };
 
-  const selectedIndex = function(state, item) {
-    return _.findIndex(state.selectedItems, nextSelected => nextSelected.id === _.get(item, 'id'));
-  };
+  const selectedIndex = (state, item) =>
+    _.findIndex(state.selectedItems, nextSelected => nextSelected.id === _.get(item, 'id'));
 
-  const expandedIndex = function(state, item) {
-    return _.findIndex(state.expandedItems, nextExpanded => nextExpanded.id === _.get(item, 'id'));
-  };
+  const expandedIndex = (state, item) =>
+    _.findIndex(state.expandedItems, nextExpanded => nextExpanded.id === _.get(item, 'id'));
 
   switch (action.type) {
     case viewToolbarTypes.SET_FILTER_TYPE:
@@ -270,6 +268,4 @@ const viewOptionsReducer = function(state = initialState, action) {
 
 viewOptionsReducer.initialState = initialState;
 
-export { initialState, viewOptionsReducer };
-
-export default viewOptionsReducer;
+export { viewOptionsReducer as default, initialState, viewOptionsReducer };

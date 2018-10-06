@@ -209,11 +209,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   getMergedScanReportSummaryCsv: id => dispatch(getMergedScanReportSummaryCsv(id))
 });
 
-const mapStateToProps = function(state) {
-  return {
-    ...state.scans.merge_dialog
-  };
-};
+const mapStateToProps = state => ({
+  ...state.scans.merge_dialog
+});
 
 export default connect(
   mapStateToProps,

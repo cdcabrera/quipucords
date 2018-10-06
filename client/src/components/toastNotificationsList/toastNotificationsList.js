@@ -59,8 +59,6 @@ ToastNotificationsList.propTypes = {
   paused: PropTypes.bool
 };
 
-const mapStateToProps = function(state) {
-  return { ...state.toastNotifications };
-};
+const mapStateToProps = state => ({ ...state.toastNotifications });
 
 export default connect(mapStateToProps)(ToastNotificationsList);

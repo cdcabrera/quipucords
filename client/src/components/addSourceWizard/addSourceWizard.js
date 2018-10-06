@@ -218,9 +218,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   updateSource: (id, data) => dispatch(updateSource(id, data))
 });
 
-const mapStateToProps = function(state) {
-  return { ...state.addSourceWizard.view };
-};
+const mapStateToProps = state => ({ ...state.addSourceWizard.view });
 
 export default connect(
   mapStateToProps,

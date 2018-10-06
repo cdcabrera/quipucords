@@ -536,11 +536,10 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   updateCredential: (id, data) => dispatch(updateCredential(id, data))
 });
 
-const mapStateToProps = function(state) {
-  return Object.assign({}, state.credentials.update, {
+const mapStateToProps = state =>
+  Object.assign({}, state.credentials.update, {
     viewOptions: state.viewOptions[viewTypes.CREDENTIALS_VIEW]
   });
-};
 
 export default connect(
   mapStateToProps,

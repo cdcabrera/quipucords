@@ -524,9 +524,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   getWizardCredentials: () => dispatch(getWizardCredentials())
 });
 
-const mapStateToProps = function(state) {
-  return { ...state.addSourceWizard.view };
-};
+const mapStateToProps = state => ({ ...state.addSourceWizard.view });
 
 export default connect(
   mapStateToProps,

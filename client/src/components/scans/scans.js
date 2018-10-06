@@ -475,12 +475,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   getReportDetailsCsv: id => dispatch(getReportDetailsCsv(id))
 });
 
-const mapStateToProps = function(state) {
-  return Object.assign({}, state.scans.view, {
+const mapStateToProps = state =>
+  Object.assign({}, state.scans.view, {
     viewOptions: state.viewOptions[viewTypes.SCANS_VIEW],
     update: state.scans.update
   });
-};
 
 export default connect(
   mapStateToProps,

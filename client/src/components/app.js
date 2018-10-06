@@ -189,13 +189,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   getStatus: () => dispatch(getStatus())
 });
 
-const mapStateToProps = function(state) {
-  return {
-    session: state.user.session,
-    user: state.user.user,
-    status: state.status.currentStatus
-  };
-};
+const mapStateToProps = state => ({
+  session: state.user.session,
+  user: state.user.user,
+  status: state.status.currentStatus
+});
 
 export default withRouter(
   connect(

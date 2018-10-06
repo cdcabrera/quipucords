@@ -71,7 +71,7 @@ const initialState = {
   }
 };
 
-describe('scansReducer', function() {
+describe('scansReducer', () => {
   it('should return the initial state', () => {
     expect(scansReducer(undefined, {})).toEqual(initialState);
   });

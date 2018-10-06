@@ -71,7 +71,7 @@ const initialState = {
   }
 };
 
-const scansReducer = function(state = initialState, action) {
+const scansReducer = (state = initialState, action) => {
   switch (action.type) {
     // Error/Rejected
     case helpers.REJECTED_ACTION(scansTypes.GET_SCANS):
@@ -619,6 +619,4 @@ const scansReducer = function(state = initialState, action) {
 
 scansReducer.initialState = initialState;
 
-export { initialState, scansReducer };
-
-export default scansReducer;
+export { scansReducer as default, initialState, scansReducer };

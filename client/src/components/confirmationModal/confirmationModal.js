@@ -78,8 +78,6 @@ ConfirmationModal.defaultProps = {
   confirmButtonText: 'Confirm'
 };
 
-const mapStateToProps = function(state) {
-  return { ...state.confirmationModal };
-};
+const mapStateToProps = state => ({ ...state.confirmationModal });
 
 export default connect(mapStateToProps)(ConfirmationModal);

@@ -345,12 +345,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   deleteCredential: id => dispatch(deleteCredential(id))
 });
 
-const mapStateToProps = function(state) {
-  return Object.assign({}, state.credentials.view, {
+const mapStateToProps = state =>
+  Object.assign({}, state.credentials.view, {
     viewOptions: state.viewOptions[viewTypes.CREDENTIALS_VIEW],
     update: state.credentials.update
   });
-};
 
 export default connect(
   mapStateToProps,

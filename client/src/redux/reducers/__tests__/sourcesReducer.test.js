@@ -21,7 +21,7 @@ const initialState = {
   }
 };
 
-describe('SourcesReducer', function() {
+describe('SourcesReducer', () => {
   it('should return the initial state', () => {
     expect(sourcesReducer(undefined, {})).toEqual(initialState);
   });

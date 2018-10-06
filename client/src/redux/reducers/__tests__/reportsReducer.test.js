@@ -19,7 +19,7 @@ const initialState = {
   }
 };
 
-describe('ReportsReducer', function() {
+describe('ReportsReducer', () => {
   it('should return the initial state', () => {
     expect(reportsReducer(undefined, {})).toEqual(initialState);
   });

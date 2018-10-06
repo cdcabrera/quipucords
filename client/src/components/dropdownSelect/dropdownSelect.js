@@ -10,25 +10,26 @@ class DropdownSelect extends React.Component {
     this.state = { dropdownIsOpen: false };
   }
 
+  passOnClick = (event, callback) => {
+    if (callback) {
+      callback.apply(this, event);
+    }
+
+    this.toggleDropDown();
+  };
+
+  toggleDropDown = (a, b, c) => {
+    const { dropdownIsOpen } = this.state;
+
+    this.setState({
+      dropdownIsOpen: (c && c.source === 'select') || !dropdownIsOpen
+    });
+  };
+
   render() {
     const { dropdownIsOpen } = this.state;
     const { id, title, multiselect, children } = this.props;
     const filteredProps = _.omit(this.props, ['multiselect']);
-
-    const toggleDropDown = (a, b, c) => {
-      this.setState({
-        dropdownIsOpen: (c && c.source === 'select') || !dropdownIsOpen
-      });
-    };
-
-    const passOnClick = callback =>
-      function() {
-        if (callback) {
-          callback.apply(this, arguments);
-        }
-
-        toggleDropDown.apply(this, arguments);
-      };
 
     if (!multiselect) {
       return (
@@ -44,14 +45,14 @@ class DropdownSelect extends React.Component {
     }
 
     return (
-      <Dropdown id={id || helpers.generateId()} open={dropdownIsOpen} onToggle={toggleDropDown} {...filteredProps}>
+      <Dropdown id={id || helpers.generateId()} open={dropdownIsOpen} onToggle={this.toggleDropDown} {...filteredProps}>
         <Dropdown.Toggle>
           <span>{title}</span>
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {children &&
             React.Children.map(children, menuItem =>
-              React.cloneElement(menuItem, { onClick: passOnClick(menuItem.props.onClick) })
+              React.cloneElement(menuItem, { onClick: e => this.passOnClick(e, menuItem.props.onClick) })
             )}
         </Dropdown.Menu>
       </Dropdown>

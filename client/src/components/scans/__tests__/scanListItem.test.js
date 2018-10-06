@@ -4,7 +4,7 @@ import ScanListItem from '../scanListItem';
 import { mount } from 'enzyme';
 import { viewTypes } from '../../../redux/constants/';
 
-describe('SourceListItem Component', function() {
+describe('SourceListItem Component', () => {
   const generateEmptyStore = () => configureMockStore()({ sources: {}, viewOptions: { [viewTypes.SCANS_VIEW]: {} } });
 
   it('should render a basic component with a success status', () => {

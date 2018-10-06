@@ -14,7 +14,7 @@ const initialState = {
   }
 };
 
-describe('factsReducer', function() {
+describe('factsReducer', () => {
   it('should return the initial state', () => {
     expect(factsReducer(undefined, {})).toEqual(initialState);
   });

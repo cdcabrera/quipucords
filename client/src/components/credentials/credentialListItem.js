@@ -200,11 +200,9 @@ CredentialListItem.propTypes = {
   expandedCredentials: PropTypes.array
 };
 
-const mapStateToProps = function(state) {
-  return Object.assign({
-    selectedCredentials: state.viewOptions[viewTypes.CREDENTIALS_VIEW].selectedItems,
-    expandedCredentials: state.viewOptions[viewTypes.CREDENTIALS_VIEW].expandedItems
-  });
-};
+const mapStateToProps = state => ({
+  selectedCredentials: state.viewOptions[viewTypes.CREDENTIALS_VIEW].selectedItems,
+  expandedCredentials: state.viewOptions[viewTypes.CREDENTIALS_VIEW].expandedItems
+});
 
 export default connect(mapStateToProps)(CredentialListItem);

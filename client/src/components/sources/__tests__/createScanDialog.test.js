@@ -3,7 +3,7 @@ import configureMockStore from 'redux-mock-store';
 import CreateScanDialog from '../createScanDialog';
 import { mount } from 'enzyme';
 
-describe('CreateScanDialog Component', function() {
+describe('CreateScanDialog Component', () => {
   const generateEmptyStore = () => configureMockStore()({ scans: {} });
 
   it('should render a basic component', () => {

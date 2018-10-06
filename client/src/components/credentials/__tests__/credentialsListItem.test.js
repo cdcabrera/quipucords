@@ -4,7 +4,7 @@ import CredentialListItem from '../credentialListItem';
 import { mount } from 'enzyme';
 import { viewTypes } from '../../../redux/constants/';
 
-describe('CredentialListItem Component', function() {
+describe('CredentialListItem Component', () => {
   const generateEmptyStore = () =>
     configureMockStore()({ credentials: {}, viewOptions: { [viewTypes.CREDENTIALS_VIEW]: {} } });
 

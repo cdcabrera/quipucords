@@ -223,9 +223,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   startScan: data => dispatch(startScan(data))
 });
 
-const mapStateToProps = function(state) {
-  return Object.assign({}, { action: state.scans.action });
-};
+const mapStateToProps = state => ({ action: state.scans.action });
 
 export default connect(
   mapStateToProps,

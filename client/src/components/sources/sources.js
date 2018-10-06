@@ -304,15 +304,14 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   deleteSource: id => dispatch(deleteSource(id))
 });
 
-const mapStateToProps = function(state) {
-  return Object.assign(
+const mapStateToProps = state =>
+  Object.assign(
     {},
     state.sources.view,
     { viewOptions: state.viewOptions[viewTypes.SOURCES_VIEW] },
     { updated: state.addSourceWizard.view.fulfilled },
     { deleted: state.sources.update.fulfilled }
   );
-};
 
 export default connect(
   mapStateToProps,

@@ -272,14 +272,12 @@ ScanHostList.defaultProps = {
   useInspectionResults: false
 };
 
-const mapStateToProps = function(state) {
-  return {};
-};
-
 const mapDispatchToProps = (dispatch, ownProps) => ({
   getConnectionScanResults: (id, query) => dispatch(getConnectionScanResults(id, query)),
   getInspectionScanResults: (id, query) => dispatch(getInspectionScanResults(id, query))
 });
+
+const mapStateToProps = () => ({});
 
 export default connect(
   mapStateToProps,

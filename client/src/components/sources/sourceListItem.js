@@ -387,11 +387,10 @@ SourceListItem.propTypes = {
   expandedSources: PropTypes.array
 };
 
-const mapStateToProps = function(state) {
-  return Object.assign({
+const mapStateToProps = state =>
+  Object.assign({
     selectedSources: state.viewOptions[viewTypes.SOURCES_VIEW].selectedItems,
     expandedSources: state.viewOptions[viewTypes.SOURCES_VIEW].expandedItems
   });
-};
 
 export default connect(mapStateToProps)(SourceListItem);
