@@ -16,7 +16,7 @@ const About = ({ user, status, shown, onClose }) => {
   let props = {
     show: shown,
     onHide: onClose,
-    logo: logo,
+    logo,
     productTitle: <img src={productTitle} alt="Entitlements Reporting" />,
     altLogo: 'ER'
   };

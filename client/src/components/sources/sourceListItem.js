@@ -37,7 +37,7 @@ class SourceListItem extends React.Component {
     Store.dispatch({
       type: SourceListItem.isSelected(item, selectedSources) ? viewTypes.DESELECT_ITEM : viewTypes.SELECT_ITEM,
       viewType: viewTypes.SOURCES_VIEW,
-      item: item
+      item
     });
   };
 
@@ -61,14 +61,14 @@ class SourceListItem extends React.Component {
       Store.dispatch({
         type: viewTypes.EXPAND_ITEM,
         viewType: viewTypes.SOURCES_VIEW,
-        item: item
+        item
       });
     } else {
       Store.dispatch({
         type: viewTypes.EXPAND_ITEM,
         viewType: viewTypes.SOURCES_VIEW,
-        item: item,
-        expandType: expandType
+        item,
+        expandType
       });
     }
   };
@@ -78,7 +78,7 @@ class SourceListItem extends React.Component {
     Store.dispatch({
       type: viewTypes.EXPAND_ITEM,
       viewType: viewTypes.SOURCES_VIEW,
-      item: item
+      item
     });
   };
 

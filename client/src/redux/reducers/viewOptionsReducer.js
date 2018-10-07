@@ -44,8 +44,8 @@ const viewOptionsReducer = (state = initialState, action) => {
     let totalPages = Math.ceil(totalCount / state[viewType].pageSize);
 
     updateState[viewType] = Object.assign({}, state[viewType], {
-      totalCount: totalCount,
-      totalPages: totalPages,
+      totalCount,
+      totalPages,
       currentPage: Math.min(state[viewType].currentPage, totalPages || 1)
     });
   };

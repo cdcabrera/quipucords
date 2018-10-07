@@ -14,7 +14,7 @@ class ReportsService {
 
         if (window.navigator && window.navigator.msSaveBlob) {
           window.navigator.msSaveBlob(blob, fileName);
-          resolve({ fileName: fileName, data: data });
+          resolve({ fileName, data });
         } else {
           let anchorTag = window.document.createElement('a');
 
@@ -29,7 +29,7 @@ class ReportsService {
           setTimeout(() => {
             window.document.body.removeChild(anchorTag);
             window.URL.revokeObjectURL(blob);
-            resolve({ fileName: fileName, data: data });
+            resolve({ fileName, data });
           }, 250);
         }
       } catch (error) {
@@ -86,7 +86,7 @@ class ReportsService {
     return axios({
       method: 'put',
       url: process.env.REACT_APP_REPORTS_SERVICE_MERGE,
-      data: data,
+      data,
       xsrfCookieName: process.env.REACT_APP_AUTH_TOKEN,
       xsrfHeaderName: process.env.REACT_APP_AUTH_HEADER,
       timeout: process.env.REACT_APP_AJAX_TIMEOUT

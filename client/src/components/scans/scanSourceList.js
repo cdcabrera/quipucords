@@ -54,7 +54,7 @@ class ScanSourceList extends React.Component {
       return cmp;
     });
 
-    this.setState({ sources: sources });
+    this.setState({ sources });
   }
 
   getSourceStatus(source) {

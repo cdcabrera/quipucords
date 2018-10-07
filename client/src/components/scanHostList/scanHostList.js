@@ -72,7 +72,7 @@ class ScanHostList extends React.Component {
       page: page === undefined ? this.state.page : page,
       page_size: 100,
       ordering: 'name',
-      status: status
+      status
     };
 
     if (sourceId) {
@@ -110,7 +110,7 @@ class ScanHostList extends React.Component {
       page: page === undefined ? this.state.page : page,
       page_size: 100,
       ordering: 'name',
-      status: status
+      status
     };
 
     if (sourceId) {

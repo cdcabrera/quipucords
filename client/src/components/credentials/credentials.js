@@ -156,10 +156,10 @@ class Credentials extends React.Component {
     Store.dispatch({
       type: confirmationModalTypes.CONFIRMATION_MODAL_SHOW,
       title: 'Delete Credentials',
-      heading: heading,
-      body: body,
+      heading,
+      body,
       confirmButtonText: 'Delete',
-      onConfirm: onConfirm
+      onConfirm
     });
   };
 
@@ -182,9 +182,9 @@ class Credentials extends React.Component {
     Store.dispatch({
       type: confirmationModalTypes.CONFIRMATION_MODAL_SHOW,
       title: 'Delete Credential',
-      heading: heading,
+      heading,
       confirmButtonText: 'Delete',
-      onConfirm: onConfirm
+      onConfirm
     });
   };
 

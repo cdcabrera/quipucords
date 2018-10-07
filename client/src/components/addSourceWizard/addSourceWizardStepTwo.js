@@ -161,7 +161,7 @@ class AddSourceWizardStepTwo extends React.Component {
   };
 
   credentialInfo(id) {
-    return _.find(this.props.allCredentials, { id: id }) || {};
+    return _.find(this.props.allCredentials, { id }) || {};
   }
 
   static validateCredentials(value) {
@@ -332,7 +332,7 @@ class AddSourceWizardStepTwo extends React.Component {
     this.setState(
       {
         multiHostDisplay: value,
-        hosts: hosts,
+        hosts,
         hostsError: AddSourceWizardStepTwo.validateHosts(hosts)
       },
       () => this.validateStep()

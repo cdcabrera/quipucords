@@ -154,7 +154,7 @@ class Scans extends React.Component {
       type: scansTypes.MERGE_SCAN_DIALOG_SHOW,
       show: true,
       scans: viewOptions.selectedItems,
-      details: details
+      details
     });
   };
 
@@ -245,9 +245,9 @@ class Scans extends React.Component {
     Store.dispatch({
       type: confirmationModalTypes.CONFIRMATION_MODAL_SHOW,
       title: 'Delete Scan',
-      heading: heading,
+      heading,
       confirmButtonText: 'Delete',
-      onConfirm: onConfirm
+      onConfirm
     });
   }
 
@@ -288,10 +288,10 @@ class Scans extends React.Component {
     Store.dispatch({
       type: confirmationModalTypes.CONFIRMATION_MODAL_SHOW,
       title: 'Delete Scans',
-      heading: heading,
-      body: body,
+      heading,
+      body,
       confirmButtonText: 'Delete',
-      onConfirm: onConfirm
+      onConfirm
     });
   };
 

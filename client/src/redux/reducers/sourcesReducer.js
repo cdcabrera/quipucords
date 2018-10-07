@@ -101,7 +101,7 @@ const sourcesReducer = (state = initialState, action) => {
       return helpers.setStateProp(
         'view',
         {
-          sources: sources,
+          sources,
           fulfilled: true
         },
         {

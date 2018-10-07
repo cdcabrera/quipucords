@@ -34,7 +34,7 @@ class CredentialListItem extends React.Component {
     Store.dispatch({
       type: this.isSelected() ? viewTypes.DESELECT_ITEM : viewTypes.SELECT_ITEM,
       viewType: viewTypes.CREDENTIALS_VIEW,
-      item: item
+      item
     });
   }
 
@@ -45,14 +45,14 @@ class CredentialListItem extends React.Component {
       Store.dispatch({
         type: viewTypes.EXPAND_ITEM,
         viewType: viewTypes.CREDENTIALS_VIEW,
-        item: item
+        item
       });
     } else {
       Store.dispatch({
         type: viewTypes.EXPAND_ITEM,
         viewType: viewTypes.CREDENTIALS_VIEW,
-        item: item,
-        expandType: expandType
+        item,
+        expandType
       });
     }
   }
@@ -62,7 +62,7 @@ class CredentialListItem extends React.Component {
     Store.dispatch({
       type: viewTypes.EXPAND_ITEM,
       viewType: viewTypes.CREDENTIALS_VIEW,
-      item: item
+      item
     });
   }
 

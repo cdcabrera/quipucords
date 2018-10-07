@@ -76,7 +76,7 @@ class Sources extends React.Component {
         Store.dispatch({
           type: viewTypes.DESELECT_ITEM,
           viewType: viewTypes.SOURCES_VIEW,
-          item: item
+          item
         });
       }
     } catch (e) {
@@ -142,9 +142,9 @@ class Sources extends React.Component {
     Store.dispatch({
       type: confirmationModalTypes.CONFIRMATION_MODAL_SHOW,
       title: 'Delete Source',
-      heading: heading,
+      heading,
       confirmButtonText: 'Delete',
-      onConfirm: onConfirm
+      onConfirm
     });
   };
 

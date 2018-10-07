@@ -23,7 +23,7 @@ class ViewPaginationRow extends React.Component {
     const { viewType } = this.props;
     Store.dispatch({
       type: viewPaginationTypes.VIEW_FIRST_PAGE,
-      viewType: viewType
+      viewType
     });
   }
 
@@ -31,7 +31,7 @@ class ViewPaginationRow extends React.Component {
     const { viewType } = this.props;
     Store.dispatch({
       type: viewPaginationTypes.VIEW_LAST_PAGE,
-      viewType: viewType
+      viewType
     });
   }
 
@@ -39,7 +39,7 @@ class ViewPaginationRow extends React.Component {
     const { viewType } = this.props;
     Store.dispatch({
       type: viewPaginationTypes.VIEW_PREVIOUS_PAGE,
-      viewType: viewType
+      viewType
     });
   }
 
@@ -47,7 +47,7 @@ class ViewPaginationRow extends React.Component {
     const { viewType } = this.props;
     Store.dispatch({
       type: viewPaginationTypes.VIEW_NEXT_PAGE,
-      viewType: viewType
+      viewType
     });
   }
 
@@ -55,7 +55,7 @@ class ViewPaginationRow extends React.Component {
     const { viewType } = this.props;
     Store.dispatch({
       type: viewPaginationTypes.VIEW_PAGE_NUMBER,
-      viewType: viewType,
+      viewType,
       pageNumber: parseInt(e.target.value, 10)
     });
   }
@@ -64,7 +64,7 @@ class ViewPaginationRow extends React.Component {
     const { viewType } = this.props;
     Store.dispatch({
       type: viewPaginationTypes.SET_PER_PAGE,
-      viewType: viewType,
+      viewType,
       pageSize: eventKey
     });
   }
@@ -76,7 +76,7 @@ class ViewPaginationRow extends React.Component {
     const rowPagination = {
       page: currentPage,
       perPage: pageSize,
-      perPageOptions: perPageOptions
+      perPageOptions
     };
 
     let itemsStart = (currentPage - 1) * pageSize + 1;

@@ -17,7 +17,7 @@ class ToastNotificationsList extends React.Component {
   onDismiss = toast => {
     Store.dispatch({
       type: toastNotificationTypes.TOAST_REMOVE,
-      toast: toast
+      toast
     });
   };
 
