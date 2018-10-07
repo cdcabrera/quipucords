@@ -124,7 +124,7 @@ class CredentialListItem extends React.Component {
 
     switch (this.expandType(item, expandedCredentials)) {
       case 'sources':
-        item.sources && item.sources.sort((item1, item2) => item1.name.localeCompare(item2.name));
+        (item.sources || []).sort((item1, item2) => item1.name.localeCompare(item2.name));
         return (
           <Grid fluid>
             {item.sources &&
