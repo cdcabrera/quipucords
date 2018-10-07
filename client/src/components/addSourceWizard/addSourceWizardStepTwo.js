@@ -520,7 +520,7 @@ AddSourceWizardStepTwo.propTypes = {
   allCredentials: PropTypes.array
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   getWizardCredentials: () => dispatch(getWizardCredentials())
 });
 

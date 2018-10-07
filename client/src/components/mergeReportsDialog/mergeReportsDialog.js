@@ -60,12 +60,12 @@ class MergeReportsDialog extends React.Component {
       response => {
         if (details) {
           getMergedScanReportDetailsCsv(_.get(response, 'value.data.id')).then(
-            success => this.notifyDownloadStatus(false),
+            () => this.notifyDownloadStatus(false),
             error => this.notifyDownloadStatus(true, error)
           );
         } else {
           getMergedScanReportSummaryCsv(_.get(response, 'value.data.id')).then(
-            success => this.notifyDownloadStatus(false),
+            () => this.notifyDownloadStatus(false),
             error => this.notifyDownloadStatus(true, error)
           );
         }
@@ -203,7 +203,7 @@ MergeReportsDialog.propTypes = {
   details: PropTypes.bool.isRequired
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   mergeScans: data => dispatch(mergeScanReports(data)),
   getMergedScanReportDetailsCsv: id => dispatch(getMergedScanReportDetailsCsv(id)),
   getMergedScanReportSummaryCsv: id => dispatch(getMergedScanReportSummaryCsv(id))

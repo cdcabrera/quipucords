@@ -271,7 +271,7 @@ ScanHostList.defaultProps = {
   useInspectionResults: false
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   getConnectionScanResults: (id, query) => dispatch(getConnectionScanResults(id, query)),
   getInspectionScanResults: (id, query) => dispatch(getInspectionScanResults(id, query))
 });

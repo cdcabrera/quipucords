@@ -218,7 +218,7 @@ CreateScanDialog.propTypes = {
   action: PropTypes.object
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   addScan: data => dispatch(addScan(data)),
   startScan: data => dispatch(startScan(data))
 });

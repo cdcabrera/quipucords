@@ -35,7 +35,7 @@ class ToastNotificationsList extends React.Component {
                   toastIndex={index}
                   type={toast.alertType}
                   paused={paused}
-                  onDismiss={e => this.onDismiss(toast)}
+                  onDismiss={() => this.onDismiss(toast)}
                   onMouseEnter={this.onHover}
                   onMouseLeave={this.onLeave}
                 >

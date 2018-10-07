@@ -108,8 +108,8 @@ ScanSourceList.propTypes = {
   getScanJob: PropTypes.func
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  getScanJob: (id, query) => dispatch(getScanJob(id))
+const mapDispatchToProps = dispatch => ({
+  getScanJob: id => dispatch(getScanJob(id))
 });
 
 const mapStateToProps = () => ({});

@@ -138,13 +138,13 @@ class Scans extends React.Component {
   onDownloadSummaryReport = reportId => {
     this.props
       .getReportSummaryCsv(reportId)
-      .then(response => Scans.notifyDownloadStatus(false), error => Scans.notifyDownloadStatus(true, error.message));
+      .then(() => Scans.notifyDownloadStatus(false), error => Scans.notifyDownloadStatus(true, error.message));
   };
 
   onDownloadDetailedReport = reportId => {
     this.props
       .getReportDetailsCsv(reportId)
-      .then(response => Scans.notifyDownloadStatus(false), error => Scans.notifyDownloadStatus(true, error.message));
+      .then(() => Scans.notifyDownloadStatus(false), error => Scans.notifyDownloadStatus(true, error.message));
   };
 
   onMergeScanResults = details => {
@@ -464,7 +464,7 @@ Scans.propTypes = {
   update: PropTypes.object
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   getScans: queryObj => dispatch(getScans(queryObj)),
   startScan: id => dispatch(startScan(id)),
   pauseScan: id => dispatch(pauseScan(id)),

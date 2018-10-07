@@ -182,7 +182,7 @@ App.propTypes = {
   }).isRequired
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   authorizeUser: () => dispatch(authorizeUser()),
   getUser: () => dispatch(getUser()),
   logoutUser: () => dispatch(logoutUser()),

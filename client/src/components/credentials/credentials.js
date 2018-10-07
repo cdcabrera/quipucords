@@ -338,7 +338,7 @@ Credentials.propTypes = {
   update: PropTypes.object
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   getCredentials: queryObj => dispatch(getCredentials(queryObj)),
   deleteCredential: id => dispatch(deleteCredential(id))
 });

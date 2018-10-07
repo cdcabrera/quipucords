@@ -295,7 +295,7 @@ Sources.propTypes = {
   deleted: PropTypes.bool
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   getSources: queryObj => dispatch(getSources(queryObj)),
   deleteSource: id => dispatch(deleteSource(id))
 });

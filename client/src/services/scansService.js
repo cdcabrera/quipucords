@@ -41,7 +41,8 @@ class ScansService {
       url: `${process.env.REACT_APP_SCANS_SERVICE}${id}`,
       xsrfCookieName: process.env.REACT_APP_AUTH_TOKEN,
       xsrfHeaderName: process.env.REACT_APP_AUTH_HEADER,
-      timeout: process.env.REACT_APP_AJAX_TIMEOUT
+      timeout: process.env.REACT_APP_AJAX_TIMEOUT,
+      data
     });
   }
 

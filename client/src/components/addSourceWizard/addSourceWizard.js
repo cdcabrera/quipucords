@@ -66,7 +66,7 @@ class AddSourceWizard extends React.Component {
     }
   };
 
-  onStep = stepIndex => {
+  onStep = () => {
     // ToDo: wizard step map/breadcrumb/trail click, or leave disabled
   };
 
@@ -88,7 +88,7 @@ class AddSourceWizard extends React.Component {
     }
   };
 
-  onSubmit = event => {
+  onSubmit = () => {
     const { addSource, updateSource, source, edit } = this.props;
     const { stepOneValid, stepTwoValid } = this.state;
 
@@ -127,7 +127,7 @@ class AddSourceWizard extends React.Component {
         label={step.label}
         title={step.title}
         activeStep={activeStep && activeStep.step}
-        onClick={e => this.onStep(activeStep && activeStep.step)}
+        onClick={() => this.onStep(activeStep && activeStep.step)}
       />
     ));
   }
@@ -213,7 +213,7 @@ AddSourceWizard.propTypes = {
   error: PropTypes.bool
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   addSource: (data, query) => dispatch(addSource(data, query)),
   updateSource: (id, data) => dispatch(updateSource(id, data))
 });

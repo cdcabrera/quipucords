@@ -529,7 +529,7 @@ CreateCredentialDialog.propTypes = {
   viewOptions: PropTypes.object
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   getCredentials: queryObj => dispatch(getCredentials(queryObj)),
   getWizardCredentials: () => dispatch(getWizardCredentials()),
   addCredential: data => dispatch(addCredential(data)),
