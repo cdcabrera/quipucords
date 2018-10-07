@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, Grid } from 'patternfly-react';
 import helpers from '../../common/helpers';
 

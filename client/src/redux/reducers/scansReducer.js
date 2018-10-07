@@ -1,6 +1,6 @@
+import _ from 'lodash';
 import helpers from '../../common/helpers';
 import { scansTypes, sourcesTypes } from '../constants';
-import _ from 'lodash';
 
 const initialState = {
   view: {

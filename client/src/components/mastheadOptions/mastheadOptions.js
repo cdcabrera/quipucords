@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { Dropdown, Icon, MenuItem } from 'patternfly-react';
 
 const MastheadOptions = ({ user, logoutUser, showAboutModal }) => (

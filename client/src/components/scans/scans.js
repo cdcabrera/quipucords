@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Alert, Button, DropdownButton, EmptyState, Grid, Form, ListView, MenuItem, Modal } from 'patternfly-react';
 import _ from 'lodash';
-
 import { getScans, startScan, pauseScan, cancelScan, restartScan, deleteScan } from '../../redux/actions/scansActions';
 import { getReportSummaryCsv, getReportDetailsCsv } from '../../redux/actions/reportsActions';
 import {

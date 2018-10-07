@@ -1,7 +1,7 @@
 import React from 'react';
 import configureMockStore from 'redux-mock-store';
-import SourceListItem from '../sourceListItem';
 import { mount } from 'enzyme';
+import SourceListItem from '../sourceListItem';
 import { viewTypes } from '../../../redux/constants';
 
 describe('SourceListItem Component', () => {

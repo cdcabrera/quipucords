@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Store from '../../redux/store';
 import { Modal, Alert, Button, Icon, Form, Grid, MenuItem } from 'patternfly-react';
+import Store from '../../redux/store';
 import { helpers } from '../../common/helpers';
 import { credentialsTypes, toastNotificationTypes, viewTypes } from '../../redux/constants';
 import {

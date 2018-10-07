@@ -1,8 +1,8 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Grid, Icon } from 'patternfly-react';
+import _ from 'lodash';
 import { helpers } from '../../common/helpers';
 import { getScanJob } from '../../redux/actions/scansActions';
 

@@ -1,11 +1,8 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import { PaginationRow, PAGINATION_VIEW } from 'patternfly-react';
-
 import helpers from '../../common/helpers';
 import Store from '../../redux/store';
-
 import { viewPaginationTypes } from '../../redux/constants';
 
 class ViewPaginationRow extends React.Component {

@@ -1,11 +1,10 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroller';
-
-import helpers from '../../common/helpers';
 import { connect } from 'react-redux';
 import { EmptyState, Grid } from 'patternfly-react';
+import _ from 'lodash';
+import helpers from '../../common/helpers';
 import { getConnectionScanResults, getInspectionScanResults } from '../../redux/actions/scansActions';
 
 class ScanHostList extends React.Component {

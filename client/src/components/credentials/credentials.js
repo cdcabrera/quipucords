@@ -1,10 +1,8 @@
-import _ from 'lodash';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 import { Alert, Button, DropdownButton, EmptyState, Form, Grid, ListView, MenuItem, Modal } from 'patternfly-react';
-
+import _ from 'lodash';
 import { getCredentials, deleteCredential } from '../../redux/actions/credentialsActions';
 import {
   confirmationModalTypes,
@@ -16,10 +14,8 @@ import {
 } from '../../redux/constants';
 import Store from '../../redux/store';
 import helpers from '../../common/helpers';
-
 import ViewToolbar from '../viewToolbar/viewToolbar';
 import ViewPaginationRow from '../viewPaginationRow/viewPaginationRow';
-
 import CredentialsEmptyState from './credentialsEmptyState';
 import CredentialListItem from './credentialListItem';
 import { CredentialFilterFields, CredentialSortFields } from './crendentialConstants';

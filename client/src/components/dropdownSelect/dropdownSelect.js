@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'patternfly-react';
-import helpers from '../../common/helpers';
 import _ from 'lodash';
+import helpers from '../../common/helpers';
 
 class DropdownSelect extends React.Component {
   constructor(props) {

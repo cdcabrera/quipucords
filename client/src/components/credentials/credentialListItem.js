@@ -1,9 +1,9 @@
-import _ from 'lodash';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import cx from 'classnames';
-import PropTypes from 'prop-types';
 import { ListView, Button, Grid, Icon, Checkbox } from 'patternfly-react';
+import _ from 'lodash';
 import { helpers } from '../../common/helpers';
 import SimpleTooltip from '../simpleTooltIp/simpleTooltip';
 import Store from '../../redux/store';

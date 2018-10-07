@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { MenuItem, Button, Icon, Form, Grid, Checkbox } from 'patternfly-react';
+import _ from 'lodash';
 import Store from '../../redux/store';
 import helpers from '../../common/helpers';
 import DropdownSelect from '../dropdownSelect/dropdownSelect';
@@ -9,7 +10,6 @@ import { addSourceWizardField as FieldGroup } from './addSourceWizardField';
 import { apiTypes } from '../../constants';
 import { sourcesTypes, credentialsTypes } from '../../redux/constants';
 import { getWizardCredentials } from '../../redux/actions/credentialsActions';
-import _ from 'lodash';
 
 class AddSourceWizardStepTwo extends React.Component {
   constructor(props) {

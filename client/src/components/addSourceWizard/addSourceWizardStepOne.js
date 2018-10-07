@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Form, Radio } from 'patternfly-react';
+import _ from 'lodash';
 import Store from '../../redux/store';
 import { apiTypes } from '../../constants';
 import { sourcesTypes } from '../../redux/constants';
-import _ from 'lodash';
 
 class AddSourceWizardStepOne extends React.Component {
   constructor(props) {

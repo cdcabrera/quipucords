@@ -1,6 +1,6 @@
+import _ from 'lodash';
 import { credentialsTypes, sourcesTypes } from '../constants';
 import helpers from '../../common/helpers';
-import _ from 'lodash';
 
 const initialState = {
   view: {

@@ -1,10 +1,8 @@
-import _ from 'lodash';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
 import { Alert, Button, EmptyState, ListView, Modal } from 'patternfly-react';
-
+import _ from 'lodash';
 import { getSources, deleteSource } from '../../redux/actions/sourcesActions';
 import {
   sourcesTypes,
@@ -15,10 +13,8 @@ import {
 } from '../../redux/constants';
 import Store from '../../redux/store';
 import helpers from '../../common/helpers';
-
 import ViewToolbar from '../viewToolbar/viewToolbar';
 import ViewPaginationRow from '../viewPaginationRow/viewPaginationRow';
-
 import SourcesEmptyState from './sourcesEmptyState';
 import SourceListItem from './sourceListItem';
 import CreateScanDialog from './createScanDialog';

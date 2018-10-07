@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Filter, Sort, Toolbar } from 'patternfly-react';
 import _ from 'lodash';
-
 import helpers from '../../common/helpers';
 import Store from '../../redux/store';
-
 import { viewToolbarTypes } from '../../redux/constants';
 import SimpleTooltip from '../simpleTooltIp/simpleTooltip';
 import RefreshTimeButton from '../refreshTimeButton/refreshTimeButton';
