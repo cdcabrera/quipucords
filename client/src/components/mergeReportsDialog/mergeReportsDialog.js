@@ -213,7 +213,9 @@ const mapStateToProps = state => ({
   ...state.scans.merge_dialog
 });
 
-export default connect(
+const ConnectedMergeReportsDialog = connect(
   mapStateToProps,
   mapDispatchToProps
 )(MergeReportsDialog);
+
+export { ConnectedMergeReportsDialog as default, ConnectedMergeReportsDialog, MergeReportsDialog };

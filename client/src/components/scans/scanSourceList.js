@@ -114,7 +114,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
 const mapStateToProps = () => ({});
 
-export default connect(
+const ConnectedScanSourceList = connect(
   mapStateToProps,
   mapDispatchToProps
 )(ScanSourceList);
+
+export { ConnectedScanSourceList as default, ConnectedScanSourceList, ScanSourceList };

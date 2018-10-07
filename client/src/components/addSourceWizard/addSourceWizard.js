@@ -220,7 +220,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
 const mapStateToProps = state => ({ ...state.addSourceWizard.view });
 
-export default connect(
+const ConnectedAddSourceWizard = connect(
   mapStateToProps,
   mapDispatchToProps
 )(AddSourceWizard);
+
+export { ConnectedAddSourceWizard as default, ConnectedAddSourceWizard, AddSourceWizard };

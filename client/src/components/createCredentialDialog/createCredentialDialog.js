@@ -541,7 +541,9 @@ const mapStateToProps = state =>
     viewOptions: state.viewOptions[viewTypes.CREDENTIALS_VIEW]
   });
 
-export default connect(
+const ConnectedCreateCredentialDialog = connect(
   mapStateToProps,
   mapDispatchToProps
 )(CreateCredentialDialog);
+
+export { ConnectedCreateCredentialDialog as default, ConnectedCreateCredentialDialog, CreateCredentialDialog };

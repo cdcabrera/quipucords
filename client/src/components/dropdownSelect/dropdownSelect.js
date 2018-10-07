@@ -67,4 +67,4 @@ DropdownSelect.propTypes = {
   multiselect: PropTypes.bool
 };
 
-export default DropdownSelect;
+export { DropdownSelect as default, DropdownSelect };

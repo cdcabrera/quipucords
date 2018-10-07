@@ -372,4 +372,6 @@ const mapStateToProps = state => ({
   selectedScans: state.viewOptions[viewTypes.SCANS_VIEW].selectedItems
 });
 
-export default connect(mapStateToProps)(ScanListItem);
+const ConnectedScanListItem = connect(mapStateToProps)(ScanListItem);
+
+export { ConnectedScanListItem as default, ConnectedScanListItem, ScanListItem };

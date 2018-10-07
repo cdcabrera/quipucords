@@ -480,7 +480,9 @@ const mapStateToProps = state =>
     update: state.scans.update
   });
 
-export default connect(
+const ConnectedScans = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Scans);
+
+export { ConnectedScans as default, ConnectedScans, Scans };

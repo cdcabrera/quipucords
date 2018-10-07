@@ -50,4 +50,4 @@ About.propTypes = {
   onClose: PropTypes.func
 };
 
-export default About;
+export { About as default, About };

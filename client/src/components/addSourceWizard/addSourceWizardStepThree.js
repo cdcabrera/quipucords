@@ -46,4 +46,6 @@ AddSourceWizardStepThree.propTypes = {
 
 const mapStateToProps = state => ({ view: state.addSourceWizard.view });
 
-export default connect(mapStateToProps)(AddSourceWizardStepThree);
+const ConnectedAddSourceWizardStepThree = connect(mapStateToProps)(AddSourceWizardStepThree);
+
+export { ConnectedAddSourceWizardStepThree as default, ConnectedAddSourceWizardStepThree, AddSourceWizardStepThree };

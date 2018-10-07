@@ -309,7 +309,9 @@ const mapStateToProps = state =>
     { deleted: state.sources.update.fulfilled }
   );
 
-export default connect(
+const ConnectedSources = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Sources);
+
+export { ConnectedSources as default, ConnectedSources, Sources };

@@ -6,7 +6,7 @@ import _ from 'lodash';
 import Store from '../../redux/store';
 import helpers from '../../common/helpers';
 import DropdownSelect from '../dropdownSelect/dropdownSelect';
-import { addSourceWizardField as FieldGroup } from './addSourceWizardField';
+import { AddSourceWizardField as FieldGroup } from './addSourceWizardField';
 import { apiTypes } from '../../constants';
 import { sourcesTypes, credentialsTypes } from '../../redux/constants';
 import { getWizardCredentials } from '../../redux/actions/credentialsActions';
@@ -526,7 +526,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
 const mapStateToProps = state => ({ ...state.addSourceWizard.view });
 
-export default connect(
+const ConnectedAddSourceWizardStepTwo = connect(
   mapStateToProps,
   mapDispatchToProps
 )(AddSourceWizardStepTwo);
+
+export { ConnectedAddSourceWizardStepTwo as default, ConnectedAddSourceWizardStepTwo, AddSourceWizardStepTwo };

@@ -196,7 +196,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
 const mapStateToProps = () => ({});
 
-export default connect(
+const ConnectedScanJobsList = connect(
   mapStateToProps,
   mapDispatchToProps
 )(ScanJobsList);
+
+export { ConnectedScanJobsList as default, ConnectedScanJobsList, ScanJobsList };

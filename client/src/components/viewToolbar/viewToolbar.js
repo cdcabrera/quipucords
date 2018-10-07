@@ -301,4 +301,4 @@ ViewToolbar.defaultProps = {
   itemsTypePlural: ''
 };
 
-export default ViewToolbar;
+export { ViewToolbar as default, ViewToolbar };

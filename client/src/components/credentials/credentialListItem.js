@@ -205,4 +205,6 @@ const mapStateToProps = state => ({
   expandedCredentials: state.viewOptions[viewTypes.CREDENTIALS_VIEW].expandedItems
 });
 
-export default connect(mapStateToProps)(CredentialListItem);
+const ConnectedCredentialListItem = connect(mapStateToProps)(CredentialListItem);
+
+export { ConnectedCredentialListItem as default, ConnectedCredentialListItem, CredentialListItem };

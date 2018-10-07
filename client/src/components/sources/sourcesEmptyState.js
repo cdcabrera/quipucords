@@ -28,4 +28,4 @@ SourcesEmptyState.propTypes = {
   onAddSource: PropTypes.func
 };
 
-export default SourcesEmptyState;
+export { SourcesEmptyState as default, SourcesEmptyState };

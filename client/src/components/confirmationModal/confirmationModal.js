@@ -80,4 +80,6 @@ ConfirmationModal.defaultProps = {
 
 const mapStateToProps = state => ({ ...state.confirmationModal });
 
-export default connect(mapStateToProps)(ConfirmationModal);
+const ConnectedConfirmationModal = connect(mapStateToProps)(ConfirmationModal);
+
+export { ConnectedConfirmationModal as default, ConnectedConfirmationModal, ConfirmationModal };

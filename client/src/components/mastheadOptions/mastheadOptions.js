@@ -31,4 +31,4 @@ MastheadOptions.propTypes = {
   showAboutModal: PropTypes.func
 };
 
-export default MastheadOptions;
+export { MastheadOptions as default, MastheadOptions };

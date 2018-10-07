@@ -7,4 +7,4 @@ const getStatus = () => dispatch =>
     payload: statusService.getStatus()
   });
 
-export { getStatus };
+export { getStatus as default, getStatus };

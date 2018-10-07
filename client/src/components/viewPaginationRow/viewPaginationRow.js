@@ -112,4 +112,4 @@ ViewPaginationRow.propTypes = {
   totalPages: PropTypes.number
 };
 
-export default ViewPaginationRow;
+export { ViewPaginationRow as default, ViewPaginationRow };

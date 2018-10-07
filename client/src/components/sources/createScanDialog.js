@@ -225,7 +225,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
 const mapStateToProps = state => ({ action: state.scans.action });
 
-export default connect(
+const ConnectedCreateScanDialog = connect(
   mapStateToProps,
   mapDispatchToProps
 )(CreateScanDialog);
+
+export { ConnectedCreateScanDialog as default, ConnectedCreateScanDialog, CreateScanDialog };

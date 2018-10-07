@@ -393,4 +393,6 @@ const mapStateToProps = state =>
     expandedSources: state.viewOptions[viewTypes.SOURCES_VIEW].expandedItems
   });
 
-export default connect(mapStateToProps)(SourceListItem);
+const ConnectedSourceListItem = connect(mapStateToProps)(SourceListItem);
+
+export { ConnectedSourceListItem as default, ConnectedSourceListItem, SourceListItem };

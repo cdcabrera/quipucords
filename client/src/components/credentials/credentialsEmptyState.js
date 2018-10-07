@@ -42,4 +42,4 @@ CredentialsEmptyState.propTypes = {
   onAddSource: PropTypes.func
 };
 
-export default CredentialsEmptyState;
+export { CredentialsEmptyState as default, CredentialsEmptyState };

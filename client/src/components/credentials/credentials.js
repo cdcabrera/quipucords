@@ -347,7 +347,9 @@ const mapStateToProps = state =>
     update: state.credentials.update
   });
 
-export default connect(
+const ConnectedCredentials = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Credentials);
+
+export { ConnectedCredentials as default, ConnectedCredentials, Credentials };
