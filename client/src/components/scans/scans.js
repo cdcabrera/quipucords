@@ -266,7 +266,9 @@ class Scans extends React.Component {
     let heading = <span>Are you sure you want to delete the following scans?</span>;
 
     let scansList = '';
-    viewOptions.selectedItems.forEach((item, index) => (scansList += (index > 0 ? '\n' : '') + item.name));
+    viewOptions.selectedItems.forEach((item, index) => {
+      scansList += (index > 0 ? '\n' : '') + item.name;
+    });
 
     let body = (
       <Grid.Col sm={12}>
