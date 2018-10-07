@@ -52,7 +52,7 @@ describe('ScansActions', () => {
 
     const dispatcher = actions.scans.getScans();
     dispatcher(store.dispatch).then(() => {
-      const view = store.getState().scans.view;
+      const { view } = store.getState().scans;
 
       expect(view.scans).toEqual(getScansMock.results);
       expect(view.fulfilled).toBeTruthy();

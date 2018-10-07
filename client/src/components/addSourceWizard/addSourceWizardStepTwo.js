@@ -295,16 +295,14 @@ class AddSourceWizardStepTwo extends React.Component {
   };
 
   onChangeHost = event => {
-    let value = event.target.value;
+    const { value } = event.target;
     let host = [];
     let port;
-    let hostPort;
     let validateHost;
 
     if (value !== '') {
-      hostPort = value.split(':');
-      host = [hostPort[0]];
-      port = hostPort[1];
+      [host, port] = value.split(':');
+      host = [host];
     }
 
     validateHost = AddSourceWizardStepTwo.validateHost(host);
@@ -321,7 +319,7 @@ class AddSourceWizardStepTwo extends React.Component {
   };
 
   onChangeHosts = event => {
-    const value = event.target.value;
+    const { value } = event.target;
     let hosts = [];
 
     if (value !== '') {
