@@ -152,7 +152,7 @@ class CreateScanDialog extends React.Component {
     return (
       <Modal show={show} onHide={onClose}>
         <Modal.Header>
-          <button className="close" onClick={onClose} aria-hidden="true" aria-label="Close">
+          <button type="button" className="close" onClick={onClose} aria-hidden="true" aria-label="Close">
             <Icon type="pf" name="close" />
           </button>
           <Modal.Title>Scan</Modal.Title>

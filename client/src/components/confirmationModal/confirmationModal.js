@@ -29,7 +29,7 @@ class ConfirmationModal extends React.Component {
     return (
       <Modal show={show} onHide={this.cancel}>
         <Modal.Header>
-          <button className="close" onClick={this.cancel} aria-hidden="true" aria-label="Close">
+          <button type="button" className="close" onClick={this.cancel} aria-hidden="true" aria-label="Close">
             <Icon type="pf" name="close" />
           </button>
           <Modal.Title>{title}</Modal.Title>

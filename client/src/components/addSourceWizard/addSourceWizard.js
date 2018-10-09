@@ -142,7 +142,7 @@ class AddSourceWizard extends React.Component {
         <Modal show={show} onHide={this.onCancel} dialogClassName="modal-dialog modal-lg wizard-pf quipucords-wizard">
           <Wizard>
             <Modal.Header>
-              <button className="close" onClick={this.onCancel} aria-hidden="true" aria-label="Close">
+              <button type="button" className="close" onClick={this.onCancel} aria-hidden="true" aria-label="Close">
                 <Icon type="pf" name="close" />
               </button>
               <Modal.Title>{edit ? 'Edit' : 'Add'} Source</Modal.Title>

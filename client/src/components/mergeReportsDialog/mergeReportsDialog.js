@@ -170,7 +170,7 @@ class MergeReportsDialog extends React.Component {
     return (
       <Modal show={show} onHide={this.onClose}>
         <Modal.Header>
-          <button className="close" onClick={this.onClose} aria-hidden="true" aria-label="Close">
+          <button type="button" className="close" onClick={this.onClose} aria-hidden="true" aria-label="Close">
             <Icon type="pf" name="close" />
           </button>
           <Modal.Title>{`${details ? 'Detailed' : 'Summary'} Merge Report`}</Modal.Title>
