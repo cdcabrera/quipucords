@@ -44,7 +44,7 @@ class ScanSourceList extends React.Component {
   }
 
   sortSources(scan) {
-    let sources = [..._.get(scan, 'sources', [])];
+    const sources = [..._.get(scan, 'sources', [])];
 
     sources.sort((item1, item2) => {
       let cmp = item1.source_type.localeCompare(item2.source_type);

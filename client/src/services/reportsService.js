@@ -16,7 +16,7 @@ class ReportsService {
           window.navigator.msSaveBlob(blob, fileName);
           resolve({ fileName, data });
         } else {
-          let anchorTag = window.document.createElement('a');
+          const anchorTag = window.document.createElement('a');
 
           anchorTag.href = window.URL.createObjectURL(blob);
           anchorTag.style.display = 'none';
@@ -39,7 +39,7 @@ class ReportsService {
   }
 
   static getReportDetails(id, query = {}) {
-    let apiPath = process.env.REACT_APP_REPORTS_SERVICE_DETAILS.replace('{0}', id);
+    const apiPath = process.env.REACT_APP_REPORTS_SERVICE_DETAILS.replace('{0}', id);
 
     return axios({
       url: apiPath,
@@ -55,7 +55,7 @@ class ReportsService {
   }
 
   static getReportSummary(id, query = {}) {
-    let apiPath = process.env.REACT_APP_REPORTS_SERVICE_DEPLOYMENTS.replace('{0}', id);
+    const apiPath = process.env.REACT_APP_REPORTS_SERVICE_DEPLOYMENTS.replace('{0}', id);
 
     return axios({
       url: apiPath,

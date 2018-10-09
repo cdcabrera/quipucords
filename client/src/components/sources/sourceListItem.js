@@ -45,8 +45,8 @@ class SourceListItem extends React.Component {
     const { item } = this.props;
 
     if (expandType === 'okHosts' || expandType === 'failedHosts') {
-      let okHostCount = _.get(item, 'connection.source_systems_scanned', 0);
-      let failedHostCount = _.get(item, 'connection.source_systems_failed', 0);
+      const okHostCount = _.get(item, 'connection.source_systems_scanned', 0);
+      const failedHostCount = _.get(item, 'connection.source_systems_failed', 0);
 
       if ((expandType === 'okHosts' && okHostCount === 0) || (expandType === 'failedHosts' && failedHostCount === 0)) {
         this.onCloseExpand();
@@ -122,7 +122,7 @@ class SourceListItem extends React.Component {
     const credentialCount = _.size(_.get(item, 'credentials', []));
     let okHostCount = _.get(item, 'connection.source_systems_scanned', 0);
     let failedHostCount = _.get(item, 'connection.source_systems_failed', 0);
-    let unreachableHostCount = _.get(item, 'connection.source_systems_unreachable', 0);
+    const unreachableHostCount = _.get(item, 'connection.source_systems_unreachable', 0);
 
     if (helpers.DEV_MODE) {
       okHostCount = helpers.devModeNormalizeCount(okHostCount);

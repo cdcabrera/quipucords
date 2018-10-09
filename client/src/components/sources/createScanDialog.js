@@ -89,7 +89,7 @@ class CreateScanDialog extends React.Component {
     const { sources, addScan } = this.props;
     const { scanName } = this.state;
 
-    let data = {
+    const data = {
       name: scanName,
       sources: sources.map(item => item.id)
     };

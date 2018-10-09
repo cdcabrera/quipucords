@@ -234,13 +234,13 @@ class Scans extends React.Component {
   }
 
   handleDeleteScan(item) {
-    let heading = (
+    const heading = (
       <span>
         Are you sure you want to delete the scan <strong>{item.name}</strong>?
       </span>
     );
 
-    let onConfirm = () => this.doDeleteScans([item]);
+    const onConfirm = () => this.doDeleteScans([item]);
 
     Store.dispatch({
       type: confirmationModalTypes.CONFIRMATION_MODAL_SHOW,
@@ -263,14 +263,14 @@ class Scans extends React.Component {
       return;
     }
 
-    let heading = <span>Are you sure you want to delete the following scans?</span>;
+    const heading = <span>Are you sure you want to delete the following scans?</span>;
 
     let scansList = '';
     viewOptions.selectedItems.forEach((item, index) => {
       scansList += (index > 0 ? '\n' : '') + item.name;
     });
 
-    let body = (
+    const body = (
       <Grid.Col sm={12}>
         <Form.FormControl
           className="quipucords-form-control"
@@ -283,7 +283,7 @@ class Scans extends React.Component {
       </Grid.Col>
     );
 
-    let onConfirm = () => this.doDeleteScans(viewOptions.selectedItems);
+    const onConfirm = () => this.doDeleteScans(viewOptions.selectedItems);
 
     Store.dispatch({
       type: confirmationModalTypes.CONFIRMATION_MODAL_SHOW,
@@ -322,7 +322,7 @@ class Scans extends React.Component {
   renderScansActions() {
     const { viewOptions } = this.props;
 
-    let mergeAllowed = _.size(viewOptions.selectedItems) > 1;
+    const mergeAllowed = _.size(viewOptions.selectedItems) > 1;
 
     // FUTURE: deletion is not currently enabled
     let deleteAction = null;

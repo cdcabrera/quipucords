@@ -13,7 +13,7 @@ const About = ({ user, status, shown, onClose }) => {
   const versionText = `${_.get(status, 'api_version', 'unknown')} (Build: ${_.get(status, 'build', 'unknown')})`;
   const browser = detect();
 
-  let props = {
+  const props = {
     show: shown,
     onHide: onClose,
     logo,

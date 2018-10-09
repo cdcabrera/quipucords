@@ -81,7 +81,7 @@ class AddSourceWizard extends React.Component {
   };
 
   onBack = () => {
-    let { activeStepIndex } = this.state;
+    const { activeStepIndex } = this.state;
 
     if (activeStepIndex >= 1) {
       this.setState({ activeStepIndex: activeStepIndex - 1 });

@@ -46,7 +46,7 @@ class ScanHostList extends React.Component {
     const { useConnectionResults, useInspectionResults } = this.props;
 
     const newResults = _.get(results, 'value.data.results', []);
-    let allResults = [...scanResults, ...newResults];
+    const allResults = [...scanResults, ...newResults];
 
     if (useConnectionResults && useInspectionResults) {
       allResults.sort((item1, item2) => {
@@ -143,7 +143,7 @@ class ScanHostList extends React.Component {
   }
 
   refresh(useProps, page = 1) {
-    let { useConnectionResults, useInspectionResults, status } = useProps;
+    const { useConnectionResults, useInspectionResults, status } = useProps;
 
     this.setState({
       scanResultsPending: true,

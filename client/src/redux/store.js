@@ -7,7 +7,7 @@ import reduxReducers from './reducers';
 // Create any initial state items based on stored data (cookies etc.)
 const hydrateStore = () => {};
 
-let middleware = [thunkMiddleware, promiseMiddleware()];
+const middleware = [thunkMiddleware, promiseMiddleware()];
 
 if (process.env.NODE_ENV !== 'production' && process.env.REACT_APP_DEBUG_MIDDLEWARE === 'true') {
   middleware.push(createLogger());

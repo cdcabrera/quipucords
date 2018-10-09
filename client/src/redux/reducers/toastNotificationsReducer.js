@@ -8,22 +8,23 @@ const initialState = {
 const toastNotificationsReducer = (state = initialState, action) => {
   switch (action.type) {
     case toastNotificationTypes.TOAST_ADD:
-      let newToast = {
+      const newToast = {
         header: action.header,
         message: action.message,
         alertType: action.alertType,
         persistent: action.persistent
       };
+
       return Object.assign({}, state, {
         toasts: [...state.toasts, newToast],
         displayedToasts: state.displayedToasts + 1
       });
 
     case toastNotificationTypes.TOAST_REMOVE:
-      let index = state.toasts.indexOf(action.toast);
+      const index = state.toasts.indexOf(action.toast);
       action.toast.removed = true;
 
-      let displayedToast = state.toasts.find(toast => !toast.removed);
+      const displayedToast = state.toasts.find(toast => !toast.removed);
 
       if (!displayedToast) {
         return Object.assign({}, state, { toasts: [] });

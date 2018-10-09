@@ -79,8 +79,8 @@ class ViewPaginationRow extends React.Component {
       perPageOptions
     };
 
-    let itemsStart = (currentPage - 1) * pageSize + 1;
-    let itemsEnd = Math.min(currentPage * pageSize, totalCount);
+    const itemsStart = (currentPage - 1) * pageSize + 1;
+    const itemsEnd = Math.min(currentPage * pageSize, totalCount);
 
     return (
       <PaginationRow

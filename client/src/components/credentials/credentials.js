@@ -131,14 +131,14 @@ class Credentials extends React.Component {
       return;
     }
 
-    let heading = <span>Are you sure you want to delete the following credentials?</span>;
+    const heading = <span>Are you sure you want to delete the following credentials?</span>;
 
     let credentialsList = '';
     viewOptions.selectedItems.forEach((item, index) => {
       credentialsList += (index > 0 ? '\n' : '') + item.name;
     });
 
-    let body = (
+    const body = (
       <Grid.Col sm={12}>
         <Form.FormControl
           className="quipucords-form-control"
@@ -151,7 +151,7 @@ class Credentials extends React.Component {
       </Grid.Col>
     );
 
-    let onConfirm = () => this.doDeleteCredentials(viewOptions.selectedItems);
+    const onConfirm = () => this.doDeleteCredentials(viewOptions.selectedItems);
 
     Store.dispatch({
       type: confirmationModalTypes.CONFIRMATION_MODAL_SHOW,
@@ -171,13 +171,13 @@ class Credentials extends React.Component {
   };
 
   onDeleteCredential = item => {
-    let heading = (
+    const heading = (
       <span>
         Are you sure you want to delete the credential <strong>{item.name}</strong>?
       </span>
     );
 
-    let onConfirm = () => this.doDeleteCredentials([item]);
+    const onConfirm = () => this.doDeleteCredentials([item]);
 
     Store.dispatch({
       type: confirmationModalTypes.CONFIRMATION_MODAL_SHOW,

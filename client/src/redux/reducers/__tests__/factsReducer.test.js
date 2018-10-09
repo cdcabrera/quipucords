@@ -20,7 +20,7 @@ describe('factsReducer', () => {
   });
 
   it('should handle ADD_FACTS_REJECTED', () => {
-    let dispatched = {
+    const dispatched = {
       type: helpers.REJECTED_ACTION(factsTypes.ADD_FACTS),
       error: true,
       payload: {
@@ -33,7 +33,7 @@ describe('factsReducer', () => {
       }
     };
 
-    let resultState = factsReducer(undefined, dispatched);
+    const resultState = factsReducer(undefined, dispatched);
     expect(resultState.update.error).toBeTruthy();
     expect(resultState.update.errorMessage).toEqual('GET ERROR');
 
@@ -41,18 +41,18 @@ describe('factsReducer', () => {
   });
 
   it('should handle ADD_FACTS_PENDING', () => {
-    let dispatched = {
+    const dispatched = {
       type: helpers.PENDING_ACTION(factsTypes.ADD_FACTS)
     };
 
-    let resultState = factsReducer(undefined, dispatched);
+    const resultState = factsReducer(undefined, dispatched);
 
     expect(resultState.update.pending).toBeTruthy();
     expect(resultState.persist).toEqual(initialState.persist);
   });
 
   it('should handle ADD_FACTS_FULFILLED', () => {
-    let dispatched = {
+    const dispatched = {
       type: helpers.FULFILLED_ACTION(factsTypes.ADD_FACTS),
       payload: {
         data: [
@@ -76,7 +76,7 @@ describe('factsReducer', () => {
       }
     };
 
-    let resultState = factsReducer(undefined, dispatched);
+    const resultState = factsReducer(undefined, dispatched);
 
     expect(resultState.update.fulfilled).toBeTruthy();
     expect(resultState.update.facts).toHaveLength(4);

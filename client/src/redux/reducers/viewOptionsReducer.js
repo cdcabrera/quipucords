@@ -31,9 +31,9 @@ initialState[viewTypes.SCANS_VIEW] = Object.assign(INITAL_VIEW_STATE);
 initialState[viewTypes.CREDENTIALS_VIEW] = Object.assign(INITAL_VIEW_STATE);
 
 const viewOptionsReducer = (state = initialState, action) => {
-  let updateState = {};
+  const updateState = {};
 
-  let updatePageCounts = (viewType, itemsCount) => {
+  const updatePageCounts = (viewType, itemsCount) => {
     let totalCount = itemsCount;
 
     // TODO: Remove this when we get decent data back in development mode
@@ -41,7 +41,7 @@ const viewOptionsReducer = (state = initialState, action) => {
       totalCount = Math.abs(itemsCount) % 1000;
     }
 
-    let totalPages = Math.ceil(totalCount / state[viewType].pageSize);
+    const totalPages = Math.ceil(totalCount / state[viewType].pageSize);
 
     updateState[viewType] = Object.assign({}, state[viewType], {
       totalCount,
@@ -75,7 +75,7 @@ const viewOptionsReducer = (state = initialState, action) => {
       return Object.assign({}, state, updateState);
 
     case viewToolbarTypes.ADD_FILTER:
-      let currentFilter = state[action.viewType].activeFilters.find(filter => action.filter.field === filter.field);
+      const currentFilter = state[action.viewType].activeFilters.find(filter => action.filter.field === filter.field);
 
       if (!currentFilter) {
         updateState[action.viewType] = Object.assign({}, state[action.viewType], {
@@ -87,7 +87,7 @@ const viewOptionsReducer = (state = initialState, action) => {
         return state;
       } else {
         // replace the existing filter
-        let index = state[action.viewType].activeFilters.indexOf(currentFilter);
+        const index = state[action.viewType].activeFilters.indexOf(currentFilter);
         updateState[action.viewType] = Object.assign({}, state[action.viewType], {
           activeFilters: [
             ...state[action.viewType].activeFilters.slice(0, index),
@@ -101,7 +101,7 @@ const viewOptionsReducer = (state = initialState, action) => {
       return Object.assign({}, state, updateState);
 
     case viewToolbarTypes.REMOVE_FILTER:
-      let index = state[action.viewType].activeFilters.indexOf(action.filter);
+      const index = state[action.viewType].activeFilters.indexOf(action.filter);
       if (index >= 0) {
         updateState[action.viewType] = Object.assign({}, state[action.viewType], {
           activeFilters: [

@@ -110,7 +110,7 @@ class CreateCredentialDialog extends React.Component {
   };
 
   onSave = () => {
-    let credential = {
+    const credential = {
       username: this.state.username,
       name: this.state.credentialName
     };

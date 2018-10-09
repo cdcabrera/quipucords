@@ -27,7 +27,7 @@ describe('SourcesReducer', () => {
   });
 
   it('should handle DELETE_SOURCE_REJECTED', () => {
-    let dispatched = {
+    const dispatched = {
       type: helpers.REJECTED_ACTION(sourcesTypes.DELETE_SOURCE),
       error: true,
       payload: {
@@ -40,7 +40,7 @@ describe('SourcesReducer', () => {
       }
     };
 
-    let resultState = sourcesReducer(undefined, dispatched);
+    const resultState = sourcesReducer(undefined, dispatched);
 
     expect(resultState.update.error).toBeTruthy();
     expect(resultState.update.errorMessage).toEqual('DELETE ERROR');
@@ -50,7 +50,7 @@ describe('SourcesReducer', () => {
   });
 
   it('should handle GET_SOURCES_REJECTED', () => {
-    let dispatched = {
+    const dispatched = {
       type: helpers.REJECTED_ACTION(sourcesTypes.GET_SOURCES),
       error: true,
       payload: {
@@ -63,7 +63,7 @@ describe('SourcesReducer', () => {
       }
     };
 
-    let resultState = sourcesReducer(undefined, dispatched);
+    const resultState = sourcesReducer(undefined, dispatched);
 
     expect(resultState.view.error).toBeTruthy();
     expect(resultState.view.errorMessage).toEqual('GET ERROR');
@@ -72,11 +72,11 @@ describe('SourcesReducer', () => {
   });
 
   it('should handle GET_SOURCES_PENDING', () => {
-    let dispatched = {
+    const dispatched = {
       type: helpers.PENDING_ACTION(sourcesTypes.GET_SOURCES)
     };
 
-    let resultState = sourcesReducer(undefined, dispatched);
+    const resultState = sourcesReducer(undefined, dispatched);
 
     expect(resultState.view.pending).toBeTruthy();
 
@@ -84,7 +84,7 @@ describe('SourcesReducer', () => {
   });
 
   it('should handle GET_SOURCES_FULFILLED', () => {
-    let dispatched = {
+    const dispatched = {
       type: helpers.FULFILLED_ACTION(sourcesTypes.GET_SOURCES),
       payload: {
         data: {
@@ -110,7 +110,7 @@ describe('SourcesReducer', () => {
       }
     };
 
-    let resultState = sourcesReducer(undefined, dispatched);
+    const resultState = sourcesReducer(undefined, dispatched);
 
     expect(resultState.view.fulfilled).toBeTruthy();
     expect(resultState.view.sources).toHaveLength(4);

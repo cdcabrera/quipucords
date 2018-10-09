@@ -4,7 +4,7 @@ import { Grid, Icon } from 'patternfly-react';
 import _ from 'lodash';
 
 const SourceCredentialsList = ({ source }) => {
-  let credentials = [..._.get(source, 'credentials', [])];
+  const credentials = [..._.get(source, 'credentials', [])];
 
   credentials.sort((item1, item2) => item1.name.localeCompare(item2.name));
 

@@ -119,7 +119,7 @@ class AddSourceWizardStepTwo extends React.Component {
       credentials.length &&
       !credentialsError
     ) {
-      let updatedSource = {};
+      const updatedSource = {};
 
       _.set(updatedSource, apiTypes.API_SOURCE_NAME, sourceName);
       _.set(updatedSource, apiTypes.API_SOURCE_HOSTS, hosts);
@@ -176,14 +176,14 @@ class AddSourceWizardStepTwo extends React.Component {
     const { credentials } = this.state;
     const { source } = this.props;
 
-    let sourceType = _.get(source, apiTypes.API_SOURCE_TYPE);
+    const sourceType = _.get(source, apiTypes.API_SOURCE_TYPE);
     let submitCreds = [];
 
     if (sourceType === 'vcenter' || sourceType === 'satellite') {
       submitCreds = [value.id];
     } else {
       submitCreds = [...credentials];
-      let credentialIndex = submitCreds.indexOf(value.id);
+      const credentialIndex = submitCreds.indexOf(value.id);
 
       if (credentialIndex < 0) {
         submitCreds.push(value.id);
@@ -298,14 +298,13 @@ class AddSourceWizardStepTwo extends React.Component {
     const { value } = event.target;
     let host = [];
     let port;
-    let validateHost;
 
     if (value !== '') {
       [host, port] = value.split(':');
       host = [host];
     }
 
-    validateHost = AddSourceWizardStepTwo.validateHost(host);
+    const validateHost = AddSourceWizardStepTwo.validateHost(host);
     this.onChangePort(port || '');
 
     this.setState(

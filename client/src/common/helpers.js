@@ -119,8 +119,8 @@ const authorizationTypeString = authorizationType => {
 };
 
 const setStateProp = (prop, data, options) => {
-  let { state = {}, initialState = {}, reset = true } = options;
-  let obj = { ...state };
+  const { state = {}, initialState = {}, reset = true } = options;
+  const obj = { ...state };
 
   if (!state[prop]) {
     console.error(`Error: Property ${prop} does not exist within the passed state.`, state);
@@ -154,7 +154,7 @@ const viewPropsChanged = (nextViewOptions, currentViewOptions) =>
   nextViewOptions.activeFilters !== currentViewOptions.activeFilters;
 
 const createViewQueryObject = (viewOptions, queryObj) => {
-  let queryObject = {
+  const queryObject = {
     ...queryObj
   };
 
@@ -177,7 +177,7 @@ const createViewQueryObject = (viewOptions, queryObj) => {
 };
 
 const getErrorMessageFromResults = results => {
-  let responseData = _.get(results, 'response.data', results.message);
+  const responseData = _.get(results, 'response.data', results.message);
 
   if (typeof responseData === 'string') {
     return responseData;
@@ -196,7 +196,7 @@ const getErrorMessageFromResults = results => {
 };
 
 const isIpAddress = name => {
-  let vals = name.split('.');
+  const vals = name.split('.');
   if (vals.length === 4) {
     return _.find(vals, val => Number.isNaN(val)) === undefined;
   }

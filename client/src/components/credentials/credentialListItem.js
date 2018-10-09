@@ -98,7 +98,7 @@ class CredentialListItem extends React.Component {
   renderStatusItems() {
     const { item } = this.props;
 
-    let sourceCount = item.sources ? item.sources.length : 0;
+    const sourceCount = item.sources ? item.sources.length : 0;
 
     return [
       <ListView.InfoItem
