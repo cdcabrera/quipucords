@@ -44,24 +44,26 @@ class CreateCredentialDialog extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.show && nextProps.show) {
+    const { edit, fulfilled, getCredentials, show, viewOptions } = this.props;
+
+    if (!show && nextProps.show) {
       this.resetInitialState(nextProps);
     }
 
-    if (this.props.show && nextProps.fulfilled && !this.props.fulfilled) {
+    if (show && nextProps.fulfilled && !fulfilled) {
       Store.dispatch({
         type: toastNotificationTypes.TOAST_ADD,
         alertType: 'success',
         message: (
           <span>
             Credential <strong>{nextProps.credential.name}</strong> successfully
-            {this.props.edit ? ' updated' : ' added'}.
+            {edit ? ' updated' : ' added'}.
           </span>
         )
       });
 
       this.onCancel();
-      this.props.getCredentials(helpers.createViewQueryObject(this.props.viewOptions));
+      getCredentials(helpers.createViewQueryObject(viewOptions));
     }
   }
 
@@ -110,38 +112,52 @@ class CreateCredentialDialog extends React.Component {
   };
 
   onSave = () => {
+    const { addCredential, edit, updateCredential } = this.props;
+    const {
+      authorizationType,
+      becomeMethod,
+      becomePassword,
+      becomeUser,
+      credentialName,
+      credentialType,
+      passphrase,
+      password,
+      sshKeyFile,
+      username
+    } = this.state;
+
     const credential = {
-      username: this.state.username,
-      name: this.state.credentialName
+      username,
+      name: credentialName
     };
 
-    if (this.props.edit) {
+    if (edit) {
       credential.id = this.props.credential.id;
     } else {
-      credential.cred_type = this.state.credentialType;
+      credential.cred_type = credentialType;
     }
 
-    if (this.state.authorizationType === 'sshKey') {
-      credential.ssh_keyfile = this.state.sshKeyFile;
-      credential.sshpassphrase = this.state.passphrase;
+    if (authorizationType === 'sshKey') {
+      credential.ssh_keyfile = sshKeyFile;
+      credential.sshpassphrase = passphrase;
     } else {
-      credential.password = this.state.password;
+      credential.password = password;
     }
 
-    if (this.state.credentialType === 'network') {
-      credential.become_method = this.state.becomeMethod;
-      if (this.state.becomeUser) {
-        credential.become_user = this.state.becomeUser;
+    if (credentialType === 'network') {
+      credential.become_method = becomeMethod;
+      if (becomeUser) {
+        credential.become_user = becomeUser;
       }
-      if (this.state.becomePassword) {
-        credential.become_password = this.state.becomePassword;
+      if (becomePassword) {
+        credential.become_password = becomePassword;
       }
     }
 
-    if (this.props.edit) {
-      this.props.updateCredential(credential.id, credential);
+    if (edit) {
+      updateCredential(credential.id, credential);
     } else {
-      this.props.addCredential(credential).finally(() => {
+      addCredential(credential).finally(() => {
         this.props.getWizardCredentials();
       });
     }
@@ -152,14 +168,24 @@ class CreateCredentialDialog extends React.Component {
   }
 
   validateForm() {
+    const {
+      authorizationType,
+      credentialName,
+      credentialNameError,
+      password,
+      passwordError,
+      sshKeyFile,
+      sskKeyFileError,
+      username,
+      usernameError
+    } = this.state;
+
     return (
-      this.state.credentialName &&
-      !this.state.credentialNameError &&
-      this.state.username &&
-      !this.state.usernameError &&
-      (this.state.authorizationType === 'usernamePassword'
-        ? this.state.password && !this.state.passwordError
-        : this.state.sshKeyFile && !this.state.sskKeyFileError)
+      credentialName &&
+      !credentialNameError &&
+      username &&
+      !usernameError &&
+      (authorizationType === 'usernamePassword' ? password && !passwordError : sshKeyFile && !sskKeyFileError)
     );
   }
 

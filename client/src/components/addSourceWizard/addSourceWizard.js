@@ -21,7 +21,9 @@ class AddSourceWizard extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.show && nextProps.show) {
+    const { show } = this.props;
+
+    if (!show && nextProps.show) {
       this.resetInitialState(nextProps);
     }
 

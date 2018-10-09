@@ -37,7 +37,9 @@ class Credentials extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!_.isEqual(nextProps.credentials, this.props.credentials)) {
+    const { credentials, fulfilled, update, viewOptions } = this.props;
+
+    if (!_.isEqual(nextProps.credentials, credentials)) {
       // Reset selection state though we may want to keep selections over refreshes...
       nextProps.credentials.forEach(credential => {
         if (credential.ssh_keyfile && credential.ssh_keyfile !== '') {
@@ -47,18 +49,18 @@ class Credentials extends React.Component {
         }
       });
 
-      if (nextProps.fulfilled && !this.props.fulfilled) {
+      if (nextProps.fulfilled && !fulfilled) {
         this.setState({ lastRefresh: Date.now() });
       }
     }
 
     // Check for changes resulting in a fetch
-    if (helpers.viewPropsChanged(nextProps.viewOptions, this.props.viewOptions)) {
+    if (helpers.viewPropsChanged(nextProps.viewOptions, viewOptions)) {
       this.onRefresh(nextProps);
     }
 
     if (_.get(nextProps, 'update.delete')) {
-      if (nextProps.update.fulfilled && !this.props.update.fulfilled) {
+      if (nextProps.update.fulfilled && !update.fulfilled) {
         Store.dispatch({
           type: toastNotificationTypes.TOAST_ADD,
           alertType: 'success',
@@ -79,7 +81,7 @@ class Credentials extends React.Component {
         this.deleteNextCredential();
       }
 
-      if (nextProps.update.error && !this.props.update.error) {
+      if (nextProps.update.error && !update.error) {
         Store.dispatch({
           type: toastNotificationTypes.TOAST_ADD,
           alertType: 'error',
@@ -105,10 +107,12 @@ class Credentials extends React.Component {
   };
 
   deleteNextCredential() {
+    const { deleteCredential } = this.props;
+
     if (this.credentialsToDelete.length > 0) {
       this.deletingCredential = this.credentialsToDelete.pop();
       if (this.deletingCredential) {
-        this.props.deleteCredential(this.deletingCredential.id);
+        deleteCredential(this.deletingCredential.id);
       }
     }
   }
@@ -195,8 +199,10 @@ class Credentials extends React.Component {
   };
 
   onRefresh = props => {
-    const options = _.get(props, 'viewOptions') || this.props.viewOptions;
-    this.props.getCredentials(helpers.createViewQueryObject(options));
+    const { getCredentials, viewOptions } = this.props;
+    const options = _.get(props, 'viewOptions') || viewOptions;
+
+    getCredentials(helpers.createViewQueryObject(options));
   };
 
   onClearFilters = () => {

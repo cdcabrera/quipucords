@@ -149,8 +149,10 @@ class Sources extends React.Component {
   };
 
   onRefresh = props => {
-    const options = _.get(props, 'viewOptions') || this.props.viewOptions;
-    this.props.getSources(helpers.createViewQueryObject(options));
+    const { getSources, viewOptions } = this.props;
+    const options = _.get(props, 'viewOptions') || viewOptions;
+
+    getSources(helpers.createViewQueryObject(options));
   };
 
   onClearFilters = () => {

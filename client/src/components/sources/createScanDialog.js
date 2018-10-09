@@ -18,7 +18,9 @@ class CreateScanDialog extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.show && !this.props.show) {
+    const { show } = this.props;
+
+    if (nextProps.show && !show) {
       this.setState({ scanName: '', validScanName: false });
       Store.dispatch({
         type: scansTypes.RESET_SCAN_ADD_STATUS

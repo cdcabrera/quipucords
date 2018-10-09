@@ -29,8 +29,10 @@ class ScanListItem extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { lastRefresh } = this.props;
+
     // Check for changes resulting in a fetch
-    if (!_.isEqual(nextProps.lastRefresh, this.props.lastRefresh)) {
+    if (!_.isEqual(nextProps.lastRefresh, lastRefresh)) {
       this.closeExpandIfNoData(this.expandType());
     }
   }

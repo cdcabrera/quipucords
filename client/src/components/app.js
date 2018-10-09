@@ -26,18 +26,20 @@ class App extends React.Component {
     this.state = {
       aboutShown: false
     };
-
-    helpers.bindMethods(this, ['showAbout', 'closeAbout']);
   }
 
   componentDidMount() {
-    this.props.authorizeUser();
-    this.props.getStatus();
+    const { authorizeUser, getStatus } = this.props;
+
+    authorizeUser();
+    getStatus();
   }
 
   componentWillReceiveProps(nextProps) {
+    const { getUser } = this.props;
+
     if (_.get(nextProps, 'session.loggedIn') && !_.get(this.props, 'session.loggedIn')) {
-      this.props.getUser();
+      getUser();
     }
   }
 
@@ -46,13 +48,13 @@ class App extends React.Component {
     history.push(path);
   }
 
-  showAbout() {
+  onShowAbout = () => {
     this.setState({ aboutShown: true });
-  }
+  };
 
-  closeAbout() {
+  onCloseAbout = () => {
     this.setState({ aboutShown: false });
-  }
+  };
 
   renderMenuItems() {
     const { location } = this.props;
@@ -74,7 +76,7 @@ class App extends React.Component {
     const { logoutUser } = this.props;
 
     return [
-      <VerticalNav.Item key="about" className="collapsed-nav-item" title="About" onClick={() => this.showAbout()} />,
+      <VerticalNav.Item key="about" className="collapsed-nav-item" title="About" onClick={() => this.onShowAbout()} />,
       <VerticalNav.Item key="logout" className="collapsed-nav-item" title="Logout" onClick={logoutUser} />
     ];
   }
@@ -121,7 +123,7 @@ class App extends React.Component {
         <Content />
         <ToastNotificationsList key="toastList" />
         <ConfirmationModal key="confirmationModal" />
-        <About user={user} status={status} shown={aboutShown} onClose={this.closeAbout} />
+        <About user={user} status={status} shown={aboutShown} onClose={this.onCloseAbout} />
         <AddSourceWizard />
         <CreateCredentialDialog />
       </React.Fragment>
@@ -157,7 +159,7 @@ class App extends React.Component {
         <VerticalNav persistentSecondary={false}>
           <VerticalNav.Masthead>
             <VerticalNav.Brand titleImg={titleImg} />
-            <MastheadOptions user={user} showAboutModal={this.showAbout} logoutUser={logoutUser} />
+            <MastheadOptions user={user} showAboutModal={this.onShowAbout} logoutUser={logoutUser} />
           </VerticalNav.Masthead>
           {this.renderMenuItems()}
           {this.renderMenuActions()}

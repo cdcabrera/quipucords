@@ -2,34 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Modal, Button, Icon } from 'patternfly-react';
-import helpers from '../../common/helpers';
 import Store from '../../redux/store';
 import { confirmationModalTypes } from '../../redux/constants';
 
 class ConfirmationModal extends React.Component {
-  constructor() {
-    super();
+  onCancel = () => {
+    const { onCancel } = this.props;
 
-    helpers.bindMethods(this, ['cancel']);
-  }
-
-  cancel() {
-    if (this.props.onCancel) {
-      this.props.onCancel();
+    if (onCancel) {
+      onCancel();
     } else {
       Store.dispatch({
         type: confirmationModalTypes.CONFIRMATION_MODAL_HIDE
       });
     }
-  }
+  };
 
   render() {
     const { show, title, heading, body, icon, confirmButtonText, cancelButtonText, onConfirm } = this.props;
 
     return (
-      <Modal show={show} onHide={this.cancel}>
+      <Modal show={show} onHide={this.onCancel}>
         <Modal.Header>
-          <button type="button" className="close" onClick={this.cancel} aria-hidden="true" aria-label="Close">
+          <button type="button" className="close" onClick={this.onCancel} aria-hidden="true" aria-label="Close">
             <Icon type="pf" name="close" />
           </button>
           <Modal.Title>{title}</Modal.Title>
@@ -46,7 +41,7 @@ class ConfirmationModal extends React.Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button autoFocus bsStyle="default" className="btn-cancel" onClick={this.cancel}>
+          <Button autoFocus bsStyle="default" className="btn-cancel" onClick={this.onCancel}>
             {cancelButtonText}
           </Button>
           <Button bsStyle="primary" onClick={onConfirm}>

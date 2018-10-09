@@ -11,8 +11,6 @@ class ScanHostList extends React.Component {
   constructor() {
     super();
 
-    helpers.bindMethods(this, ['loadMore']);
-
     this.state = {
       scanResults: [],
       scanResultsError: false,
@@ -30,12 +28,14 @@ class ScanHostList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { lastRefresh, status, useConnectionResults, useInspectionResults } = this.props;
+
     // Check for changes resulting in a fetch
     if (
-      !_.isEqual(nextProps.lastRefresh, this.props.lastRefresh) ||
-      nextProps.status !== this.props.status ||
-      nextProps.useConnectionResults !== this.props.useConnectionResults ||
-      nextProps.useInspectionResults !== this.props.useInspectionResults
+      !_.isEqual(nextProps.lastRefresh, lastRefresh) ||
+      nextProps.status !== status ||
+      nextProps.useConnectionResults !== useConnectionResults ||
+      nextProps.useInspectionResults !== useInspectionResults
     ) {
       this.refresh(nextProps);
     }
@@ -88,6 +88,7 @@ class ScanHostList extends React.Component {
           scanResults: this.addResults(results),
           prevResults: morePages || this.state.connectionScanResultsPending ? this.state.prevResults : []
         });
+
         this.loading = this.state.connectionScanResultsPending;
 
         if (morePages) {
@@ -107,6 +108,7 @@ class ScanHostList extends React.Component {
     const usePaging = !useConnectionResults || !useInspectionResults;
 
     const queryObject = {
+      // eslint-disable-next-line react/destructuring-assignment
       page: page === undefined ? this.state.page : page,
       page_size: 100,
       ordering: 'name',
@@ -128,6 +130,7 @@ class ScanHostList extends React.Component {
           scanResults: allResults,
           prevResults: morePages || this.state.inspectionScanResultsPending ? this.state.prevResults : []
         });
+
         this.loading = this.state.inspectionScanResultsPending;
 
         if (morePages && !usePaging) {
@@ -144,15 +147,17 @@ class ScanHostList extends React.Component {
 
   refresh(useProps, page = 1) {
     const { useConnectionResults, useInspectionResults, status } = useProps;
+    const { scanResults } = this.state;
 
     this.setState({
       scanResultsPending: true,
       connectionScanResultsPending: useConnectionResults,
       inspectionScanResultsPending: useInspectionResults,
-      scanResults: page === 1 ? [] : this.state.scanResults,
-      prevResults: this.state.scanResults,
+      scanResults: page === 1 ? [] : scanResults,
+      prevResults: scanResults,
       moreResults: false
     });
+
     this.loading = true;
 
     if (useConnectionResults) {
@@ -164,14 +169,14 @@ class ScanHostList extends React.Component {
     }
   }
 
-  loadMore(page) {
+  onLoadMore = page => {
     if (this.loading) {
       return;
     }
 
     this.loading = true;
     this.refresh(this.props, page);
-  }
+  };
 
   renderResults(results) {
     const { renderHostRow } = this.props;
@@ -190,7 +195,7 @@ class ScanHostList extends React.Component {
         <Grid fluid className="host-list">
           <InfiniteScroll
             pageStart={1}
-            loadMore={this.loadMore}
+            loadMore={this.onLoadMore}
             hasMore={moreResults}
             useWindow={false}
             loader={

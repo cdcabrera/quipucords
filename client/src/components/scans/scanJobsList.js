@@ -12,8 +12,6 @@ class ScanJobsList extends React.Component {
   constructor() {
     super();
 
-    helpers.bindMethods(this, ['onNextPage', 'onPreviousPage']);
-
     this.state = {
       scanJobs: [],
       scanJobsError: false,
@@ -25,27 +23,33 @@ class ScanJobsList extends React.Component {
   }
 
   componentDidMount() {
-    this.refresh();
+    this.onRefresh();
   }
 
   componentWillReceiveProps(nextProps) {
+    const { lastRefresh } = this.props;
+
     // Check for changes resulting in a fetch
-    if (!_.isEqual(nextProps.lastRefresh, this.props.lastRefresh)) {
-      this.refresh();
+    if (!_.isEqual(nextProps.lastRefresh, lastRefresh)) {
+      this.onRefresh();
     }
   }
 
-  onNextPage() {
-    this.setState({ page: this.state.page + 1 });
-    this.refresh(this.state.page + 1);
-  }
+  onNextPage = () => {
+    const { page } = this.state;
 
-  onPreviousPage() {
-    this.setState({ page: this.state.page - 1 });
-    this.refresh(this.state.page - 1);
-  }
+    this.setState({ page: page + 1 });
+    this.onRefresh(page + 1);
+  };
 
-  refresh(page) {
+  onPreviousPage = () => {
+    const { page } = this.state;
+
+    this.setState({ page: page - 1 });
+    this.onRefresh(page - 1);
+  };
+
+  onRefresh = page => {
     const { scan, getScanJobs } = this.props;
 
     this.setState({
@@ -75,7 +79,7 @@ class ScanJobsList extends React.Component {
           });
         });
     }
-  }
+  };
 
   renderJob(job) {
     const { scan, onSummaryDownload, onDetailedDownload } = this.props;

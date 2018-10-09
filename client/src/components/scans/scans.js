@@ -46,17 +46,19 @@ class Scans extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { fulfilled, update, viewOptions } = this.props;
+
     // Check for changes resulting in a fetch
-    if (helpers.viewPropsChanged(nextProps.viewOptions, this.props.viewOptions)) {
+    if (helpers.viewPropsChanged(nextProps.viewOptions, viewOptions)) {
       this.onRefresh(nextProps);
     }
 
-    if (nextProps.fulfilled && !this.props.fulfilled) {
+    if (nextProps.fulfilled && !fulfilled) {
       this.setState({ lastRefresh: Date.now() });
     }
 
     if (_.get(nextProps, 'update.delete')) {
-      if (nextProps.update.fulfilled && !this.props.update.fulfilled) {
+      if (nextProps.update.fulfilled && !update.fulfilled) {
         Store.dispatch({
           type: toastNotificationTypes.TOAST_ADD,
           alertType: 'success',

@@ -49,8 +49,10 @@ class AddSourceWizardStepTwo extends React.Component {
   }
 
   componentDidMount() {
+    const { getWizardCredentials } = this.props;
+
     this.setState({ ...AddSourceWizardStepTwo.initializeState(this.props) }, () => {
-      this.props.getWizardCredentials();
+      getWizardCredentials();
       this.validateStep();
     });
   }
@@ -161,7 +163,9 @@ class AddSourceWizardStepTwo extends React.Component {
   };
 
   credentialInfo(id) {
-    return _.find(this.props.allCredentials, { id }) || {};
+    const { allCredentials } = this.props;
+
+    return _.find(allCredentials, { id }) || {};
   }
 
   static validateCredentials(value) {
