@@ -296,7 +296,6 @@ ViewToolbar.propTypes = {
 };
 
 ViewToolbar.defaultProps = {
-  filteredCount: -1,
   itemsType: '',
   itemsTypePlural: ''
 };
