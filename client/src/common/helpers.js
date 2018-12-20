@@ -264,6 +264,8 @@ const PENDING_ACTION = base => `${base}_PENDING`;
 
 const REJECTED_ACTION = base => `${base}_REJECTED`;
 
+const HTTP_STATUS_RANGE = status => `${status}_STATUS_RANGE`;
+
 export const helpers = {
   devModeNormalizeCount,
   generateId,
@@ -286,7 +288,8 @@ export const helpers = {
   RH_BRAND,
   FULFILLED_ACTION,
   PENDING_ACTION,
-  REJECTED_ACTION
+  REJECTED_ACTION,
+  HTTP_STATUS_RANGE
 };
 
 export default helpers;
