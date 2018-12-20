@@ -1,3 +1,4 @@
+import * as applicationStatusTypes from './applicationStatusConstants';
 import * as confirmationModalTypes from './confirmationModalConstants';
 import * as credentialsTypes from './credentialsConstants';
 import * as factsTypes from './factsConstants';
@@ -12,6 +13,7 @@ import * as viewPaginationTypes from './viewPaginationConstants';
 import * as viewToolbarTypes from './viewToolbarConstants';
 
 const reduxTypes = {
+  applicationStatus: applicationStatusTypes,
   confirmationModal: confirmationModalTypes,
   credentials: credentialsTypes,
   facts: factsTypes,
@@ -28,6 +30,7 @@ const reduxTypes = {
 
 export {
   reduxTypes,
+  applicationStatusTypes,
   confirmationModalTypes,
   credentialsTypes,
   factsTypes,
