@@ -256,6 +256,8 @@ const ipAddressValue = name => {
 
 const DEV_MODE = process.env.REACT_APP_ENV === 'development';
 
+const TEST_MODE = process.env.REACT_APP_ENV === 'test';
+
 const RH_BRAND = process.env.REACT_APP_RH_BRAND === 'true';
 
 const FULFILLED_ACTION = base => `${base}_FULFILLED`;
@@ -285,6 +287,7 @@ export const helpers = {
   isIpAddress,
   ipAddressValue,
   DEV_MODE,
+  TEST_MODE,
   RH_BRAND,
   FULFILLED_ACTION,
   PENDING_ACTION,
