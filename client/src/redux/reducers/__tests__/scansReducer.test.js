@@ -111,7 +111,9 @@ describe('ScansReducer', () => {
 
       const resultState = scansReducer(undefined, dispatched);
 
-      expect({ type: helpers.FULFILLED_ACTION(value), result: resultState }).toMatchSnapshot(`fulfilled types ${value}`);
+      expect({ type: helpers.FULFILLED_ACTION(value), result: resultState }).toMatchSnapshot(
+        `fulfilled types ${value}`
+      );
     });
   });
 });

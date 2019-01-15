@@ -113,7 +113,7 @@ const scansReducer = (state = initialState, action) => {
           scans: action.payload.data.results,
           pending: false,
           fulfilled: true,
-          lastRefresh: Date.now(),
+          lastRefresh: (action.payload.headers && new Date(action.payload.headers.date).getTime()) || 0,
           sourcesCount: state.view.sourcesCount
         },
         {
