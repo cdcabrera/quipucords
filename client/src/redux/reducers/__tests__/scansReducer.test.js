@@ -8,6 +8,7 @@ const initialState = {
     errorMessage: '',
     pending: false,
     fulfilled: false,
+    lastRefresh: 0,
     scans: [],
     sourcesCount: 0
   },
