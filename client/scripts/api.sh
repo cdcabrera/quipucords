@@ -235,8 +235,8 @@ prodApi()
         p ) PORT=$OPTARG;;
         f ) FILE="$OPTARG";;
         t ) TYPE="$OPTARG";;
-        c ) CLEAN=true;;
-        u ) UPDATE=true;;
+        c ) CLEAN=$OPTARG;;
+        u ) UPDATE=$OPTARG;;
       esac
   done
 
