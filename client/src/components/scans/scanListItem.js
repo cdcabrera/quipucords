@@ -216,7 +216,6 @@ class ScanListItem extends React.Component {
           </SimpleTooltip>
         );
       case 'created':
-      case 'pending':
       case 'running':
         return (
           <React.Fragment>
@@ -242,6 +241,8 @@ class ScanListItem extends React.Component {
             {downloadActions}
           </SimpleTooltip>
         );
+      case 'pending':
+        return null;
       default:
         return (
           <SimpleTooltip id="startTip" tooltip="Start Scan">
