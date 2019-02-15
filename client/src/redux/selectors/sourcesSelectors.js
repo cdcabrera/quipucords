@@ -47,7 +47,7 @@ const sourceDetailSelector = createSelector(
         false
       );
 
-      updatedSource.optionParmiko = _get(
+      updatedSource.optionParamiko = _get(
         source[apiTypes.API_RESPONSE_SOURCE_OPTIONS],
         apiTypes.API_RESPONSE_SOURCE_OPTIONS_PARAMIKO,
         false
