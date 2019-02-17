@@ -1,82 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Form, Radio } from 'patternfly-react';
-import _ from 'lodash';
-import Store from '../../redux/store';
-import { apiTypes } from '../../constants';
-import { sourcesTypes } from '../../redux/constants';
+import { connect, store, reduxSelectors, reduxTypes } from '../../redux';
+import apiTypes from '../../constants/apiConstants';
 
 class AddSourceWizardStepOne extends React.Component {
   constructor(props) {
     super(props);
 
-    this.initialState = {
-      sourceType: '',
-      sourceTypeError: null
+    this.state = {
+      type: props.type
     };
-
-    this.state = { ...this.initialState };
   }
 
   componentDidMount() {
-    const sourceType = _.get(this.props, ['source', apiTypes.API_SOURCE_TYPE], 'network');
-
-    this.setState({ sourceType }, () => {
-      this.validateStep();
-    });
+    this.isStepValid();
   }
 
   onChangeSourceType = event => {
-    this.setState(
-      {
-        sourceType: event.target.value
-      },
-      () => this.validateStep()
-    );
+    const { value } = event.target;
+
+    this.setState({ type: value }, () => this.isStepValid());
   };
 
-  validateStep() {
-    const { sourceType } = this.state;
-    const { source } = this.props;
+  onSubmit = event => {
+    event.preventDefault();
+  };
 
-    if (sourceType !== '') {
-      Store.dispatch({
-        type: sourcesTypes.UPDATE_SOURCE_WIZARD_STEPONE,
-        source: _.merge({}, source, { [apiTypes.API_SOURCE_TYPE]: sourceType })
-      });
-    }
+  isStepValid() {
+    const { type } = this.state;
+
+    store.dispatch({
+      type: reduxTypes.sources.UPDATE_SOURCE_WIZARD_STEPONE,
+      source: {
+        [apiTypes.API_SUBMIT_SOURCE_SOURCE_TYPE]: type
+      }
+    });
   }
 
   render() {
-    const { sourceType, sourceTypeError } = this.state;
+    const { type } = this.props;
 
     return (
-      <Form horizontal>
+      <Form horizontal onSubmit={this.onSubmit}>
         <h3 className="right-aligned_basic-form">Select source type</h3>
-        <Form.FormGroup validationState={sourceTypeError ? 'error' : null}>
-          <Radio
-            name="sourceType"
-            value="network"
-            checked={sourceType === 'network'}
-            onChange={this.onChangeSourceType}
-          >
+        <Form.FormGroup>
+          <Radio name="sourceType" value="network" checked={type === 'network'} onChange={this.onChangeSourceType}>
             Network Range
           </Radio>
-          <Radio
-            name="sourceType"
-            value="satellite"
-            checked={sourceType === 'satellite'}
-            onChange={this.onChangeSourceType}
-          >
+          <Radio name="sourceType" value="satellite" checked={type === 'satellite'} onChange={this.onChangeSourceType}>
             Satellite
           </Radio>
-          <Radio
-            name="sourceType"
-            value="vcenter"
-            checked={sourceType === 'vcenter'}
-            onChange={this.onChangeSourceType}
-          >
+          <Radio name="sourceType" value="vcenter" checked={type === 'vcenter'} onChange={this.onChangeSourceType}>
             vCenter Server
           </Radio>
         </Form.FormGroup>
@@ -86,15 +61,22 @@ class AddSourceWizardStepOne extends React.Component {
 }
 
 AddSourceWizardStepOne.propTypes = {
-  source: PropTypes.object
+  type: PropTypes.string
 };
 
 AddSourceWizardStepOne.defaultProps = {
-  source: {}
+  type: 'network'
 };
 
-const mapStateToProps = state => ({ ...state.addSourceWizard.view });
+const makeMapStateToProps = () => {
+  const mapSource = reduxSelectors.sources.makeSourceDetail();
 
-const ConnectedAddSourceWizardStepOne = connect(mapStateToProps)(AddSourceWizardStepOne);
+  return (state, props) => ({
+    ...state.addSourceWizard,
+    ...mapSource(state, props)
+  });
+};
+
+const ConnectedAddSourceWizardStepOne = connect(makeMapStateToProps)(AddSourceWizardStepOne);
 
 export { ConnectedAddSourceWizardStepOne as default, ConnectedAddSourceWizardStepOne, AddSourceWizardStepOne };
