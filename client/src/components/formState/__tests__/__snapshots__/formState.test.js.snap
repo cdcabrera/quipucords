@@ -1,0 +1,96 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`basic render 1`] = `
+<form>
+  <label>
+    Lorem
+    <input
+      name="lorem"
+      readonly=""
+      type="text"
+      value="ipsum"
+    />
+  </label>
+</form>
+`;
+
+exports[`basic validation 1`] = `
+Object {
+  "errors": Object {
+    "lorem": "required",
+  },
+  "isSubmitting": false,
+  "isUpdating": false,
+  "isValidating": false,
+  "refValues": null,
+  "submitCount": 0,
+  "touched": Object {
+    "lorem": true,
+  },
+  "values": Object {
+    "lorem": "",
+  },
+}
+`;
+
+exports[`initial props 1`] = `
+Object {
+  "children": [Function],
+  "initialValues": Object {
+    "lorem": "ipsum",
+  },
+  "onReset": [Function],
+  "onSubmit": [Function],
+  "resetRefValues": true,
+  "validate": [Function],
+}
+`;
+
+exports[`initial state 1`] = `
+Object {
+  "errors": Object {},
+  "isSubmitting": false,
+  "isUpdating": false,
+  "isValidating": false,
+  "refValues": Object {
+    "lorem": "ipsum",
+  },
+  "submitCount": 0,
+  "touched": Object {},
+  "values": Object {
+    "lorem": "ipsum",
+  },
+}
+`;
+
+exports[`onevent 1`] = `
+Object {
+  "errors": Object {},
+  "isSubmitting": false,
+  "isUpdating": false,
+  "isValidating": false,
+  "refValues": null,
+  "submitCount": 0,
+  "touched": Object {
+    "lorem": true,
+  },
+  "values": Object {
+    "lorem": "dolor",
+  },
+}
+`;
+
+exports[`onsubmit 1`] = `
+Object {
+  "errors": Object {},
+  "isSubmitting": false,
+  "isUpdating": false,
+  "isValidating": false,
+  "refValues": null,
+  "submitCount": 1,
+  "touched": Object {},
+  "values": Object {
+    "lorem": "dolor",
+  },
+}
+`;
