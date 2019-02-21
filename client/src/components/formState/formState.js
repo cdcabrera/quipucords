@@ -43,9 +43,17 @@ class FormState extends React.Component {
     }
   }
 
+  onEventCustom = custom => {
+    if (!custom.name || !custom.value) {
+      return;
+    }
+
+    this.onEvent({ target: { ...custom }, persist: helpers.noop, type: 'custom' });
+  };
+
   onEvent = event => {
     const { touched, values } = this.state;
-    const { id, name, value } = event.target;
+    const { id, name, value } = event.options ? { ...event } : event.target;
 
     event.persist();
 
@@ -70,7 +78,6 @@ class FormState extends React.Component {
             isUpdating: false,
             isValidating: false,
             isValid: checkIsValid
-            // errors: { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) }
           });
         })
     );
@@ -118,7 +125,6 @@ class FormState extends React.Component {
 
           this.setState(
             {
-              // errors: { ...errors, ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) },
               errors: setErrors,
               isSubmitting: false,
               isUpdating: false,
@@ -174,7 +180,6 @@ class FormState extends React.Component {
             isUpdating: false,
             isValidating: false,
             isValid: checkIsValid
-            // errors: { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) }
           });
         })
     );
@@ -204,6 +209,7 @@ class FormState extends React.Component {
     return (
       <React.Fragment>
         {children({
+          handleOnEventCustom: this.onEventCustom,
           handleOnEvent: this.onEvent,
           handleOnReset: this.onReset,
           handleOnSubmit: this.onSubmit,

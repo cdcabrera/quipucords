@@ -94,6 +94,7 @@ Object {
       },
     ],
     "selectedIndex": 2,
+    "type": "select-one",
     "value": "hello",
   },
   "id": "test",
@@ -172,8 +173,10 @@ Object {
       },
     ],
     "selectedIndex": 2,
+    "type": "select-one",
     "value": "hello",
   },
+  "type": "select-one",
   "value": "hello",
 }
 `;

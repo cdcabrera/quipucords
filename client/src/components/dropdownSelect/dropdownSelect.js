@@ -66,6 +66,7 @@ class DropdownSelect extends React.Component {
           name: name || id,
           value: updatedOptions[optionsIndex].value,
           selectedIndex: optionsIndex,
+          type: `select-${(multiselect && 'multiple') || 'one'}`,
           options: updatedOptions
         };
         const mockEvent = {
@@ -95,7 +96,8 @@ class DropdownSelect extends React.Component {
       : _cloneDeep(options);
 
     const updatedTitle = [];
-    const activateValues = selectValue && typeof selectValue === 'string' ? [selectValue] : selectValue;
+    const activateValues =
+      (selectValue && typeof selectValue === 'string') || typeof selectValue === 'number' ? [selectValue] : selectValue;
 
     updatedOptions.forEach((option, index) => {
       let convertedOption = option;
@@ -188,7 +190,7 @@ DropdownSelect.propTypes = {
   onSelect: PropTypes.func,
   options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   pullRight: PropTypes.bool,
-  selectValue: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  selectValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.array]),
   title: PropTypes.string
 };
 
