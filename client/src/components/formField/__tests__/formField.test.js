@@ -22,12 +22,20 @@ describe('FormField Component', () => {
   });
 
   it('should have isEmpty validation', () => {
-    expect(fieldValidation.isEmpty('')).toEqual(true);
-    expect(fieldValidation.isEmpty('test')).toEqual(false);
+    expect(fieldValidation.isEmpty('')).toBe(true);
+    expect(fieldValidation.isEmpty('test')).toBe(false);
   });
 
   it('should have doesntHaveMinimumCharacters validation', () => {
-    expect(fieldValidation.doesntHaveMinimumCharacters('', 5)).toEqual(true);
-    expect(fieldValidation.doesntHaveMinimumCharacters('test test', 5)).toEqual(false);
+    expect(fieldValidation.doesntHaveMinimumCharacters('', 5)).toBe(true);
+    expect(fieldValidation.doesntHaveMinimumCharacters('test test', 5)).toBe(false);
+  });
+
+  it('should have isPortValid validation', () => {
+    expect(fieldValidation.isPortValid('weeeeee')).toBe(false);
+    expect(fieldValidation.isPortValid(-1)).toBe(false);
+    expect(fieldValidation.isPortValid(65536)).toBe(false);
+    expect(fieldValidation.isPortValid('65536')).toBe(false);
+    expect(fieldValidation.isPortValid(65535)).toBe(true);
   });
 });

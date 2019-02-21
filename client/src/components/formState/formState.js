@@ -143,17 +143,15 @@ class FormState extends React.Component {
   };
 
   submit(event) {
-    const { values } = this.state;
     const { onSubmit } = this.props;
 
-    return Promise.resolve(onSubmit({ event, values }));
+    return Promise.resolve(onSubmit(_cloneDeep({ event, ...this.state })));
   }
 
   validate(event) {
-    const { values } = this.state;
     const { validate } = this.props;
 
-    const checkPromise = validate({ event, values });
+    const checkPromise = validate(_cloneDeep({ event, ...this.state }));
 
     if (Object.prototype.toString.call(checkPromise) === '[object Promise]') {
       return checkPromise;
@@ -217,7 +215,7 @@ class FormState extends React.Component {
           handleOnEvent: this.onEvent,
           handleOnReset: this.onReset,
           handleOnSubmit: this.onSubmit,
-          ...this.state
+          ..._cloneDeep(this.state)
         })}
       </React.Fragment>
     );

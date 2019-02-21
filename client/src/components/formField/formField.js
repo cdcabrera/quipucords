@@ -32,10 +32,12 @@ const FormField = ({
 
 const doesntHaveMinimumCharacters = (value, characters = 5) => typeof value === 'string' && value.length < characters;
 const isEmpty = value => !value || value === '' || (Array.isArray(value) && !value.length);
+const isPortValid = value => /^\d{1,5}$/.test(value) && value <= 65535;
 
 const fieldValidation = {
   doesntHaveMinimumCharacters,
-  isEmpty
+  isEmpty,
+  isPortValid
 };
 
 FormField.propTypes = {

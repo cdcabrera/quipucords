@@ -86,6 +86,22 @@ Object {
 }
 `;
 
+exports[`not mutated 1`] = `
+Object {
+  "errors": Object {},
+  "isSubmitting": false,
+  "isUpdating": false,
+  "isValid": true,
+  "isValidating": false,
+  "refValues": null,
+  "submitCount": 0,
+  "touched": Object {},
+  "values": Object {
+    "lorem": "ipsum",
+  },
+}
+`;
+
 exports[`onevent 1`] = `
 Object {
   "errors": Object {},

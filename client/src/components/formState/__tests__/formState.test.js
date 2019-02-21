@@ -125,4 +125,28 @@ describe('FormState Component', () => {
     component.instance().onEventCustom([{ name: 'lorem', value: 'woot again' }, { name: 'dolor', value: 'sit' }]);
     expect(component.state()).toMatchSnapshot('multiple custom events');
   });
+
+  it('should clone returned values to avoid mutation by consumer', () => {
+    const props = {
+      initialValues: {
+        lorem: 'ipsum'
+      },
+      validate: ({ values }) => {
+        const updatedErrors = {};
+
+        // eslint-disable-next-line
+        values.lorem = 'mutated';
+
+        return updatedErrors;
+      }
+    };
+
+    const component = mount(
+      <FormState validateOnmount {...props}>
+        {({ values }) => <div>Lorem = {values.lorem}</div>}
+      </FormState>
+    );
+
+    expect(component.state()).toMatchSnapshot('not mutated');
+  });
 });
