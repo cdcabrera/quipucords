@@ -19,11 +19,20 @@ class FormState extends React.Component {
       isUpdating: false,
       isSubmitting: false,
       isValidating: false,
+      isValid: null,
       refValues,
       submitCount: 0,
       touched: {},
       values: _cloneDeep(props.initialValues)
     };
+  }
+
+  componentDidMount() {
+    const { validateOnmount } = this.props;
+
+    if (validateOnmount === true) {
+      this.validateOnMount();
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -36,12 +45,13 @@ class FormState extends React.Component {
 
   onEvent = event => {
     const { touched, values } = this.state;
-    const { name, value } = event.target;
-
-    const updatedTouched = { ...touched, [name]: true };
-    const updatedValues = { ...values, [name]: value };
+    const { id, name, value } = event.target;
 
     event.persist();
+
+    const targetName = name || id || 'generated form state target, add name or id attr to field';
+    const updatedTouched = { ...touched, [targetName]: true };
+    const updatedValues = { ...values, [targetName]: value };
 
     this.setState(
       {
@@ -52,10 +62,15 @@ class FormState extends React.Component {
       },
       () =>
         this.validate(event).then(updatedErrors => {
+          const setErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
+          const checkIsValid = !Object.keys(setErrors).length;
+
           this.setState({
+            errors: setErrors,
             isUpdating: false,
             isValidating: false,
-            errors: { ...(updatedErrors[0] || updatedErrors || {}) }
+            isValid: checkIsValid
+            // errors: { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) }
           });
         })
     );
@@ -84,7 +99,7 @@ class FormState extends React.Component {
   };
 
   onSubmit = event => {
-    const { errors, submitCount } = this.state;
+    const { submitCount } = this.state;
 
     event.persist();
     event.preventDefault();
@@ -98,11 +113,16 @@ class FormState extends React.Component {
       },
       () =>
         this.validate(event).then(updatedErrors => {
+          const setErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
+          const checkIsValid = !Object.keys(setErrors).length;
+
           this.setState(
             {
-              errors: { ...errors, ...(updatedErrors[0] || updatedErrors || {}) },
+              // errors: { ...errors, ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) },
+              errors: setErrors,
               isSubmitting: false,
               isUpdating: false,
+              isValid: checkIsValid,
               isValidating: false,
               touched: {}
             },
@@ -132,6 +152,32 @@ class FormState extends React.Component {
     return {
       then: callback => callback(checkPromise)
     };
+  }
+
+  validateOnMount(event) {
+    const updatedEvent = event || {
+      type: 'mount'
+    };
+
+    this.setState(
+      {
+        isUpdating: true,
+        isValidating: true
+      },
+      () =>
+        this.validate(updatedEvent).then(updatedErrors => {
+          const setErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
+          const checkIsValid = !Object.keys(setErrors).length;
+
+          this.setState({
+            errors: setErrors,
+            isUpdating: false,
+            isValidating: false,
+            isValid: checkIsValid
+            // errors: { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) }
+          });
+        })
+    );
   }
 
   updateComponent() {
@@ -174,7 +220,8 @@ FormState.propTypes = {
   onReset: PropTypes.func,
   onSubmit: PropTypes.func,
   resetRefValues: PropTypes.bool,
-  validate: PropTypes.func
+  validate: PropTypes.func,
+  validateOnmount: PropTypes.bool
 };
 
 FormState.defaultProps = {
@@ -182,7 +229,8 @@ FormState.defaultProps = {
   onReset: helpers.noop,
   onSubmit: helpers.noop,
   resetRefValues: false,
-  validate: helpers.noop
+  validate: helpers.noop,
+  validateOnmount: false
 };
 
 export { FormState as default, FormState };

@@ -31,7 +31,7 @@ const FormField = ({
 };
 
 const doesntHaveMinimumCharacters = (value, characters = 5) => typeof value === 'string' && value.length < characters;
-const isEmpty = value => !value || value === '';
+const isEmpty = value => !value || value === '' || (Array.isArray(value) && !value.length);
 
 const fieldValidation = {
   doesntHaveMinimumCharacters,

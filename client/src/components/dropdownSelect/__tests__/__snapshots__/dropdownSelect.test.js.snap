@@ -3,17 +3,18 @@
 exports[`basic dropdown 1`] = `
 <div
   class="quipucords-dropdownselect  dropdown btn-group"
+  name="test"
 >
   <button
     aria-expanded="false"
     aria-haspopup="true"
-    class="dropdown-toggle btn btn-default"
+    class="form-control dropdown-toggle btn btn-default"
     id="test"
     role="button"
     type="button"
   >
     <span>
-      Select option
+      hello
     </span>
      
     <span
@@ -38,7 +39,7 @@ exports[`basic dropdown 1`] = `
       </a>
     </li>
     <li
-      class=""
+      class="active"
       role="presentation"
     >
       <a
@@ -53,14 +54,139 @@ exports[`basic dropdown 1`] = `
 </div>
 `;
 
+exports[`emulated event 1`] = `
+Object {
+  "currentTarget": Object {
+    "id": "test",
+    "name": "test",
+    "options": Array [
+      Object {
+        "label": "lorem",
+        "selected": false,
+        "text": "lorem",
+        "textContent": "lorem",
+        "title": "lorem",
+        "value": "lorem",
+      },
+      Object {
+        "label": "ipsum",
+        "selected": false,
+        "text": "ipsum",
+        "textContent": "ipsum",
+        "title": "ipsum",
+        "value": "ipsum",
+      },
+      Object {
+        "label": "hello",
+        "selected": true,
+        "text": "hello",
+        "textContent": "hello",
+        "title": "hello",
+        "value": "hello",
+      },
+      Object {
+        "label": "world",
+        "selected": false,
+        "text": "world",
+        "textContent": "world",
+        "title": "world",
+        "value": "world",
+      },
+    ],
+    "selectedIndex": 2,
+    "value": "hello",
+  },
+  "id": "test",
+  "name": "test",
+  "options": Array [
+    Object {
+      "label": "lorem",
+      "selected": false,
+      "text": "lorem",
+      "textContent": "lorem",
+      "title": "lorem",
+      "value": "lorem",
+    },
+    Object {
+      "label": "ipsum",
+      "selected": false,
+      "text": "ipsum",
+      "textContent": "ipsum",
+      "title": "ipsum",
+      "value": "ipsum",
+    },
+    Object {
+      "label": "hello",
+      "selected": true,
+      "text": "hello",
+      "textContent": "hello",
+      "title": "hello",
+      "value": "hello",
+    },
+    Object {
+      "label": "world",
+      "selected": false,
+      "text": "world",
+      "textContent": "world",
+      "title": "world",
+      "value": "world",
+    },
+  ],
+  "persist": [Function],
+  "selectedIndex": 2,
+  "target": Object {
+    "id": "test",
+    "name": "test",
+    "options": Array [
+      Object {
+        "label": "lorem",
+        "selected": false,
+        "text": "lorem",
+        "textContent": "lorem",
+        "title": "lorem",
+        "value": "lorem",
+      },
+      Object {
+        "label": "ipsum",
+        "selected": false,
+        "text": "ipsum",
+        "textContent": "ipsum",
+        "title": "ipsum",
+        "value": "ipsum",
+      },
+      Object {
+        "label": "hello",
+        "selected": true,
+        "text": "hello",
+        "textContent": "hello",
+        "title": "hello",
+        "value": "hello",
+      },
+      Object {
+        "label": "world",
+        "selected": false,
+        "text": "world",
+        "textContent": "world",
+        "title": "world",
+        "value": "world",
+      },
+    ],
+    "selectedIndex": 2,
+    "value": "hello",
+  },
+  "value": "hello",
+}
+`;
+
 exports[`key value object 1`] = `
 <div
   class="quipucords-dropdownselect  dropdown btn-group"
+  name="test"
 >
   <button
     aria-expanded="false"
     aria-haspopup="true"
-    class="dropdown-toggle btn btn-default"
+    class="form-control dropdown-toggle btn btn-default"
     id="test"
     role="button"
     type="button"
@@ -109,11 +235,12 @@ exports[`key value object 1`] = `
 exports[`multiselect dropdown 1`] = `
 <div
   class="quipucords-dropdownselect  dropdown btn-group"
+  name="test"
 >
   <button
     aria-expanded="false"
     aria-haspopup="true"
-    class="dropdown-toggle btn btn-default"
+    class="form-control dropdown-toggle btn btn-default"
     id="test"
     role="button"
     type="button"
@@ -194,11 +321,12 @@ exports[`multiselect dropdown 1`] = `
 exports[`string array 1`] = `
 <div
   class="quipucords-dropdownselect  dropdown btn-group"
+  name="test"
 >
   <button
     aria-expanded="false"
     aria-haspopup="true"
-    class="dropdown-toggle btn btn-default"
+    class="form-control dropdown-toggle btn btn-default"
     id="test"
     role="button"
     type="button"

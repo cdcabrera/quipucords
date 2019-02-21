@@ -21,6 +21,7 @@ Object {
   },
   "isSubmitting": false,
   "isUpdating": false,
+  "isValid": false,
   "isValidating": false,
   "refValues": null,
   "submitCount": 0,
@@ -43,6 +44,7 @@ Object {
   "onSubmit": [Function],
   "resetRefValues": true,
   "validate": [Function],
+  "validateOnmount": false,
 }
 `;
 
@@ -51,6 +53,7 @@ Object {
   "errors": Object {},
   "isSubmitting": false,
   "isUpdating": false,
+  "isValid": null,
   "isValidating": false,
   "refValues": Object {
     "lorem": "ipsum",
@@ -68,6 +71,7 @@ Object {
   "errors": Object {},
   "isSubmitting": false,
   "isUpdating": false,
+  "isValid": true,
   "isValidating": false,
   "refValues": null,
   "submitCount": 0,
@@ -85,6 +89,7 @@ Object {
   "errors": Object {},
   "isSubmitting": false,
   "isUpdating": false,
+  "isValid": true,
   "isValidating": false,
   "refValues": null,
   "submitCount": 1,

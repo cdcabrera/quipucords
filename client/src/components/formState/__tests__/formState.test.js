@@ -74,7 +74,7 @@ describe('FormState Component', () => {
           <form>
             <label>
               Lorem
-              <input name="lorem" value={values.lorem} type="text" onChange={handleOnEvent} />
+              <input id="lorem" value={values.lorem} type="text" onChange={handleOnEvent} />
               <span className="error">{errors.lorem}</span>
             </label>
           </form>
@@ -82,9 +82,8 @@ describe('FormState Component', () => {
       </FormState>
     );
 
-    const mockEvent = { target: { value: '', name: 'lorem' }, persist: () => {}, preventDefault: () => {} };
+    const mockEvent = { target: { value: '', id: 'lorem' }, persist: () => {}, preventDefault: () => {} };
     component.instance().onEvent(mockEvent);
     expect(component.state()).toMatchSnapshot('basic validation');
-
   });
 });
