@@ -66,6 +66,26 @@ Object {
 }
 `;
 
+exports[`multiple custom events 1`] = `
+Object {
+  "errors": Object {},
+  "isSubmitting": false,
+  "isUpdating": false,
+  "isValid": true,
+  "isValidating": false,
+  "refValues": null,
+  "submitCount": 0,
+  "touched": Object {
+    "dolor": true,
+    "lorem": true,
+  },
+  "values": Object {
+    "dolor": "sit",
+    "lorem": "woot again",
+  },
+}
+`;
+
 exports[`onevent 1`] = `
 Object {
   "errors": Object {},
@@ -96,6 +116,25 @@ Object {
   "touched": Object {},
   "values": Object {
     "lorem": "dolor",
+  },
+}
+`;
+
+exports[`single custom event 1`] = `
+Object {
+  "errors": Object {},
+  "isSubmitting": false,
+  "isUpdating": false,
+  "isValid": true,
+  "isValidating": false,
+  "refValues": null,
+  "submitCount": 0,
+  "touched": Object {
+    "lorem": true,
+  },
+  "values": Object {
+    "dolor": "",
+    "lorem": "woot",
   },
 }
 `;

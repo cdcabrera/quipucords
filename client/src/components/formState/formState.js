@@ -44,11 +44,15 @@ class FormState extends React.Component {
   }
 
   onEventCustom = custom => {
-    if (!custom.name || !custom.value) {
+    const eventArray = (Array.isArray(custom) && custom) || (custom && [custom]);
+
+    if (!eventArray.length) {
       return;
     }
 
-    this.onEvent({ target: { ...custom }, persist: helpers.noop, type: 'custom' });
+    eventArray
+      .filter(event => event.name && event.value)
+      .forEach(event => this.onEvent({ target: { ...event }, persist: helpers.noop, type: 'custom' }));
   };
 
   onEvent = event => {

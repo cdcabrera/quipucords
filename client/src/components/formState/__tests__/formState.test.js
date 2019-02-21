@@ -86,4 +86,43 @@ describe('FormState Component', () => {
     component.instance().onEvent(mockEvent);
     expect(component.state()).toMatchSnapshot('basic validation');
   });
+
+  it('should handle custom events', () => {
+    const props = {
+      initialValues: {
+        lorem: 'ipsum',
+        dolor: ''
+      },
+      validate: ({ values }) => {
+        const updatedErrors = {};
+
+        if (!values.lorem) {
+          updatedErrors.lorem = 'required';
+        }
+
+        return updatedErrors;
+      }
+    };
+
+    const component = mount(
+      <FormState {...props}>
+        {({ errors, values, handleOnEventCustom }) => (
+          <form>
+            <label>
+              Lorem
+              <input name="lorem" value={values.lorem} type="text" onChange={handleOnEventCustom} />
+              <span className="error">{errors.lorem}</span>
+              <input name="dolor" value={values.dolor} type="hidden" />
+            </label>
+          </form>
+        )}
+      </FormState>
+    );
+
+    component.instance().onEventCustom({ name: 'lorem', value: 'woot' });
+    expect(component.state()).toMatchSnapshot('single custom event');
+
+    component.instance().onEventCustom([{ name: 'lorem', value: 'woot again' }, { name: 'dolor', value: 'sit' }]);
+    expect(component.state()).toMatchSnapshot('multiple custom events');
+  });
 });
