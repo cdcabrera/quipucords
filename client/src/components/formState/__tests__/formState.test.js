@@ -26,13 +26,13 @@ describe('FormState Component', () => {
     expect(component.render()).toMatchSnapshot('basic render');
   });
 
-  it('should update handle change and submits events while updating state', () => {
-    const props = { initialValues: { lorem: 'ipsum' }, validate: () => ({}) };
+  it('should update handle reset, changes, and submit events while updating state', () => {
+    const props = { initialValues: { lorem: 'ipsum' }, resetUsingInitialValues: true, validate: () => ({}) };
 
     const component = mount(
       <FormState {...props}>
-        {({ values, handleOnEvent, handleOnSubmit }) => (
-          <form onSubmit={handleOnSubmit}>
+        {({ values, handleOnEvent, handleOnReset, handleOnSubmit }) => (
+          <form onSubmit={handleOnSubmit} onReset={handleOnReset}>
             <label>
               Lorem
               <input name="lorem" value={values.lorem} type="text" onChange={handleOnEvent} />
@@ -44,10 +44,18 @@ describe('FormState Component', () => {
     );
 
     const componentInstance = component.instance();
-    const mockEvent = { target: { value: 'dolor', name: 'lorem' }, persist: () => {}, preventDefault: () => {} };
-    componentInstance.onEvent(mockEvent);
+
+    componentInstance.onEvent({
+      target: { value: 'dolor', name: 'lorem' },
+      persist: () => {},
+      preventDefault: () => {}
+    });
     expect(component.state()).toMatchSnapshot('onevent');
     expect(componentInstance.values).toMatchSnapshot('onevent values updated');
+
+    componentInstance.onReset({ persist: () => {} });
+    expect(component.state()).toMatchSnapshot('onreset');
+    expect(componentInstance.values).toMatchSnapshot('reset values updated');
 
     componentInstance.onSubmit({ persist: () => {}, preventDefault: () => {} });
     expect(component.state()).toMatchSnapshot('onsubmit');

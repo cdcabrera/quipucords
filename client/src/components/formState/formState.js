@@ -9,7 +9,9 @@ class FormState extends React.Component {
     super(props);
 
     this.errors = {};
-    this.refValues = props.resetRefValues === true ? _cloneDeep(props.initialValues) : null;
+    this.refValues =
+      props.resetUsingInitialValues === true || props.allowUpdates === true ? _cloneDeep(props.initialValues) : null;
+
     this.touched = {};
     this.values = _cloneDeep(props.initialValues);
 
@@ -32,9 +34,9 @@ class FormState extends React.Component {
 
   componentDidUpdate() {
     const { refValues } = this;
-    const { initialValues, resetRefValues } = this.props;
+    const { allowUpdates, initialValues } = this.props;
 
-    if (resetRefValues === true && !_isEqual(refValues, initialValues)) {
+    if (allowUpdates === true && !_isEqual(refValues, initialValues)) {
       this.updateComponent();
     }
   }
@@ -85,24 +87,30 @@ class FormState extends React.Component {
 
   onReset = event => {
     const { refValues, values } = this;
-    const { onReset, resetRefValues } = this.props;
+    const { onReset, resetUsingInitialValues } = this.props;
 
     event.persist();
 
-    if (refValues && resetRefValues === true) {
-      const updatedValues = _cloneDeep(refValues);
+    const isResetWithInitialValues = refValues && resetUsingInitialValues === true;
+    const updatedValues = (isResetWithInitialValues && _cloneDeep(refValues)) || {};
 
-      this.touched = {};
-      this.values = updatedValues;
+    this.values = updatedValues;
+    this.errors = {};
+    this.touched = {};
 
-      this.setState(
-        {
-          submitCount: 0
-        },
-        () => onReset({ event, ..._cloneDeep({ values: updatedValues, prevValues: values }) })
-      );
+    this.setState({
+      isUpdating: false,
+      isSubmitting: false,
+      isValidating: false,
+      isValid: null,
+      submitCount: 0
+    });
+
+    if (isResetWithInitialValues) {
+      onReset({ event, ..._cloneDeep({ values: updatedValues, prevValues: values }) });
     } else {
-      onReset({ event, ..._cloneDeep(values) });
+      // Resetting the values, potentially, will throw the controlled vs uncontrolled messaging.
+      onReset({ event, values: {}, ..._cloneDeep({ prevValues: values }) });
     }
   };
 
@@ -225,20 +233,22 @@ class FormState extends React.Component {
 }
 
 FormState.propTypes = {
+  allowUpdates: PropTypes.bool,
   children: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
   onReset: PropTypes.func,
   onSubmit: PropTypes.func,
-  resetRefValues: PropTypes.bool,
+  resetUsingInitialValues: PropTypes.bool,
   validate: PropTypes.func,
   validateOnmount: PropTypes.bool
 };
 
 FormState.defaultProps = {
+  allowUpdates: false,
   initialValues: {},
   onReset: helpers.noop,
   onSubmit: helpers.noop,
-  resetRefValues: false,
+  resetUsingInitialValues: false,
   validate: helpers.noop,
   validateOnmount: false
 };

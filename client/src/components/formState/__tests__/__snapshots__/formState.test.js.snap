@@ -22,6 +22,7 @@ Object {
 
 exports[`initial props 1`] = `
 Object {
+  "allowUpdates": false,
   "children": [Function],
   "initialValues": Object {
     "lorem": "ipsum",
@@ -29,6 +30,7 @@ Object {
   "onReset": [Function],
   "onSubmit": [Function],
   "resetRefValues": true,
+  "resetUsingInitialValues": false,
   "validate": [Function],
   "validateOnmount": false,
 }
@@ -73,6 +75,16 @@ Object {
 }
 `;
 
+exports[`onreset 1`] = `
+Object {
+  "isSubmitting": false,
+  "isUpdating": false,
+  "isValid": null,
+  "isValidating": false,
+  "submitCount": 0,
+}
+`;
+
 exports[`onsubmit 1`] = `
 Object {
   "isSubmitting": false,
@@ -80,6 +92,12 @@ Object {
   "isValid": true,
   "isValidating": false,
   "submitCount": 1,
+}
+`;
+
+exports[`reset values updated 1`] = `
+Object {
+  "lorem": "ipsum",
 }
 `;
 
