@@ -47,7 +47,7 @@ FormField.propTypes = {
   colField: PropTypes.number,
   colFieldClassName: PropTypes.string,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  errorMessage: PropTypes.string,
+  errorMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   id: PropTypes.string,
   label: PropTypes.node
 };
