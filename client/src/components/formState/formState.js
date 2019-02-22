@@ -152,14 +152,14 @@ class FormState extends React.Component {
     const { values, errors, touched } = this;
     const { onSubmit } = this.props;
 
-    return Promise.resolve(onSubmit(_cloneDeep({ event, ...this.state, values, errors, touched })));
+    return Promise.resolve(onSubmit({ event, ..._cloneDeep({ ...this.state, values, errors, touched }) }));
   }
 
   validate(event) {
     const { values, errors, touched } = this;
     const { validate } = this.props;
 
-    const checkPromise = validate(_cloneDeep({ event, ...this.state, values, errors, touched }));
+    const checkPromise = validate({ event, ..._cloneDeep({ ...this.state, values, errors, touched }) });
 
     if (Object.prototype.toString.call(checkPromise) === '[object Promise]') {
       return checkPromise;
