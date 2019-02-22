@@ -20,10 +20,27 @@ const srcDictionary = {
   vcenter: 'VCenter'
 };
 
+const sslProtocolDictionary = {
+  SSLv2: 'SSLv2',
+  SSLv23: 'SSLv23',
+  SSLv3: 'SSLv3',
+  TLSv1: 'TLSv1',
+  TLSv1_1: 'TLSv1.1',
+  TLSv1_2: 'TLSv1.2'
+};
+
 const dictionary = {
   ...authDictionary,
   ...scanStatusDictionary,
-  ...srcDictionary
+  ...srcDictionary,
+  ...sslProtocolDictionary
 };
 
-export { dictionary as default, dictionary, authDictionary, scanStatusDictionary, srcDictionary };
+export {
+  dictionary as default,
+  dictionary,
+  authDictionary,
+  scanStatusDictionary,
+  srcDictionary,
+  sslProtocolDictionary
+};

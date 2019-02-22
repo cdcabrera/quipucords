@@ -7,6 +7,12 @@ Object {
     "usernamePassword": "Username and Password",
   },
   "default": Object {
+    "SSLv2": "SSLv2",
+    "SSLv23": "SSLv23",
+    "SSLv3": "SSLv3",
+    "TLSv1": "TLSv1",
+    "TLSv1_1": "TLSv1.1",
+    "TLSv1_2": "TLSv1.2",
     "canceled": "Canceled",
     "completed": "Completed",
     "created": "Created",
@@ -22,6 +28,12 @@ Object {
     "vcenter": "VCenter",
   },
   "dictionary": Object {
+    "SSLv2": "SSLv2",
+    "SSLv23": "SSLv23",
+    "SSLv3": "SSLv3",
+    "TLSv1": "TLSv1",
+    "TLSv1_1": "TLSv1.1",
+    "TLSv1_2": "TLSv1.2",
     "canceled": "Canceled",
     "completed": "Completed",
     "created": "Created",
@@ -51,11 +63,25 @@ Object {
     "satellite": "Satellite",
     "vcenter": "VCenter",
   },
+  "sslProtocolDictionary": Object {
+    "SSLv2": "SSLv2",
+    "SSLv23": "SSLv23",
+    "SSLv3": "SSLv3",
+    "TLSv1": "TLSv1",
+    "TLSv1_1": "TLSv1.1",
+    "TLSv1_2": "TLSv1.2",
+  },
 }
 `;
 
 exports[`default export 1`] = `
 Object {
+  "SSLv2": "SSLv2",
+  "SSLv23": "SSLv23",
+  "SSLv3": "SSLv3",
+  "TLSv1": "TLSv1",
+  "TLSv1_1": "TLSv1.1",
+  "TLSv1_2": "TLSv1.2",
   "canceled": "Canceled",
   "completed": "Completed",
   "created": "Created",
