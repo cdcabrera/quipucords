@@ -8,22 +8,17 @@ class FormState extends React.Component {
   constructor(props) {
     super(props);
 
-    let refValues = null;
-
-    if (props.resetRefValues === true) {
-      refValues = _cloneDeep(props.initialValues);
-    }
+    this.errors = {};
+    this.refValues = props.resetRefValues === true ? _cloneDeep(props.initialValues) : null;
+    this.touched = {};
+    this.values = _cloneDeep(props.initialValues);
 
     this.state = {
-      errors: {},
       isUpdating: false,
       isSubmitting: false,
       isValidating: false,
       isValid: null,
-      refValues,
-      submitCount: 0,
-      touched: {},
-      values: _cloneDeep(props.initialValues)
+      submitCount: 0
     };
   }
 
@@ -35,10 +30,11 @@ class FormState extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
+    const { refValues } = this;
     const { initialValues, resetRefValues } = this.props;
 
-    if (resetRefValues === true && !_isEqual(prevState.refValues, initialValues)) {
+    if (resetRefValues === true && !_isEqual(refValues, initialValues)) {
       this.updateComponent();
     }
   }
@@ -51,24 +47,23 @@ class FormState extends React.Component {
     }
 
     eventArray
-      .filter(event => event.name && event.value)
+      .filter(event => 'name' in event && 'value' in event)
       .forEach(event => this.onEvent({ target: { ...event }, persist: helpers.noop, type: 'custom' }));
   };
 
   onEvent = event => {
-    const { touched, values } = this.state;
+    const { touched, values } = this;
     const { id, name, value } = event.options ? { ...event } : event.target;
 
     event.persist();
 
     const targetName = name || id || 'generated form state target, add name or id attr to field';
-    const updatedTouched = { ...touched, [targetName]: true };
-    const updatedValues = { ...values, [targetName]: value };
+
+    this.touched = { ...touched, [targetName]: true };
+    this.values = { ...values, [targetName]: value };
 
     this.setState(
       {
-        values: updatedValues,
-        touched: updatedTouched,
         isUpdating: true,
         isValidating: true
       },
@@ -77,8 +72,9 @@ class FormState extends React.Component {
           const setErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
           const checkIsValid = !Object.keys(setErrors).length;
 
+          this.errors = setErrors;
+
           this.setState({
-            errors: setErrors,
             isUpdating: false,
             isValidating: false,
             isValid: checkIsValid
@@ -88,7 +84,7 @@ class FormState extends React.Component {
   };
 
   onReset = event => {
-    const { refValues, values } = this.state;
+    const { refValues, values } = this;
     const { onReset, resetRefValues } = this.props;
 
     event.persist();
@@ -96,16 +92,17 @@ class FormState extends React.Component {
     if (refValues && resetRefValues === true) {
       const updatedValues = _cloneDeep(refValues);
 
+      this.touched = {};
+      this.values = updatedValues;
+
       this.setState(
         {
-          touched: {},
-          submitCount: 0,
-          values: updatedValues
+          submitCount: 0
         },
-        () => onReset({ event, values: updatedValues, prevValues: values })
+        () => onReset({ event, ..._cloneDeep({ values: updatedValues, prevValues: values }) })
       );
     } else {
-      onReset({ event, values });
+      onReset({ event, ..._cloneDeep(values) });
     }
   };
 
@@ -127,14 +124,15 @@ class FormState extends React.Component {
           const setErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
           const checkIsValid = !Object.keys(setErrors).length;
 
+          this.errors = setErrors;
+          this.touched = {};
+
           this.setState(
             {
-              errors: setErrors,
               isSubmitting: false,
               isUpdating: false,
               isValid: checkIsValid,
-              isValidating: false,
-              touched: {}
+              isValidating: false
             },
             () => !Object.keys(updatedErrors).length && this.submit(event)
           );
@@ -143,15 +141,17 @@ class FormState extends React.Component {
   };
 
   submit(event) {
+    const { values, errors, touched } = this;
     const { onSubmit } = this.props;
 
-    return Promise.resolve(onSubmit(_cloneDeep({ event, ...this.state })));
+    return Promise.resolve(onSubmit(_cloneDeep({ event, ...this.state, values, errors, touched })));
   }
 
   validate(event) {
+    const { values, errors, touched } = this;
     const { validate } = this.props;
 
-    const checkPromise = validate(_cloneDeep({ event, ...this.state }));
+    const checkPromise = validate(_cloneDeep({ event, ...this.state, values, errors, touched }));
 
     if (Object.prototype.toString.call(checkPromise) === '[object Promise]') {
       return checkPromise;
@@ -177,8 +177,9 @@ class FormState extends React.Component {
           const setErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
           const checkIsValid = !Object.keys(setErrors).length;
 
+          this.errors = setErrors;
+
           this.setState({
-            errors: setErrors,
             isUpdating: false,
             isValidating: false,
             isValid: checkIsValid
@@ -195,17 +196,18 @@ class FormState extends React.Component {
         isUpdating: true
       },
       () => {
-        const values = _cloneDeep(initialValues);
+        this.refValues = initialValues;
+        this.values = _cloneDeep(initialValues);
+
         this.setState({
-          isUpdating: false,
-          refValues: initialValues,
-          values
+          isUpdating: false
         });
       }
     );
   }
 
   render() {
+    const { values, errors, touched } = this;
     const { children } = this.props;
 
     return (
@@ -215,7 +217,7 @@ class FormState extends React.Component {
           handleOnEvent: this.onEvent,
           handleOnReset: this.onReset,
           handleOnSubmit: this.onSubmit,
-          ..._cloneDeep(this.state)
+          ..._cloneDeep({ ...this.state, values, errors, touched })
         })}
       </React.Fragment>
     );

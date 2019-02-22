@@ -47,6 +47,7 @@ describe('FormState Component', () => {
     const mockEvent = { target: { value: 'dolor', name: 'lorem' }, persist: () => {}, preventDefault: () => {} };
     componentInstance.onEvent(mockEvent);
     expect(component.state()).toMatchSnapshot('onevent');
+    expect(componentInstance.values).toMatchSnapshot('onevent values updated');
 
     componentInstance.onSubmit({ persist: () => {}, preventDefault: () => {} });
     expect(component.state()).toMatchSnapshot('onsubmit');
@@ -82,9 +83,10 @@ describe('FormState Component', () => {
       </FormState>
     );
 
+    const componentInstance = component.instance();
     const mockEvent = { target: { value: '', id: 'lorem' }, persist: () => {}, preventDefault: () => {} };
-    component.instance().onEvent(mockEvent);
-    expect(component.state()).toMatchSnapshot('basic validation');
+    componentInstance.onEvent(mockEvent);
+    expect(componentInstance.errors).toMatchSnapshot('basic validation');
   });
 
   it('should handle custom events', () => {
@@ -119,11 +121,12 @@ describe('FormState Component', () => {
       </FormState>
     );
 
-    component.instance().onEventCustom({ name: 'lorem', value: 'woot' });
-    expect(component.state()).toMatchSnapshot('single custom event');
+    const componentInstance = component.instance();
+    componentInstance.onEventCustom({ name: 'lorem', value: 'woot' });
+    expect(componentInstance.values).toMatchSnapshot('single custom event');
 
-    component.instance().onEventCustom([{ name: 'lorem', value: 'woot again' }, { name: 'dolor', value: 'sit' }]);
-    expect(component.state()).toMatchSnapshot('multiple custom events');
+    componentInstance.onEventCustom([{ name: 'lorem', value: 'woot again' }, { name: 'dolor', value: 'sit' }]);
+    expect(componentInstance.values).toMatchSnapshot('multiple custom events');
   });
 
   it('should clone returned values to avoid mutation by consumer', () => {
@@ -147,6 +150,6 @@ describe('FormState Component', () => {
       </FormState>
     );
 
-    expect(component.state()).toMatchSnapshot('not mutated');
+    expect(component.instance().values).toMatchSnapshot('not mutated');
   });
 });

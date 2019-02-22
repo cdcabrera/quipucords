@@ -16,21 +16,7 @@ exports[`basic render 1`] = `
 
 exports[`basic validation 1`] = `
 Object {
-  "errors": Object {
-    "lorem": "required",
-  },
-  "isSubmitting": false,
-  "isUpdating": false,
-  "isValid": false,
-  "isValidating": false,
-  "refValues": null,
-  "submitCount": 0,
-  "touched": Object {
-    "lorem": true,
-  },
-  "values": Object {
-    "lorem": "",
-  },
+  "lorem": "required",
 }
 `;
 
@@ -50,107 +36,56 @@ Object {
 
 exports[`initial state 1`] = `
 Object {
-  "errors": Object {},
   "isSubmitting": false,
   "isUpdating": false,
   "isValid": null,
   "isValidating": false,
-  "refValues": Object {
-    "lorem": "ipsum",
-  },
   "submitCount": 0,
-  "touched": Object {},
-  "values": Object {
-    "lorem": "ipsum",
-  },
 }
 `;
 
 exports[`multiple custom events 1`] = `
 Object {
-  "errors": Object {},
-  "isSubmitting": false,
-  "isUpdating": false,
-  "isValid": true,
-  "isValidating": false,
-  "refValues": null,
-  "submitCount": 0,
-  "touched": Object {
-    "dolor": true,
-    "lorem": true,
-  },
-  "values": Object {
-    "dolor": "sit",
-    "lorem": "woot again",
-  },
+  "dolor": "sit",
+  "lorem": "woot again",
 }
 `;
 
 exports[`not mutated 1`] = `
 Object {
-  "errors": Object {},
-  "isSubmitting": false,
-  "isUpdating": false,
-  "isValid": true,
-  "isValidating": false,
-  "refValues": null,
-  "submitCount": 0,
-  "touched": Object {},
-  "values": Object {
-    "lorem": "ipsum",
-  },
+  "lorem": "ipsum",
 }
 `;
 
 exports[`onevent 1`] = `
 Object {
-  "errors": Object {},
   "isSubmitting": false,
   "isUpdating": false,
   "isValid": true,
   "isValidating": false,
-  "refValues": null,
   "submitCount": 0,
-  "touched": Object {
-    "lorem": true,
-  },
-  "values": Object {
-    "lorem": "dolor",
-  },
+}
+`;
+
+exports[`onevent values updated 1`] = `
+Object {
+  "lorem": "dolor",
 }
 `;
 
 exports[`onsubmit 1`] = `
 Object {
-  "errors": Object {},
   "isSubmitting": false,
   "isUpdating": false,
   "isValid": true,
   "isValidating": false,
-  "refValues": null,
   "submitCount": 1,
-  "touched": Object {},
-  "values": Object {
-    "lorem": "dolor",
-  },
 }
 `;
 
 exports[`single custom event 1`] = `
 Object {
-  "errors": Object {},
-  "isSubmitting": false,
-  "isUpdating": false,
-  "isValid": true,
-  "isValidating": false,
-  "refValues": null,
-  "submitCount": 0,
-  "touched": Object {
-    "lorem": true,
-  },
-  "values": Object {
-    "dolor": "",
-    "lorem": "woot",
-  },
+  "dolor": "",
+  "lorem": "woot",
 }
 `;
