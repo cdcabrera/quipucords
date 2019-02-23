@@ -4,11 +4,37 @@ import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 import helpers from '../../common/helpers';
 
+const initialState = {
+  isUpdating: false,
+  isSubmitting: false,
+  isValid: null,
+  isValidating: false,
+  submitCount: 0
+};
+
 class FormState extends React.Component {
+  static checkedInitialValues({ initialValuesAssumeBoolIsChecked, initialValues }) {
+    const checked = {};
+
+    if (initialValuesAssumeBoolIsChecked) {
+      Object.keys(initialValues).forEach(key => {
+        if (typeof initialValues[key] === 'boolean') {
+          checked[key] = initialValues[key];
+        }
+      });
+    }
+
+    return checked;
+  }
+
+  static isPromise(obj) {
+    return Object.prototype.toString.call(obj) === '[object Promise]';
+  }
+
   constructor(props) {
     super(props);
 
-    this.checked = {};
+    this.checked = FormState.checkedInitialValues(props);
     this.errors = {};
     this.refValues =
       props.resetUsingInitialValues === true || props.allowUpdates === true ? _cloneDeep(props.initialValues) : null;
@@ -17,11 +43,7 @@ class FormState extends React.Component {
     this.values = _cloneDeep(props.initialValues);
 
     this.state = {
-      isUpdating: false,
-      isSubmitting: false,
-      isValidating: false,
-      isValid: null,
-      submitCount: 0
+      ...initialState
     };
   }
 
@@ -83,8 +105,8 @@ class FormState extends React.Component {
 
           this.setState({
             isUpdating: false,
-            isValidating: false,
-            isValid: checkIsValid
+            isValid: checkIsValid,
+            isValidating: false
           });
         })
     );
@@ -92,24 +114,23 @@ class FormState extends React.Component {
 
   onReset = event => {
     const { refValues, values } = this;
-    const { onReset, resetUsingInitialValues } = this.props;
+    const { initialValuesAssumeBoolIsChecked, onReset, resetUsingInitialValues } = this.props;
 
     event.persist();
 
     const isResetWithInitialValues = refValues && resetUsingInitialValues === true;
     const updatedValues = (isResetWithInitialValues && _cloneDeep(refValues)) || {};
+    const updatedChecked =
+      (isResetWithInitialValues && FormState.checkedInitialValues(initialValuesAssumeBoolIsChecked, updatedValues)) ||
+      {};
 
     this.values = updatedValues;
-    this.checked = {};
+    this.checked = updatedChecked;
     this.errors = {};
     this.touched = {};
 
     this.setState({
-      isUpdating: false,
-      isSubmitting: false,
-      isValidating: false,
-      isValid: null,
-      submitCount: 0
+      ...initialState
     });
 
     if (isResetWithInitialValues) {
@@ -143,31 +164,50 @@ class FormState extends React.Component {
 
           this.setState(
             {
-              isSubmitting: false,
-              isUpdating: false,
               isValid: checkIsValid,
               isValidating: false
             },
-            () => !Object.keys(updatedErrors).length && this.submit(event)
+            () =>
+              checkIsValid &&
+              this.submit(event).then(() => {
+                this.setState({
+                  isSubmitting: false,
+                  isUpdating: false
+                });
+              })
           );
         })
     );
   };
 
-  submit(event) {
+  submit(event = { type: 'submit' }) {
     const { checked, errors, values, touched } = this;
     const { onSubmit } = this.props;
 
-    return Promise.resolve(onSubmit({ event, ..._cloneDeep({ ...this.state, checked, errors, values, touched }) }));
+    const checkPromise = onSubmit({
+      event,
+      ..._cloneDeep({ ...this.state, checked, errors, values, touched })
+    });
+
+    if (FormState.isPromise(checkPromise)) {
+      return checkPromise;
+    }
+
+    return {
+      then: callback => callback()
+    };
   }
 
-  validate(event) {
+  validate(event = { type: 'validate' }) {
     const { checked, errors, values, touched } = this;
     const { validate } = this.props;
 
-    const checkPromise = validate({ event, ..._cloneDeep({ ...this.state, checked, errors, values, touched }) });
+    const checkPromise = validate({
+      event,
+      ..._cloneDeep({ ...this.state, checked, errors, values, touched })
+    });
 
-    if (Object.prototype.toString.call(checkPromise) === '[object Promise]') {
+    if (FormState.isPromise(checkPromise)) {
       return checkPromise;
     }
 
@@ -176,18 +216,14 @@ class FormState extends React.Component {
     };
   }
 
-  validateOnMount(event) {
-    const updatedEvent = event || {
-      type: 'mount'
-    };
-
+  validateOnMount(event = { type: 'mount' }) {
     this.setState(
       {
         isUpdating: true,
         isValidating: true
       },
       () =>
-        this.validate(updatedEvent).then(updatedErrors => {
+        this.validate(event).then(updatedErrors => {
           const setErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
           const checkIsValid = !Object.keys(setErrors).length;
 
@@ -203,13 +239,14 @@ class FormState extends React.Component {
   }
 
   updateComponent() {
-    const { initialValues } = this.props;
+    const { initialValues, initialValuesAssumeBoolIsChecked } = this.props;
 
     this.setState(
       {
         isUpdating: true
       },
       () => {
+        this.checked = FormState.checkedInitialValues(initialValuesAssumeBoolIsChecked, initialValues);
         this.refValues = initialValues;
         this.values = _cloneDeep(initialValues);
 
@@ -242,6 +279,7 @@ FormState.propTypes = {
   allowUpdates: PropTypes.bool,
   children: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
+  initialValuesAssumeBoolIsChecked: PropTypes.bool,
   onReset: PropTypes.func,
   onSubmit: PropTypes.func,
   resetUsingInitialValues: PropTypes.bool,
@@ -252,6 +290,7 @@ FormState.propTypes = {
 FormState.defaultProps = {
   allowUpdates: false,
   initialValues: {},
+  initialValuesAssumeBoolIsChecked: true,
   onReset: helpers.noop,
   onSubmit: helpers.noop,
   resetUsingInitialValues: false,

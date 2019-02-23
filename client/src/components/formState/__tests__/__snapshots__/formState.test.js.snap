@@ -27,6 +27,7 @@ Object {
   "initialValues": Object {
     "lorem": "ipsum",
   },
+  "initialValuesAssumeBoolIsChecked": true,
   "onReset": [Function],
   "onSubmit": [Function],
   "resetRefValues": true,
