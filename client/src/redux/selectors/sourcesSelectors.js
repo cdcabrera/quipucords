@@ -1,63 +1,79 @@
 import { createSelector } from 'reselect';
 import _get from 'lodash/get';
+import helpers from '../../common/helpers';
 import apiTypes from '../../constants/apiConstants';
 
 /**
- * Map a source object to consumable prop names
+ * Map a new source object to consumable prop names
  */
 const sourceDetail = state => state.addSourceWizard.source;
 
-const sourceDetailSelector = createSelector(
-  [sourceDetail],
-  source => {
-    const updatedSource = {
-      credentials: []
-    };
+/**
+ * Map an edit source object to consumable prop names
+ */
+const editSourceDetail = state => state.addSourceWizard.editSource;
 
-    if (source) {
+const sourceDetailSelector = createSelector(
+  [sourceDetail, editSourceDetail],
+  (source, editSource) => {
+    const updateSource = Object.assign({}, editSource || {}, source || {});
+    const newSource = {};
+
+    if (updateSource) {
       /**
        * Allow for an edit source with credentials in the form of
        * [{ id:Number, type:String, name:String }]
-       * Or an original/edited source in the form of
+       * Or a new source in the form of
        * [id]
        */
-      updatedSource.credentials = _get(source, apiTypes.API_RESPONSE_SOURCE_CREDENTIALS, []).map(
-        cred => cred[apiTypes.API_RESPONSE_SOURCE_CREDENTIALS_ID] || cred
+      helpers.setPropIfDefined(
+        newSource,
+        ['credentials'],
+        _get(updateSource, apiTypes.API_RESPONSE_SOURCE_CREDENTIALS, []).map(
+          cred => cred[apiTypes.API_RESPONSE_SOURCE_CREDENTIALS_ID] || cred
+        )
       );
 
-      updatedSource.hosts = source[apiTypes.API_RESPONSE_SOURCE_HOSTS];
-      updatedSource.id = source[apiTypes.API_RESPONSE_SOURCE_ID];
-      updatedSource.name = source[apiTypes.API_RESPONSE_SOURCE_NAME];
+      helpers.setPropIfDefined(newSource, ['hosts'], updateSource[apiTypes.API_RESPONSE_SOURCE_HOSTS]);
+      helpers.setPropIfDefined(newSource, ['id'], updateSource[apiTypes.API_RESPONSE_SOURCE_ID]);
+      helpers.setPropIfDefined(newSource, ['name'], updateSource[apiTypes.API_RESPONSE_SOURCE_NAME]);
 
-      updatedSource.optionSslCert = _get(
-        source[apiTypes.API_RESPONSE_SOURCE_OPTIONS],
-        apiTypes.API_RESPONSE_SOURCE_OPTIONS_SSL_CERT,
-        false
-      );
+      if (updateSource[apiTypes.API_RESPONSE_SOURCE_OPTIONS]) {
+        helpers.setPropIfDefined(
+          newSource,
+          ['optionSslCert'],
+          _get(updateSource[apiTypes.API_RESPONSE_SOURCE_OPTIONS], apiTypes.API_RESPONSE_SOURCE_OPTIONS_SSL_CERT)
+        );
 
-      updatedSource.optionSslProtocol = _get(
-        source[apiTypes.API_RESPONSE_SOURCE_OPTIONS],
-        apiTypes.API_RESPONSE_SOURCE_OPTIONS_SSL_PROTOCOL,
-        false
-      );
+        helpers.setPropIfDefined(
+          newSource,
+          ['optionSslProtocol'],
+          _get(updateSource[apiTypes.API_RESPONSE_SOURCE_OPTIONS], apiTypes.API_RESPONSE_SOURCE_OPTIONS_SSL_PROTOCOL)
+        );
 
-      updatedSource.optionDisableSsl = _get(
-        source[apiTypes.API_RESPONSE_SOURCE_OPTIONS],
-        apiTypes.API_RESPONSE_SOURCE_OPTIONS_DISABLE_SSL,
-        false
-      );
+        helpers.setPropIfDefined(
+          newSource,
+          ['optionDisableSsl'],
+          _get(updateSource[apiTypes.API_RESPONSE_SOURCE_OPTIONS], apiTypes.API_RESPONSE_SOURCE_OPTIONS_DISABLE_SSL)
+        );
 
-      updatedSource.optionParamiko = _get(
-        source[apiTypes.API_RESPONSE_SOURCE_OPTIONS],
-        apiTypes.API_RESPONSE_SOURCE_OPTIONS_PARAMIKO,
-        false
-      );
+        helpers.setPropIfDefined(
+          newSource,
+          ['optionParamiko'],
+          _get(updateSource[apiTypes.API_RESPONSE_SOURCE_OPTIONS], apiTypes.API_RESPONSE_SOURCE_OPTIONS_PARAMIKO)
+        );
+      }
 
-      updatedSource.port = source[apiTypes.API_RESPONSE_SOURCE_PORT];
-      updatedSource.type = source[apiTypes.API_RESPONSE_SOURCE_SOURCE_TYPE];
+      helpers.setPropIfDefined(newSource, 'port', updateSource[apiTypes.API_RESPONSE_SOURCE_PORT]);
+      helpers.setPropIfDefined(newSource, ['type'], updateSource[apiTypes.API_RESPONSE_SOURCE_SOURCE_TYPE]);
+
+      if (newSource.hosts && newSource.hosts.length) {
+        newSource.hostsMultiple = newSource.hosts.join(',\n');
+        newSource.hostsSingle = `${newSource.hosts[0]}:${newSource.port || ''}`;
+      }
     }
 
-    return updatedSource;
+    return newSource;
   }
 );
 

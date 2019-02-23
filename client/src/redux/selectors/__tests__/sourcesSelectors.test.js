@@ -54,11 +54,30 @@ describe('SourcesSelectors', () => {
     expect(sourcesSelectors.sourceDetail(updatedState)).toMatchSnapshot('sourceDetail updated');
   });
 
-  it('Should map an undefined source', () => {
+  it('Should minimally map an undefined source or properties', () => {
     const state = {
-      addSourceWizard: {}
+      addSourceWizard: {
+        source: undefined
+      }
     };
 
     expect(sourcesSelectors.sourceDetail(state)).toMatchSnapshot('sourceDetail undefined');
+
+    state.addSourceWizard.source = {
+      [apiTypes.API_RESPONSE_SOURCE_CREDENTIALS]: undefined,
+      [apiTypes.API_RESPONSE_SOURCE_HOSTS]: undefined,
+      [apiTypes.API_RESPONSE_SOURCE_ID]: undefined,
+      [apiTypes.API_RESPONSE_SOURCE_NAME]: undefined,
+      [apiTypes.API_RESPONSE_SOURCE_OPTIONS]: {
+        [apiTypes.API_RESPONSE_SOURCE_OPTIONS_PARAMIKO]: undefined,
+        [apiTypes.API_RESPONSE_SOURCE_OPTIONS_DISABLE_SSL]: undefined,
+        [apiTypes.API_RESPONSE_SOURCE_OPTIONS_SSL_PROTOCOL]: undefined,
+        [apiTypes.API_RESPONSE_SOURCE_OPTIONS_SSL_CERT]: undefined
+      },
+      [apiTypes.API_RESPONSE_SOURCE_PORT]: undefined,
+      [apiTypes.API_RESPONSE_SOURCE_SOURCE_TYPE]: undefined
+    };
+
+    expect(sourcesSelectors.sourceDetail(state)).toMatchSnapshot('sourceDetail properties undefined');
   });
 });
