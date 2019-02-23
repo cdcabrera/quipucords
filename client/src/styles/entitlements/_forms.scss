@@ -1,3 +1,9 @@
+.quipucords {
+  .has-error textarea.form-control {
+    border-color: $color-pf-red-100;
+  }
+}
+
 .quipucords-dropdownselect {
   &.dropdown {
     width:100%;
