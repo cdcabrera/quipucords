@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
+import _set from 'lodash/set';
 
 const devModeNormalizeCount = (count, modulus = 100) => Math.abs(count) % modulus;
 
@@ -84,6 +85,10 @@ const scanStatusIcon = scanStatus => {
   }
 };
 
+const setPropIfDefined = (obj, props, value) => (obj && value !== undefined ? _set(obj, props, value) : obj);
+
+const setPropIfTruthy = (obj, props, value) => (obj && value ? _set(obj, props, value) : obj);
+
 const setStateProp = (prop, data, options) => {
   const { state = {}, initialState = {}, reset = true } = options;
   let obj = { ...state };
@@ -153,7 +158,7 @@ const createViewQueryObject = (viewOptions, queryObj) => {
   return queryObject;
 };
 
-const getMessageFromResults = (results, filterField = null) => {
+const getMessageFromResults = (results, filterField = null, objFormat = false) => {
   const status = _.get(results, 'response.status', results.status);
   const statusResponse = _.get(results, 'response.statusText', results.statusText);
   const messageResponse = _.get(results, 'response.data', results.message);
@@ -249,6 +254,8 @@ export const helpers = {
   sourceTypeIcon,
   scanTypeIcon,
   scanStatusIcon,
+  setPropIfDefined,
+  setPropIfTruthy,
   setStateProp,
   viewPropsChanged,
   createViewQueryObject,
