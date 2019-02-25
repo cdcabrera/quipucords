@@ -91,7 +91,7 @@ class AddSourceWizardStepTwo extends React.Component {
 
     const source = {
       [apiTypes.API_SUBMIT_SOURCE_CREDENTIALS]: values.credentials,
-      [apiTypes.API_SUBMIT_SOURCE_HOSTS]: [], // values.hosts,
+      [apiTypes.API_SUBMIT_SOURCE_HOSTS]: values.hosts,
       [apiTypes.API_SUBMIT_SOURCE_NAME]: values.name,
       [apiTypes.API_SUBMIT_SOURCE_PORT]: values.port || (type === 'network' && 22) || (type !== 'network' && 443)
     };

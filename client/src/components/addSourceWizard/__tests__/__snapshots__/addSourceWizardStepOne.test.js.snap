@@ -2,18 +2,19 @@
 
 exports[`connected 1`] = `
 <FormState
-  allowUpdates={false}
-  initialValues={
+  onReset={[Function]}
+  onSubmit={[Function]}
+  resetUsingSetValues={true}
+  setValues={
     Object {
       "sourceType": "network",
     }
   }
-  initialValuesAssumeBoolIsChecked={true}
-  onReset={[Function]}
-  onSubmit={[Function]}
-  resetUsingInitialValues={false}
+  setValuesAssumeBoolIsChecked={true}
+  setValuesOnUpdate={false}
   validate={[Function]}
-  validateOnmount={true}
+  validateOnMount={true}
+  validateOnUpdate={false}
 >
   <Component />
 </FormState>
