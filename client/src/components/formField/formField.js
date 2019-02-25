@@ -24,7 +24,14 @@ const FormField = ({
       </Grid.Col>
       <Grid.Col className={colFieldClassName} sm={colField}>
         {children}
-        {error && <Form.HelpBlock>{errorMessage}</Form.HelpBlock>}
+        {error && (
+          <Form.HelpBlock>
+            {(typeof errorMessage === 'string' && errorMessage) ||
+              (React.isValidElement(errorMessage) && errorMessage) ||
+              (errorMessage && 'Error') ||
+              ''}
+          </Form.HelpBlock>
+        )}
       </Grid.Col>
     </Form.FormGroup>
   );
@@ -47,7 +54,7 @@ FormField.propTypes = {
   colField: PropTypes.number,
   colFieldClassName: PropTypes.string,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  errorMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  errorMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node, PropTypes.bool]),
   id: PropTypes.string,
   label: PropTypes.node
 };

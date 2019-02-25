@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import { FormField, fieldValidation } from '../formField';
 
 describe('FormField Component', () => {
-  it('should render', () => {
+  it('should render a basic component', () => {
     const props = { id: 'test' };
 
     const component = mount(
@@ -12,18 +12,54 @@ describe('FormField Component', () => {
       </FormField>
     );
 
-    expect(component.render()).toMatchSnapshot();
+    expect(component.render()).toMatchSnapshot('basic formfield');
     expect(
       component
         .find('label')
         .at(0)
         .render()
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('basic label');
+  });
+
+  it('should handle multiple error message types', () => {
+    const props = {
+      id: 'test',
+      error: true,
+      errorMessage: 'lorem ipsum'
+    };
+
+    let component = mount(
+      <FormField {...props}>
+        <input id="test" type="text" value="" readOnly />
+      </FormField>
+    );
+
+    expect(component.render()).toMatchSnapshot('string error message');
+
+    props.errorMessage = true;
+
+    component = mount(
+      <FormField {...props}>
+        <input id="test" type="text" value="" readOnly />
+      </FormField>
+    );
+
+    expect(component.render()).toMatchSnapshot('boolean error message');
+
+    props.errorMessage = <span>lorem ipsum</span>;
+
+    component = mount(
+      <FormField {...props}>
+        <input id="test" type="text" value="" readOnly />
+      </FormField>
+    );
+
+    expect(component.render()).toMatchSnapshot('node error message');
   });
 
   it('should have isEmpty validation', () => {
     expect(fieldValidation.isEmpty('')).toBe(true);
-    expect(fieldValidation.isEmpty('test')).toBe(false);
+    expect(fieldValidation.isEmpty('lorem')).toBe(false);
   });
 
   it('should have doesntHaveMinimumCharacters validation', () => {
@@ -32,7 +68,7 @@ describe('FormField Component', () => {
   });
 
   it('should have isPortValid validation', () => {
-    expect(fieldValidation.isPortValid('weeeeee')).toBe(false);
+    expect(fieldValidation.isPortValid('lorem')).toBe(false);
     expect(fieldValidation.isPortValid(-1)).toBe(false);
     expect(fieldValidation.isPortValid(65536)).toBe(false);
     expect(fieldValidation.isPortValid('65536')).toBe(false);
