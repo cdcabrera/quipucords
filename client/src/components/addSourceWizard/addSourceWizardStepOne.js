@@ -19,7 +19,7 @@ class AddSourceWizardStepOne extends React.Component {
     const { type } = this.props;
 
     return (
-      <FormState validateOnmount initialValues={{ sourceType: type }} validate={this.isStepValid}>
+      <FormState validateOnMount setValues={{ sourceType: type }} validate={this.isStepValid}>
         {({ values, handleOnEvent, handleOnSubmit }) => (
           <Form horizontal onSubmit={handleOnSubmit}>
             <h3 className="right-aligned_basic-form">Select source type</h3>

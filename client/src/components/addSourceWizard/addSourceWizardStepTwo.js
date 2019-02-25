@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, Icon } from 'patternfly-react';
-import _set from 'lodash/set';
 import { connect, store, reduxActions, reduxSelectors, reduxTypes } from '../../redux';
 import { helpers } from '../../common/helpers';
 import apiTypes from '../../constants/apiConstants';
@@ -77,78 +76,69 @@ class AddSourceWizardStepTwo extends React.Component {
 
     const isNotErrors = !Object.values(errors).filter(val => val === true).length;
 
-    this.submitStep({
-      stepValid: (add && isNotErrors) || (edit && isNotErrors && Object.keys(touched).length),
-      checked,
-      values
-    });
+    if ((add && isNotErrors) || (edit && isNotErrors && Object.keys(touched).length)) {
+      this.submitStep({
+        checked,
+        values
+      });
+    }
 
     return errors;
   };
 
-  submitStep({ stepValid, checked, values }) {
+  submitStep({ checked, values }) {
     const { id, type } = this.props;
-
-    const dispatchType = stepValid
-      ? reduxTypes.sources.VALID_SOURCE_WIZARD_STEPTWO
-      : reduxTypes.sources.INVALID_SOURCE_WIZARD_STEPTWO;
 
     const source = {
       [apiTypes.API_SUBMIT_SOURCE_CREDENTIALS]: values.credentials,
-      [apiTypes.API_SUBMIT_SOURCE_HOSTS]: values.hosts,
+      [apiTypes.API_SUBMIT_SOURCE_HOSTS]: [], // values.hosts,
       [apiTypes.API_SUBMIT_SOURCE_NAME]: values.name,
       [apiTypes.API_SUBMIT_SOURCE_PORT]: values.port || (type === 'network' && 22) || (type !== 'network' && 443)
     };
 
-    if (id) {
-      source[apiTypes.API_SUBMIT_SOURCE_ID] = id;
-    }
+    helpers.setPropIfTruthy(source, [apiTypes.API_SUBMIT_SOURCE_ID], id);
 
-    if (typeof checked.optionParamiko === 'boolean') {
-      _set(
+    helpers.setPropIfDefined(
+      source,
+      [apiTypes.API_SUBMIT_SOURCE_OPTIONS, apiTypes.API_SUBMIT_SOURCE_OPTIONS_PARAMIKO],
+      checked.optionParamiko
+    );
+
+    if (type !== 'network') {
+      helpers.setPropIfDefined(
         source,
-        [apiTypes.API_SUBMIT_SOURCE_OPTIONS, apiTypes.API_SUBMIT_SOURCE_OPTIONS_PARAMIKO],
-        checked.optionParamiko
+        [apiTypes.API_SUBMIT_SOURCE_OPTIONS, apiTypes.API_SUBMIT_SOURCE_OPTIONS_SSL_CERT],
+        checked.optionSslCert
+      );
+
+      helpers.setPropIfTruthy(
+        source,
+        [apiTypes.API_SUBMIT_SOURCE_OPTIONS, apiTypes.API_SUBMIT_SOURCE_OPTIONS_SSL_PROTOCOL],
+        values.optionSslProtocol
+      );
+
+      helpers.setPropIfDefined(
+        source,
+        [apiTypes.API_SUBMIT_SOURCE_OPTIONS, apiTypes.API_SUBMIT_SOURCE_OPTIONS_DISABLE_SSL],
+        checked.optionDisableSsl
       );
     }
 
-    if (type !== 'network') {
-      if (typeof checked.optionSslCert === 'boolean') {
-        _set(
-          source,
-          [apiTypes.API_SUBMIT_SOURCE_OPTIONS, apiTypes.API_SUBMIT_SOURCE_OPTIONS_SSL_CERT],
-          checked.optionSslCert
-        );
-      }
-
-      if (values.optionSslProtocol) {
-        _set(
-          source,
-          [apiTypes.API_SUBMIT_SOURCE_OPTIONS, apiTypes.API_SUBMIT_SOURCE_OPTIONS_SSL_PROTOCOL],
-          values.optionSslProtocol
-        );
-      }
-
-      if (typeof checked.optionDisableSsl === 'boolean') {
-        _set(
-          source,
-          [apiTypes.API_SUBMIT_SOURCE_OPTIONS, apiTypes.API_SUBMIT_SOURCE_OPTIONS_DISABLE_SSL],
-          checked.optionDisableSsl
-        );
-      }
-    }
-
     store.dispatch({
-      type: dispatchType,
-      source: (stepValid && source) || {}
+      type: reduxTypes.sources.VALID_SOURCE_WIZARD_STEPTWO,
+      source
     });
   }
 
   renderName({ values, errors, touched, handleOnEvent }) {
-    const { type } = this.props;
+    const { stepTwoErrorMessages, type } = this.props;
 
     return (
-      <FormField label="Name" error={touched.name && errors.name} errorMessage="You must enter a source name">
+      <FormField
+        label="Name"
+        error={(touched.name && errors.name) || stepTwoErrorMessages.name}
+        errorMessage={stepTwoErrorMessages.name || 'You must enter a source name '}
+      >
         <Form.FormControl
           type="text"
           name="name"
@@ -161,7 +151,7 @@ class AddSourceWizardStepTwo extends React.Component {
   }
 
   renderHosts({ values, errors, touched, handleOnEventCustom, handleOnEvent }) {
-    const { type } = this.props;
+    const { stepTwoErrorMessages, type } = this.props;
 
     const onChangeMultipleHost = event => {
       const { value } = event.target;
@@ -210,7 +200,7 @@ class AddSourceWizardStepTwo extends React.Component {
           <React.Fragment>
             <FormField
               label="Search addresses"
-              error={touched.hostsMultiple && errors.hosts}
+              error={(touched.hostsMultiple && errors.hosts) || stepTwoErrorMessages.hosts}
               errorMessage="You must enter a valid IP address or hostname"
             >
               <Form.FormControl
@@ -226,7 +216,11 @@ class AddSourceWizardStepTwo extends React.Component {
                 ranges.
               </Form.HelpBlock>
             </FormField>
-            <FormField label="Port" error={touched.port && errors.port} errorMessage="Port must be valid">
+            <FormField
+              label="Port"
+              error={(touched.port && errors.port) || stepTwoErrorMessages.port}
+              errorMessage="Port must be valid"
+            >
               <Form.FormControl
                 name="port"
                 type="text"
@@ -243,8 +237,7 @@ class AddSourceWizardStepTwo extends React.Component {
       case 'satellite':
         const hostPortError = (
           <React.Fragment>
-            {touched.hostsSingle && errors.hosts && 'You must enter a valid IP address or hostname'}
-            <br />
+            {touched.hostsSingle && errors.hosts && 'You must enter a valid IP address or hostname '}
             {errors.port && 'Port must be valid'}
           </React.Fragment>
         );
@@ -253,8 +246,17 @@ class AddSourceWizardStepTwo extends React.Component {
           <React.Fragment>
             <FormField
               label="IP address or hostname"
-              error={(touched.hostsSingle && errors.hosts) || errors.port}
-              errorMessage={hostPortError}
+              error={
+                (touched.hostsSingle && errors.hosts) ||
+                errors.port ||
+                stepTwoErrorMessages.hosts ||
+                stepTwoErrorMessages.port
+              }
+              errorMessage={
+                (stepTwoErrorMessages.hosts && 'You must enter a valid IP address or hostname') ||
+                (stepTwoErrorMessages.port && 'Port must be valid') ||
+                hostPortError
+              }
             >
               <Form.FormControl
                 name="hostsSingle"
@@ -273,7 +275,7 @@ class AddSourceWizardStepTwo extends React.Component {
   }
 
   renderCredentials({ errors, touched, handleOnEventCustom }) {
-    const { availableCredentials, credentials, type } = this.props;
+    const { availableCredentials, credentials, stepTwoErrorMessages, type } = this.props;
 
     const multiselectCredentials = type === 'network';
     const sourceCredentials = availableCredentials.filter(cred => cred.type === type);
@@ -293,8 +295,8 @@ class AddSourceWizardStepTwo extends React.Component {
     return (
       <FormField
         label="Credentials"
-        error={touched.credentials && errors.credentials}
-        errorMessage="You must add a credential"
+        error={(touched.credentials && errors.credentials) || stepTwoErrorMessages.credentials}
+        errorMessage={stepTwoErrorMessages.credentials || 'You must add a credential'}
       >
         <Form.InputGroup>
           <DropdownSelect
@@ -415,7 +417,7 @@ class AddSourceWizardStepTwo extends React.Component {
     };
 
     return (
-      <FormState key={type} validateOnmount={edit} initialValues={formValues} validate={this.isStepValid}>
+      <FormState key={type} setValues={formValues} validateOnMount={edit} validate={this.isStepValid}>
         {({ handleOnSubmit, ...options }) => (
           <Form horizontal onSubmit={handleOnSubmit}>
             {this.renderName(options)}
@@ -448,6 +450,7 @@ AddSourceWizardStepTwo.propTypes = {
   stepTwoErrorMessages: PropTypes.shape({
     credentials: PropTypes.string,
     hosts: PropTypes.string,
+    name: PropTypes.string,
     options: PropTypes.string,
     port: PropTypes.string
   }),
