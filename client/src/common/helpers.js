@@ -191,6 +191,29 @@ const getMessageFromResults = (results, filterField = null, objFormat = false) =
   }
 
   const getMessages = (messageObject, filterKey) => {
+    if (_.isArray(filterKey)) {
+      if (objFormat) {
+        const filterObj = {};
+
+        filterKey.forEach(key => {
+          // filterObj[key.map || key] = getMessages(messageObject, key.value || key)
+          //  .filter(item => item !== '')
+          //  .join('\n');
+          filterObj[key.map || key] = _.join(getMessages(messageObject, key.value || key), '\n');
+        });
+
+        return filterObj;
+      }
+
+      return filterKey.map(key => _.join(getMessages(messageObject, key.value || key), '\n'));
+      /*
+      return filterKey
+        .map(key => getMessages(messageObject, key), '\n')
+        .filter(item => item !== '')
+        .join('\n');
+        */
+    }
+
     const obj = filterKey ? messageObject[filterKey] : messageObject;
 
     return _.map(
@@ -206,7 +229,27 @@ const getMessageFromResults = (results, filterField = null, objFormat = false) =
     );
   };
 
+  if (objFormat) {
+    return {
+      serverStatus,
+      messages: getMessages(messageResponse || detailResponse, filterField)
+    };
+  }
+
+  console.log('GET MESSAGES ------->', getMessages(messageResponse || detailResponse, filterField));
+
   return `${serverStatus}${_.join(getMessages(messageResponse || detailResponse, filterField), '\n')}`;
+  /*
+  const test = `${serverStatus}${_.join(getMessages(messageResponse || detailResponse, filterField), '\n')}`;
+
+  console.log('TEEEST - - - - - -- - - - -  -->', `test=${test}`, messageResponse, detailResponse, filterField);
+
+  return test;
+
+  return `${serverStatus}${getMessages(messageResponse || detailResponse, filterField)
+    .filter(item => item !== '')
+    .join('\n')}`;
+    */
 };
 
 const getStatusFromResults = results => {
