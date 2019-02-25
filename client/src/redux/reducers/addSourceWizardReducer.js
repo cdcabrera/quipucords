@@ -86,18 +86,6 @@ const addSourceWizardReducer = (state = initialState, action) => {
         }
       );
 
-    case sourcesTypes.INVALID_SOURCE_WIZARD_STEPTWO:
-      return helpers.setStateProp(
-        null,
-        {
-          stepTwoValid: false
-        },
-        {
-          state,
-          reset: false
-        }
-      );
-
     case helpers.REJECTED_ACTION(sourcesTypes.UPDATE_SOURCE):
     case helpers.REJECTED_ACTION(sourcesTypes.ADD_SOURCE):
       const stepTwoRejectedErrors = helpers.getMessageFromResults(
@@ -112,18 +100,20 @@ const addSourceWizardReducer = (state = initialState, action) => {
         true
       );
 
-      const message = Object.values(stepTwoRejectedErrors.messages)
-        .filter(item => item !== '')
-        .join(' ');
+      const messages = {};
+
+      Object.keys(stepTwoRejectedErrors.messages).forEach(key => {
+        helpers.setPropIfTruthy(messages, [key], stepTwoRejectedErrors.messages[key]);
+      });
 
       return helpers.setStateProp(
         null,
         {
           error: action.error,
-          errorMessage: message,
+          errorMessage: Object.values(messages).join(' '),
           errorStatus: helpers.getStatusFromResults(action.payload),
-          stepTwoValid: message === '',
-          stepTwoErrorMessages: stepTwoRejectedErrors.messages,
+          stepTwoValid: false,
+          stepTwoErrorMessages: messages,
           pending: false
         },
         {

@@ -13,8 +13,7 @@ describe('AddSourceWizardReducer', () => {
       types.EDIT_SOURCE_SHOW,
       types.UPDATE_SOURCE_HIDE,
       types.VALID_SOURCE_WIZARD_STEPONE,
-      types.VALID_SOURCE_WIZARD_STEPTWO,
-      types.INVALID_SOURCE_WIZARD_STEPTWO
+      types.VALID_SOURCE_WIZARD_STEPTWO
     ];
 
     specificTypes.forEach(value => {
