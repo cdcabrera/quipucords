@@ -44,28 +44,6 @@ Object {
 }
 `;
 
-exports[`defined type INVALID_SOURCE_WIZARD_STEPTWO 1`] = `
-Object {
-  "result": Object {
-    "add": false,
-    "availableCredentials": Array [],
-    "edit": false,
-    "editSource": null,
-    "error": false,
-    "errorMessage": null,
-    "errorStatus": null,
-    "fulfilled": false,
-    "pending": false,
-    "show": false,
-    "source": Object {},
-    "stepOneValid": true,
-    "stepTwoErrorMessages": Object {},
-    "stepTwoValid": false,
-  },
-  "type": "INVALID_SOURCE_WIZARD_STEPTWO",
-}
-`;
-
 exports[`defined type UPDATE_SOURCE_HIDE 1`] = `
 Object {
   "result": Object {
@@ -217,14 +195,8 @@ Object {
     "show": false,
     "source": Object {},
     "stepOneValid": true,
-    "stepTwoErrorMessages": Object {
-      "credentials": "",
-      "hosts": "",
-      "name": "",
-      "options": "",
-      "port": "",
-    },
-    "stepTwoValid": true,
+    "stepTwoErrorMessages": Object {},
+    "stepTwoValid": false,
   },
   "type": "ADD_SOURCE_REJECTED",
 }
@@ -245,14 +217,8 @@ Object {
     "show": false,
     "source": Object {},
     "stepOneValid": true,
-    "stepTwoErrorMessages": Object {
-      "credentials": "",
-      "hosts": "",
-      "name": "",
-      "options": "",
-      "port": "",
-    },
-    "stepTwoValid": true,
+    "stepTwoErrorMessages": Object {},
+    "stepTwoValid": false,
   },
   "type": "UPDATE_SOURCE_REJECTED",
 }
