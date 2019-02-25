@@ -13,13 +13,13 @@ const initialState = {
 };
 
 class FormState extends React.Component {
-  static checkedInitialValues({ initialValuesAssumeBoolIsChecked, initialValues }) {
+  static checkedSetValues({ setValuesAssumeBoolIsChecked, setValues }) {
     const checked = {};
 
-    if (initialValuesAssumeBoolIsChecked) {
-      Object.keys(initialValues).forEach(key => {
-        if (typeof initialValues[key] === 'boolean') {
-          checked[key] = initialValues[key];
+    if (setValuesAssumeBoolIsChecked) {
+      Object.keys(setValues).forEach(key => {
+        if (typeof setValues[key] === 'boolean') {
+          checked[key] = setValues[key];
         }
       });
     }
@@ -34,13 +34,15 @@ class FormState extends React.Component {
   constructor(props) {
     super(props);
 
-    this.checked = FormState.checkedInitialValues(props);
-    this.errors = {};
-    this.refValues =
-      props.resetUsingInitialValues === true || props.allowUpdates === true ? _cloneDeep(props.initialValues) : null;
-
     this.touched = {};
-    this.values = _cloneDeep(props.initialValues);
+    this.checked = FormState.checkedSetValues(props);
+
+    this.refUpdating = false;
+    this.refValues =
+      props.resetUsingSetValues === true || props.setValuesOnUpdate === true ? _cloneDeep(props.setValues) : null;
+
+    this.errors = {};
+    this.values = _cloneDeep(props.setValues);
 
     this.state = {
       ...initialState
@@ -48,19 +50,19 @@ class FormState extends React.Component {
   }
 
   componentDidMount() {
-    const { validateOnmount } = this.props;
+    const { validateOnMount } = this.props;
 
-    if (validateOnmount === true) {
+    if (validateOnMount === true) {
       this.validateOnMount();
     }
   }
 
   componentDidUpdate() {
     const { refValues } = this;
-    const { allowUpdates, initialValues } = this.props;
+    const { setValuesOnUpdate, setValues } = this.props;
 
-    if (allowUpdates === true && !_isEqual(refValues, initialValues)) {
-      this.updateComponent();
+    if (setValuesOnUpdate === true && !_isEqual(refValues, setValues)) {
+      this.updateComponentValues();
     }
   }
 
@@ -98,10 +100,10 @@ class FormState extends React.Component {
       },
       () =>
         this.validate(event).then(updatedErrors => {
-          const setErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
-          const checkIsValid = !Object.keys(setErrors).length;
+          const setUpdateErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
+          const checkIsValid = !Object.keys(setUpdateErrors).length;
 
-          this.errors = setErrors;
+          this.errors = setUpdateErrors;
 
           this.setState({
             isUpdating: false,
@@ -114,15 +116,14 @@ class FormState extends React.Component {
 
   onReset = event => {
     const { refValues, values } = this;
-    const { initialValuesAssumeBoolIsChecked, onReset, resetUsingInitialValues } = this.props;
+    const { setValuesAssumeBoolIsChecked, onReset, resetUsingSetValues } = this.props;
 
     event.persist();
 
-    const isResetWithInitialValues = refValues && resetUsingInitialValues === true;
-    const updatedValues = (isResetWithInitialValues && _cloneDeep(refValues)) || {};
+    const isResetWithSetValues = refValues && resetUsingSetValues === true;
+    const updatedValues = (isResetWithSetValues && _cloneDeep(refValues)) || {};
     const updatedChecked =
-      (isResetWithInitialValues && FormState.checkedInitialValues(initialValuesAssumeBoolIsChecked, updatedValues)) ||
-      {};
+      (isResetWithSetValues && FormState.checkedSetValues(setValuesAssumeBoolIsChecked, updatedValues)) || {};
 
     this.values = updatedValues;
     this.checked = updatedChecked;
@@ -133,7 +134,7 @@ class FormState extends React.Component {
       ...initialState
     });
 
-    if (isResetWithInitialValues) {
+    if (isResetWithSetValues) {
       onReset({ event, ..._cloneDeep({ values: updatedValues, prevValues: values }) });
     } else {
       // Resetting the values, potentially, will throw the controlled vs uncontrolled messaging.
@@ -156,10 +157,10 @@ class FormState extends React.Component {
       },
       () =>
         this.validate(event).then(updatedErrors => {
-          const setErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
-          const checkIsValid = !Object.keys(setErrors).length;
+          const setUpdateErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
+          const checkIsValid = !Object.keys(setUpdateErrors).length;
 
-          this.errors = setErrors;
+          this.errors = setUpdateErrors;
           this.touched = {};
 
           this.setState(
@@ -217,6 +218,10 @@ class FormState extends React.Component {
   }
 
   validateOnMount(event = { type: 'mount' }) {
+    this.validateOnUpdate(event);
+  }
+
+  validateOnUpdate(event = { type: 'update' }) {
     this.setState(
       {
         isUpdating: true,
@@ -224,10 +229,10 @@ class FormState extends React.Component {
       },
       () =>
         this.validate(event).then(updatedErrors => {
-          const setErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
-          const checkIsValid = !Object.keys(setErrors).length;
+          const setUpdateErrors = { ...((updatedErrors && updatedErrors[0]) || updatedErrors || {}) };
+          const checkIsValid = !Object.keys(setUpdateErrors).length;
 
-          this.errors = setErrors;
+          this.errors = setUpdateErrors;
 
           this.setState({
             isUpdating: false,
@@ -238,21 +243,25 @@ class FormState extends React.Component {
     );
   }
 
-  updateComponent() {
-    const { initialValues, initialValuesAssumeBoolIsChecked } = this.props;
+  updateComponentValues() {
+    const { setValues, setValuesAssumeBoolIsChecked, validateOnUpdate } = this.props;
 
     this.setState(
       {
         isUpdating: true
       },
       () => {
-        this.checked = FormState.checkedInitialValues(initialValuesAssumeBoolIsChecked, initialValues);
-        this.refValues = initialValues;
-        this.values = _cloneDeep(initialValues);
+        this.checked = FormState.checkedSetValues(setValuesAssumeBoolIsChecked, setValues);
+        this.refValues = _cloneDeep(setValues);
+        this.values = _cloneDeep(setValues);
 
-        this.setState({
-          isUpdating: false
-        });
+        if (validateOnUpdate) {
+          this.validateOnUpdate();
+        } else {
+          this.setState({
+            isUpdating: false
+          });
+        }
       }
     );
   }
@@ -276,26 +285,28 @@ class FormState extends React.Component {
 }
 
 FormState.propTypes = {
-  allowUpdates: PropTypes.bool,
   children: PropTypes.func.isRequired,
-  initialValues: PropTypes.object,
-  initialValuesAssumeBoolIsChecked: PropTypes.bool,
   onReset: PropTypes.func,
   onSubmit: PropTypes.func,
-  resetUsingInitialValues: PropTypes.bool,
+  resetUsingSetValues: PropTypes.bool,
+  setValues: PropTypes.object,
+  setValuesOnUpdate: PropTypes.bool,
+  setValuesAssumeBoolIsChecked: PropTypes.bool,
   validate: PropTypes.func,
-  validateOnmount: PropTypes.bool
+  validateOnMount: PropTypes.bool,
+  validateOnUpdate: PropTypes.bool
 };
 
 FormState.defaultProps = {
-  allowUpdates: false,
-  initialValues: {},
-  initialValuesAssumeBoolIsChecked: true,
   onReset: helpers.noop,
   onSubmit: helpers.noop,
-  resetUsingInitialValues: false,
+  resetUsingSetValues: true,
+  setValues: {},
+  setValuesOnUpdate: false,
+  setValuesAssumeBoolIsChecked: true,
   validate: helpers.noop,
-  validateOnmount: false
+  validateOnMount: false,
+  validateOnUpdate: false
 };
 
 export { FormState as default, FormState };

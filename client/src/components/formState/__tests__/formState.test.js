@@ -4,7 +4,7 @@ import { FormState } from '../formState';
 
 describe('FormState Component', () => {
   it('should render a basic component', () => {
-    const props = { resetRefValues: true, initialValues: { lorem: 'ipsum' } };
+    const props = { setValues: { lorem: 'ipsum' } };
 
     const component = mount(
       <FormState {...props}>
@@ -27,7 +27,7 @@ describe('FormState Component', () => {
   });
 
   it('should update handle reset, changes, and submit events while updating state', () => {
-    const props = { initialValues: { lorem: 'ipsum' }, resetUsingInitialValues: true, validate: () => ({}) };
+    const props = { setValues: { lorem: 'ipsum' }, resetUsingSetValues: true, validate: () => ({}) };
 
     const component = mount(
       <FormState {...props}>
@@ -63,7 +63,7 @@ describe('FormState Component', () => {
 
   it('should do a basic validation check', () => {
     const props = {
-      initialValues: {
+      setValues: {
         lorem: 'ipsum'
       },
       validate: ({ values }) => {
@@ -92,6 +92,8 @@ describe('FormState Component', () => {
     );
 
     const componentInstance = component.instance();
+    expect(componentInstance.errors).toMatchSnapshot('initial errors');
+
     const mockEvent = { target: { value: '', id: 'lorem' }, persist: () => {}, preventDefault: () => {} };
     componentInstance.onEvent(mockEvent);
     expect(componentInstance.errors).toMatchSnapshot('basic validation');
@@ -99,7 +101,7 @@ describe('FormState Component', () => {
 
   it('should handle custom events', () => {
     const props = {
-      initialValues: {
+      setValues: {
         lorem: 'ipsum',
         dolor: ''
       },
@@ -139,7 +141,7 @@ describe('FormState Component', () => {
 
   it('should clone returned values to avoid mutation by consumer', () => {
     const props = {
-      initialValues: {
+      setValues: {
         lorem: 'ipsum'
       },
       validate: ({ values }) => {

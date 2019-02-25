@@ -20,20 +20,22 @@ Object {
 }
 `;
 
+exports[`initial errors 1`] = `Object {}`;
+
 exports[`initial props 1`] = `
 Object {
-  "allowUpdates": false,
   "children": [Function],
-  "initialValues": Object {
-    "lorem": "ipsum",
-  },
-  "initialValuesAssumeBoolIsChecked": true,
   "onReset": [Function],
   "onSubmit": [Function],
-  "resetRefValues": true,
-  "resetUsingInitialValues": false,
+  "resetUsingSetValues": true,
+  "setValues": Object {
+    "lorem": "ipsum",
+  },
+  "setValuesAssumeBoolIsChecked": true,
+  "setValuesOnUpdate": false,
   "validate": [Function],
-  "validateOnmount": false,
+  "validateOnMount": false,
+  "validateOnUpdate": false,
 }
 `;
 
